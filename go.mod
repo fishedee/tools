@@ -1,4 +1,4 @@
-module github.com/donnol/query
+module github.com/donnol/tools
 
 go 1.12
 

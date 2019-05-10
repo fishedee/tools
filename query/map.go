@@ -9,9 +9,12 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/donnol/tools/decimal"
+	"github.com/donnol/tools/kind"
 )
 
-var decimalType = reflect.TypeOf(Decimal("0"))
+var decimalType = reflect.TypeOf(decimal.Decimal("0"))
 
 func nameMapper(name string) string {
 	return strings.ToLower(name[0:1]) + name[1:]
@@ -56,10 +59,10 @@ var arrayMappingInfoMap struct {
 var interfaceType reflect.Type
 
 func getDataTagInfoInner(dataType reflect.Type, tag string) arrayMappingInfo {
-	dataTypeKind := GetTypeKind(dataType)
+	dataTypeKind := kind.GetTypeKind(dataType)
 	result := arrayMappingInfo{}
 	result.kind = dataTypeKind
-	if dataTypeKind == TypeKind.STRUCT {
+	if dataTypeKind == kind.TypeKind.STRUCT {
 		if dataType == reflect.TypeOf(time.Time{}) {
 			//时间类型
 			result.isTimeType = true
@@ -153,11 +156,11 @@ func arrayToMapInner(dataValue reflect.Value, tag string) (reflect.Value, bool) 
 	var result reflect.Value
 	var isEmpty bool
 	dataType := getDataTagInfo(dataValue.Type(), tag)
-	if dataType.kind == TypeKind.STRUCT && dataType.isTimeType == true {
+	if dataType.kind == kind.TypeKind.STRUCT && dataType.isTimeType == true {
 		timeValue := dataValue.Interface().(time.Time)
 		result = reflect.ValueOf(timeValue.Format("2006-01-02 15:04:05"))
-		isEmpty = IsEmptyValue(dataValue)
-	} else if dataType.kind == TypeKind.STRUCT && dataType.isTimeType == false {
+		isEmpty = kind.IsEmptyValue(dataValue)
+	} else if dataType.kind == kind.TypeKind.STRUCT && dataType.isTimeType == false {
 		resultMap := map[string]interface{}{}
 		for _, singleType := range dataType.field {
 			if singleType.canWrite == false {
@@ -178,7 +181,7 @@ func arrayToMapInner(dataValue reflect.Value, tag string) (reflect.Value, bool) 
 		}
 		result = reflect.ValueOf(resultMap)
 		isEmpty = (len(resultMap) == 0)
-	} else if dataType.kind == TypeKind.ARRAY {
+	} else if dataType.kind == kind.TypeKind.ARRAY {
 		resultSlice := []interface{}{}
 		dataLen := dataValue.Len()
 		for i := 0; i != dataLen; i++ {
@@ -188,7 +191,7 @@ func arrayToMapInner(dataValue reflect.Value, tag string) (reflect.Value, bool) 
 		}
 		result = reflect.ValueOf(resultSlice)
 		isEmpty = (len(resultSlice) == 0)
-	} else if dataType.kind == TypeKind.MAP {
+	} else if dataType.kind == kind.TypeKind.MAP {
 		dataKeyType := dataValue.Type().Key()
 		resultMapType := reflect.MapOf(dataKeyType, interfaceType)
 		resultMap := reflect.MakeMap(resultMapType)
@@ -200,16 +203,16 @@ func arrayToMapInner(dataValue reflect.Value, tag string) (reflect.Value, bool) 
 		}
 		result = resultMap
 		isEmpty = (len(dataKeys) == 0)
-	} else if dataType.kind == TypeKind.INTERFACE ||
-		dataType.kind == TypeKind.PTR {
+	} else if dataType.kind == kind.TypeKind.INTERFACE ||
+		dataType.kind == kind.TypeKind.PTR {
 		result, isEmpty = arrayToMapInner(dataValue.Elem(), tag)
-	} else if dataType.kind == TypeKind.STRING && dataValue.Type() == decimalType {
-		decimalString := dataValue.Interface().(Decimal).String()
+	} else if dataType.kind == kind.TypeKind.STRING && dataValue.Type() == decimalType {
+		decimalString := dataValue.Interface().(decimal.Decimal).String()
 		result = reflect.ValueOf(decimalString)
 		isEmpty = (decimalString == "0")
 	} else {
 		result = dataValue
-		isEmpty = IsEmptyValue(dataValue)
+		isEmpty = kind.IsEmptyValue(dataValue)
 	}
 	return result, isEmpty
 }
@@ -226,11 +229,11 @@ func ArrayToMap(data interface{}, tag string) interface{} {
 
 func mapToBool(dataValue reflect.Value, target reflect.Value) error {
 	dataType := dataValue.Type()
-	dataKind := GetTypeKind(dataType)
-	if dataKind == TypeKind.BOOL {
+	dataKind := kind.GetTypeKind(dataType)
+	if dataKind == kind.TypeKind.BOOL {
 		target.SetBool(dataValue.Bool())
 		return nil
-	} else if dataKind == TypeKind.STRING {
+	} else if dataKind == kind.TypeKind.STRING {
 		dataBool, err := strconv.ParseBool(dataValue.String())
 		if err != nil {
 			return fmt.Errorf("不是布尔值，其值为[%s]", dataValue.String())
@@ -244,17 +247,17 @@ func mapToBool(dataValue reflect.Value, target reflect.Value) error {
 
 func mapToUint(dataValue reflect.Value, target reflect.Value) error {
 	dataType := dataValue.Type()
-	dataKind := GetTypeKind(dataType)
-	if dataKind == TypeKind.UINT {
+	dataKind := kind.GetTypeKind(dataType)
+	if dataKind == kind.TypeKind.UINT {
 		target.SetUint(dataValue.Uint())
 		return nil
-	} else if dataKind == TypeKind.INT {
+	} else if dataKind == kind.TypeKind.INT {
 		target.SetUint(uint64(dataValue.Int()))
 		return nil
-	} else if dataKind == TypeKind.FLOAT {
+	} else if dataKind == kind.TypeKind.FLOAT {
 		target.SetUint(uint64(math.Floor(dataValue.Float() + 0.5)))
 		return nil
-	} else if dataKind == TypeKind.STRING {
+	} else if dataKind == kind.TypeKind.STRING {
 		dataUint, err := strconv.ParseUint(dataValue.String(), 10, 64)
 		if err != nil {
 			return fmt.Errorf("不是无符号整数，其值为[%s]", dataValue.String())
@@ -268,17 +271,17 @@ func mapToUint(dataValue reflect.Value, target reflect.Value) error {
 
 func mapToInt(dataValue reflect.Value, target reflect.Value) error {
 	dataType := dataValue.Type()
-	dataKind := GetTypeKind(dataType)
-	if dataKind == TypeKind.INT {
+	dataKind := kind.GetTypeKind(dataType)
+	if dataKind == kind.TypeKind.INT {
 		target.SetInt(dataValue.Int())
 		return nil
-	} else if dataKind == TypeKind.UINT {
+	} else if dataKind == kind.TypeKind.UINT {
 		target.SetInt(int64(dataValue.Uint()))
 		return nil
-	} else if dataKind == TypeKind.FLOAT {
+	} else if dataKind == kind.TypeKind.FLOAT {
 		target.SetInt(int64(math.Floor(dataValue.Float() + 0.5)))
 		return nil
-	} else if dataKind == TypeKind.STRING {
+	} else if dataKind == kind.TypeKind.STRING {
 		dataInt, err := strconv.ParseInt(dataValue.String(), 10, 64)
 		if err != nil {
 			return fmt.Errorf("不是整数，其值为[%s]", dataValue.String())
@@ -292,17 +295,17 @@ func mapToInt(dataValue reflect.Value, target reflect.Value) error {
 
 func mapToFloat(dataValue reflect.Value, target reflect.Value) error {
 	dataType := dataValue.Type()
-	dataKind := GetTypeKind(dataType)
-	if dataKind == TypeKind.FLOAT {
+	dataKind := kind.GetTypeKind(dataType)
+	if dataKind == kind.TypeKind.FLOAT {
 		target.SetFloat(dataValue.Float())
 		return nil
-	} else if dataKind == TypeKind.INT {
+	} else if dataKind == kind.TypeKind.INT {
 		target.SetFloat(float64(dataValue.Int()))
 		return nil
-	} else if dataKind == TypeKind.UINT {
+	} else if dataKind == kind.TypeKind.UINT {
 		target.SetFloat(float64(dataValue.Uint()))
 		return nil
-	} else if dataKind == TypeKind.STRING {
+	} else if dataKind == kind.TypeKind.STRING {
 		dataFloat, err := strconv.ParseFloat(dataValue.String(), 64)
 		if err != nil {
 			return fmt.Errorf("不是浮点数，其值为[%s]", dataValue.String())
@@ -317,7 +320,7 @@ func mapToFloat(dataValue reflect.Value, target reflect.Value) error {
 func mapToString(dataValue reflect.Value, target reflect.Value) error {
 	stringValue := fmt.Sprintf("%v", dataValue.Interface())
 	if target.Type() == decimalType {
-		_, err := NewDecimal(stringValue)
+		_, err := decimal.NewDecimal(stringValue)
 		if err != nil {
 			return fmt.Errorf("不是十进制数字，其值为[%s]", stringValue)
 		}
@@ -331,8 +334,8 @@ func mapToString(dataValue reflect.Value, target reflect.Value) error {
 
 func mapToArray(dataValue reflect.Value, target reflect.Value, tag string) error {
 	dataType := dataValue.Type()
-	dataKind := GetTypeKind(dataType)
-	if dataKind != TypeKind.ARRAY {
+	dataKind := kind.GetTypeKind(dataType)
+	if dataKind != kind.TypeKind.ARRAY {
 		return fmt.Errorf("不是数组，其类型为[%s]", dataValue.Type().String())
 	}
 	//增长空间
@@ -375,8 +378,8 @@ func mapToArray(dataValue reflect.Value, target reflect.Value, tag string) error
 
 func mapToMap(dataValue reflect.Value, target reflect.Value, tag string) error {
 	dataType := dataValue.Type()
-	dataKind := GetTypeKind(dataType)
-	if dataKind != TypeKind.MAP {
+	dataKind := kind.GetTypeKind(dataType)
+	if dataKind != kind.TypeKind.MAP {
 		return fmt.Errorf("不是映射，其类型为[%s]", dataValue.Type().String())
 	}
 	dataKeys := dataValue.MapKeys()
@@ -427,8 +430,8 @@ func mapToTime(dataValue reflect.Value, target reflect.Value) error {
 
 func mapToStruct(dataValue reflect.Value, target reflect.Value, targetType arrayMappingInfo, tag string) error {
 	dataType := dataValue.Type()
-	dataKind := GetTypeKind(dataType)
-	if dataKind != TypeKind.MAP {
+	dataKind := kind.GetTypeKind(dataType)
+	if dataKind != kind.TypeKind.MAP {
 		return fmt.Errorf("不是映射，其类型为[%s]", dataValue.Type().String())
 	}
 	dataTypeKey := dataType.Key()
@@ -505,9 +508,9 @@ func mapToArrayInner(data reflect.Value, target reflect.Value, tag string) error
 	}
 	//根据target是多层嵌套的问题
 	targetType := getDataTagInfo(target.Type(), tag)
-	if targetType.kind == TypeKind.PTR {
+	if targetType.kind == kind.TypeKind.PTR {
 		return mapToPtr(data, target, tag)
-	} else if targetType.kind == TypeKind.INTERFACE {
+	} else if targetType.kind == kind.TypeKind.INTERFACE {
 		return mapToInterface(data, target, tag)
 	}
 	//处理data是个空字符串
@@ -515,21 +518,21 @@ func mapToArrayInner(data reflect.Value, target reflect.Value, tag string) error
 		target.Set(reflect.Zero(target.Type()))
 		return nil
 	}
-	if targetType.kind == TypeKind.BOOL {
+	if targetType.kind == kind.TypeKind.BOOL {
 		return mapToBool(data, target)
-	} else if targetType.kind == TypeKind.INT {
+	} else if targetType.kind == kind.TypeKind.INT {
 		return mapToInt(data, target)
-	} else if targetType.kind == TypeKind.UINT {
+	} else if targetType.kind == kind.TypeKind.UINT {
 		return mapToUint(data, target)
-	} else if targetType.kind == TypeKind.FLOAT {
+	} else if targetType.kind == kind.TypeKind.FLOAT {
 		return mapToFloat(data, target)
-	} else if targetType.kind == TypeKind.STRING {
+	} else if targetType.kind == kind.TypeKind.STRING {
 		return mapToString(data, target)
-	} else if targetType.kind == TypeKind.ARRAY {
+	} else if targetType.kind == kind.TypeKind.ARRAY {
 		return mapToArray(data, target, tag)
-	} else if targetType.kind == TypeKind.MAP {
+	} else if targetType.kind == kind.TypeKind.MAP {
 		return mapToMap(data, target, tag)
-	} else if targetType.kind == TypeKind.STRUCT {
+	} else if targetType.kind == kind.TypeKind.STRUCT {
 		if targetType.isTimeType {
 			return mapToTime(data, target)
 		}

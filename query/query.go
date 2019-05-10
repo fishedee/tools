@@ -9,6 +9,10 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/donnol/tools/decimal"
+	"github.com/donnol/tools/kind"
+	"github.com/donnol/tools/plode"
 )
 
 // SelectMacroHandler 基础类函数QuerySelect
@@ -417,8 +421,8 @@ func getQueryExtractAndCompares(dataType reflect.Type, sortTypeStr string) []que
 }
 
 func getQueryCompare(fieldType reflect.Type) queryCompare {
-	typeKind := GetTypeKind(fieldType)
-	if typeKind == TypeKind.BOOL {
+	typeKind := kind.GetTypeKind(fieldType)
+	if typeKind == kind.TypeKind.BOOL {
 		return func(left reflect.Value, right reflect.Value) int {
 			leftBool := left.Bool()
 			rightBool := right.Bool()
@@ -430,7 +434,7 @@ func getQueryCompare(fieldType reflect.Type) queryCompare {
 				return 1
 			}
 		}
-	} else if typeKind == TypeKind.INT {
+	} else if typeKind == kind.TypeKind.INT {
 		return func(left reflect.Value, right reflect.Value) int {
 			leftInt := left.Int()
 			rightInt := right.Int()
@@ -442,7 +446,7 @@ func getQueryCompare(fieldType reflect.Type) queryCompare {
 				return 0
 			}
 		}
-	} else if typeKind == TypeKind.UINT {
+	} else if typeKind == kind.TypeKind.UINT {
 		return func(left reflect.Value, right reflect.Value) int {
 			leftUint := left.Uint()
 			rightUint := right.Uint()
@@ -454,7 +458,7 @@ func getQueryCompare(fieldType reflect.Type) queryCompare {
 				return 0
 			}
 		}
-	} else if typeKind == TypeKind.FLOAT {
+	} else if typeKind == kind.TypeKind.FLOAT {
 		return func(left reflect.Value, right reflect.Value) int {
 			leftFloat := left.Float()
 			rightFloat := right.Float()
@@ -466,11 +470,11 @@ func getQueryCompare(fieldType reflect.Type) queryCompare {
 				return 0
 			}
 		}
-	} else if typeKind == TypeKind.STRING {
-		if fieldType == reflect.TypeOf(Decimal("")) {
+	} else if typeKind == kind.TypeKind.STRING {
+		if fieldType == reflect.TypeOf(decimal.Decimal("")) {
 			return func(left reflect.Value, right reflect.Value) int {
-				leftDecimal := left.Interface().(Decimal)
-				rightDecimal := right.Interface().(Decimal)
+				leftDecimal := left.Interface().(decimal.Decimal)
+				rightDecimal := right.Interface().(decimal.Decimal)
 				return leftDecimal.Cmp(rightDecimal)
 			}
 		}
@@ -487,7 +491,7 @@ func getQueryCompare(fieldType reflect.Type) queryCompare {
 			}
 		}
 
-	} else if typeKind == TypeKind.STRUCT && fieldType == reflect.TypeOf(time.Time{}) {
+	} else if typeKind == kind.TypeKind.STRUCT && fieldType == reflect.TypeOf(time.Time{}) {
 		return func(left reflect.Value, right reflect.Value) int {
 			leftTime := left.Interface().(time.Time)
 			rightTime := right.Interface().(time.Time)
@@ -529,7 +533,7 @@ func getQueryExtract(dataType reflect.Type, name string) (reflect.Type, queryExt
 		}
 	}
 
-	field, ok := getFieldByName(dataType, name)
+	field, ok := kind.GetFieldByName(dataType, name)
 	if !ok {
 		panic(dataType.Name() + " has not name " + name)
 	}
@@ -799,7 +803,7 @@ func Reverse(data interface{}) interface{} {
 // Distinct 唯一
 func Distinct(data interface{}, columnNames string) interface{} {
 	//提取信息
-	name := Explode(columnNames, ",")
+	name := plode.Explode(columnNames, ",")
 	extractInfo := []queryExtract{}
 	dataValue := reflect.ValueOf(data)
 	dataType := dataValue.Type().Elem()

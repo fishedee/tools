@@ -1,4 +1,4 @@
-package query
+package enum
 
 import (
 	"reflect"

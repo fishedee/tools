@@ -1,13 +1,16 @@
-package query
+package kind
 
 import (
 	"reflect"
 	"sync"
+
+	"github.com/donnol/tools/enum"
+	"github.com/donnol/tools/plode"
 )
 
 // TypeKind 类型
 var TypeKind struct {
-	EnumStruct
+	enum.EnumStruct
 	BOOL      int `enum:"1,布尔"`
 	INT       int `enum:"2,有符号整数"`
 	UINT      int `enum:"3,无符号整数"`
@@ -24,7 +27,7 @@ var TypeKind struct {
 }
 
 func init() {
-	InitEnumStruct(&TypeKind)
+	enum.InitEnumStruct(&TypeKind)
 }
 
 // GetTypeKind 获取类型
@@ -117,7 +120,7 @@ var (
 )
 
 func getFieldByNameInner(t reflect.Type, name string) (reflect.StructField, bool) {
-	nameArray := Explode(name, ".")
+	nameArray := plode.Explode(name, ".")
 	if len(nameArray) == 0 {
 		return reflect.StructField{}, false
 	}
@@ -136,7 +139,8 @@ func getFieldByNameInner(t reflect.Type, name string) (reflect.StructField, bool
 	return resultStruct, true
 }
 
-func getFieldByName(t reflect.Type, name string) (reflect.StructField, bool) {
+// GetFieldByName 获取字段
+func GetFieldByName(t reflect.Type, name string) (reflect.StructField, bool) {
 	getFieldByNameMutex.RLock()
 	result, isExist := getFieldByNameCache[t][name]
 	getFieldByNameMutex.RUnlock()

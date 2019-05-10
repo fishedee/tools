@@ -3,6 +3,8 @@ package query
 import (
 	"testing"
 	"time"
+
+	"github.com/donnol/tools/assert"
 )
 
 func TestQuerySelect(t *testing.T) {
@@ -157,7 +159,7 @@ func TestQuerySelect(t *testing.T) {
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
 		result := Select(singleTestCase.origin, singleTestCase.function)
-		AssertEqual(t, result, singleTestCase.target, singleTestCaseIndex)
+		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
 
 	}
 }
@@ -211,7 +213,7 @@ func TestQueryWhere(t *testing.T) {
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
 		result := Where(singleTestCase.origin, singleTestCase.function)
-		AssertEqual(t, result, singleTestCase.target, singleTestCaseIndex)
+		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
 
 	}
 }
@@ -292,7 +294,7 @@ func TestQueryReduce(t *testing.T) {
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
 		result := Reduce(singleTestCase.origin, singleTestCase.function, singleTestCase.initNum)
-		AssertEqual(t, result, singleTestCase.target, singleTestCaseIndex)
+		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
 
 	}
 
@@ -535,7 +537,7 @@ func TestQuerySort(t *testing.T) {
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
 		result := Sort(singleTestCase.origin, singleTestCase.sortName)
-		AssertEqual(t, result, singleTestCase.target, singleTestCaseIndex)
+		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
 
 	}
 
@@ -1026,7 +1028,7 @@ func TestQueryJoin(t *testing.T) {
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
 		result := Join(singleTestCase.leftData, singleTestCase.rightData, singleTestCase.joinPlace, singleTestCase.joinType, singleTestCase.joinFuctor)
-		AssertEqual(t, result, singleTestCase.target, singleTestCaseIndex)
+		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
 
 	}
 }
@@ -1270,7 +1272,7 @@ func TestQueryGroup(t *testing.T) {
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
 		result := Group(singleTestCase.data, singleTestCase.groupType, singleTestCase.groupFuctor)
-		AssertEqual(t, result, singleTestCase.target, singleTestCaseIndex)
+		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
 
 	}
 
@@ -1380,7 +1382,7 @@ func TestQueryColumn(t *testing.T) {
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
 		result := Column(singleTestCase.data, singleTestCase.Column)
-		AssertEqual(t, result, singleTestCase.target, singleTestCaseIndex)
+		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
 
 	}
 }
@@ -1515,7 +1517,7 @@ func TestQueryColumnMap(t *testing.T) {
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
 		result := ColumnMap(singleTestCase.data, singleTestCase.Column)
-		AssertEqual(t, result, singleTestCase.target, singleTestCaseIndex)
+		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
 
 	}
 }
@@ -1565,7 +1567,7 @@ func TestQueryReverse(t *testing.T) {
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
 		result := Reverse(singleTestCase.data)
-		AssertEqual(t, result, singleTestCase.target, singleTestCaseIndex)
+		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
 
 	}
 }
@@ -1616,7 +1618,7 @@ func TestQueryCombine(t *testing.T) {
 
 	for _, singleTestCase := range testCase {
 		result := Combine(singleTestCase.origin, singleTestCase.origin2, singleTestCase.functor)
-		AssertEqual(t, result, singleTestCase.target)
+		assert.Equal(t, result, singleTestCase.target)
 	}
 }
 
@@ -1817,7 +1819,7 @@ func TestQueryDistinct(t *testing.T) {
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
 		result := Distinct(singleTestCase.origin, singleTestCase.uniqueName)
-		AssertEqual(t, result, singleTestCase.target, singleTestCaseIndex)
+		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
 
 	}
 }

@@ -1,4 +1,4 @@
-package query
+package decimal
 
 import (
 	"github.com/shopspring/decimal"
