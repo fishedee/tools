@@ -63,7 +63,7 @@ func init() {
 		newData := make([]{{ .firstArgElemType }},len(dataIn),len(dataIn))
 		copy(newData,dataIn)
 
-		language.QuerySortInternal(len(newData),func(i int, j int)int{
+		query.SortInternal(len(newData),func(i int, j int)int{
 			{{ .sortCode }}
 			return 0
 		},func(i int,j int){
