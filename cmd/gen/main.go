@@ -38,23 +38,25 @@ func nodeString(fset *token.FileSet, n ast.Node) string {
 	return buf.String()
 }
 
-type queryGenRequest struct {
+// QueryGenRequest QueryGenRequest
+type QueryGenRequest struct {
 	pkg    macro.MacroPackage
 	expr   *ast.CallExpr
 	caller *types.Func
 	args   []types.TypeAndValue
 }
 
-type queryGenResponse struct {
+// QueryGenResponse QueryGenResponse
+type QueryGenResponse struct {
 	importPackage map[string]bool
 	funcName      string
 	funcBody      string
 	initBody      string
 }
 
-type queryGenHandler func(request queryGenRequest) *queryGenResponse
+type queryGenHandler func(request QueryGenRequest) *QueryGenResponse
 
-func handleQueryGen(name string, request queryGenRequest) *queryGenResponse {
+func handleQueryGen(name string, request QueryGenRequest) *QueryGenResponse {
 	handler, isExist := queryGenMapper[name]
 	if isExist == false {
 		return nil
@@ -74,7 +76,7 @@ func formatSource(data string) []byte {
 	return result
 }
 
-func generate(packageName string, packagePath string, packages []queryGenResponse) {
+func generate(packageName string, packagePath string, packages []QueryGenResponse) {
 	var fileDir string
 	gopath, _ := os.LookupEnv("GOPATH")
 	fileDir = gopath + "/src/" + packagePath
@@ -149,7 +151,7 @@ func run() {
 		}
 	}
 
-	genPackage := []queryGenResponse{}
+	genPackage := []QueryGenResponse{}
 	initPackageName := ""
 	globalGeneratePackagePath = args[0]
 	err := macroObj.Walk(func(pkg macro.MacroPackage) {
@@ -158,7 +160,7 @@ func run() {
 		}
 		pkg.OnFuncCall(func(expr *ast.CallExpr, caller *types.Func, args []types.TypeAndValue) {
 			callerFullName := caller.FullName()
-			request := queryGenRequest{
+			request := QueryGenRequest{
 				pkg:    pkg,
 				expr:   expr,
 				caller: caller,

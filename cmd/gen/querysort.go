@@ -6,7 +6,7 @@ import (
 )
 
 // QuerySortGen QuerySortGen
-func QuerySortGen(request queryGenRequest) *queryGenResponse {
+func QuerySortGen(request QueryGenRequest) *QueryGenResponse {
 	args := request.args
 	line := request.pkg.FileSet().Position(request.expr.Pos()).String()
 
@@ -41,7 +41,7 @@ func QuerySortGen(request queryGenRequest) *queryGenResponse {
 		"signature":      signature,
 		"argumentDefine": argumentDefine,
 	})
-	return &queryGenResponse{
+	return &QueryGenResponse{
 		importPackage: importPackage,
 		funcName:      "querySort_" + signature,
 		funcBody:      funcBody,

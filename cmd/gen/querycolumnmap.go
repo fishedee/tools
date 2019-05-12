@@ -6,7 +6,7 @@ import (
 )
 
 // QueryColumnMapGen QueryColumnMapGen
-func QueryColumnMapGen(request queryGenRequest) *queryGenResponse {
+func QueryColumnMapGen(request QueryGenRequest) *QueryGenResponse {
 	args := request.args
 	line := request.pkg.FileSet().Position(request.expr.Pos()).String()
 
@@ -39,7 +39,7 @@ func QueryColumnMapGen(request queryGenRequest) *queryGenResponse {
 		"signature":      signature,
 		"argumentDefine": argumentDefine,
 	})
-	return &queryGenResponse{
+	return &QueryGenResponse{
 		importPackage: importPackage,
 		funcName:      "queryColumnMap_" + signature,
 		funcBody:      funcBody,

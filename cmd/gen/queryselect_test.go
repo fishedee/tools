@@ -17,9 +17,8 @@ func TestQuerySelect(t *testing.T) {
 	assert.Equal(t, query.Select(data, func(a User) Sex {
 		if len(a.Name) >= 3 && a.Name[0:3] == "Man" {
 			return Sex{IsMale: true}
-		} else {
-			return Sex{IsMale: false}
 		}
+		return Sex{IsMale: false}
 	}), []Sex{
 		Sex{IsMale: true},
 		Sex{IsMale: false},

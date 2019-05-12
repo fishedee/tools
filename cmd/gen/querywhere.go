@@ -5,7 +5,7 @@ import (
 )
 
 // QueryWhereGen QueryWhereGen
-func QueryWhereGen(request queryGenRequest) *queryGenResponse {
+func QueryWhereGen(request QueryGenRequest) *QueryGenResponse {
 	args := request.args
 	line := request.pkg.FileSet().Position(request.expr.Pos()).String()
 
@@ -50,7 +50,7 @@ func QueryWhereGen(request queryGenRequest) *queryGenResponse {
 		"signature":      signature,
 		"argumentDefine": argumentDefine,
 	})
-	return &queryGenResponse{
+	return &QueryGenResponse{
 		importPackage: importPackage,
 		funcName:      "queryWhere_" + signature,
 		funcBody:      funcBody,

@@ -5,7 +5,7 @@ import (
 )
 
 // QuerySelectGen QuerySelectGen
-func QuerySelectGen(request queryGenRequest) *queryGenResponse {
+func QuerySelectGen(request QueryGenRequest) *QueryGenResponse {
 	args := request.args
 	line := request.pkg.FileSet().Position(request.expr.Pos()).String()
 
@@ -49,7 +49,7 @@ func QuerySelectGen(request queryGenRequest) *queryGenResponse {
 		"signature":      signature,
 		"argumentDefine": argumentDefine,
 	})
-	return &queryGenResponse{
+	return &QueryGenResponse{
 		importPackage: importPackage,
 		funcName:      "querySelect_" + signature,
 		funcBody:      funcBody,

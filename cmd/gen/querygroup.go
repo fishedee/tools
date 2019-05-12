@@ -6,7 +6,7 @@ import (
 )
 
 // QueryGroupGen QueryGroupGen
-func QueryGroupGen(request queryGenRequest) *queryGenResponse {
+func QueryGroupGen(request QueryGenRequest) *QueryGenResponse {
 	args := request.args
 	line := request.pkg.FileSet().Position(request.expr.Pos()).String()
 
@@ -56,7 +56,7 @@ func QueryGroupGen(request queryGenRequest) *queryGenResponse {
 		"signature":      signature,
 		"argumentDefine": argumentDefine,
 	})
-	return &queryGenResponse{
+	return &QueryGenResponse{
 		importPackage: importPackage,
 		funcName:      "queryGroup_" + signature,
 		funcBody:      funcBody,

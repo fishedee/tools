@@ -18,7 +18,7 @@ func analyseJoin(line string, joinType string) (string, string) {
 }
 
 // QueryJoinGen QueryJoinGen
-func QueryJoinGen(request queryGenRequest) *queryGenResponse {
+func QueryJoinGen(request QueryGenRequest) *QueryGenResponse {
 	args := request.args
 	line := request.pkg.FileSet().Position(request.expr.Pos()).String()
 
@@ -92,7 +92,7 @@ func QueryJoinGen(request queryGenRequest) *queryGenResponse {
 		"signature":      signature,
 		"argumentDefine": argumentDefine,
 	})
-	return &queryGenResponse{
+	return &QueryGenResponse{
 		importPackage: importPackage,
 		funcName:      "queryJoin_" + signature,
 		funcBody:      funcBody,
@@ -182,7 +182,7 @@ func init() {
 		panic(err)
 	}
 	registerQueryGen("github.com/donnol/tools/query.Join", QueryJoinGen)
-	registerQueryGen("github.com/donnol/tools/query.LeftJoin", func(request queryGenRequest) *queryGenResponse {
+	registerQueryGen("github.com/donnol/tools/query.LeftJoin", func(request QueryGenRequest) *QueryGenResponse {
 		thridParty := types.TypeAndValue{
 			Type:  nil,
 			Value: constant.MakeString("left"),
@@ -194,7 +194,7 @@ func init() {
 		request.args = newArgs
 		return QueryJoinGen(request)
 	})
-	registerQueryGen("github.com/donnol/tools/query.RightJoin", func(request queryGenRequest) *queryGenResponse {
+	registerQueryGen("github.com/donnol/tools/query.RightJoin", func(request QueryGenRequest) *QueryGenResponse {
 		thridParty := types.TypeAndValue{
 			Type:  nil,
 			Value: constant.MakeString("right"),
@@ -206,7 +206,7 @@ func init() {
 		request.args = newArgs
 		return QueryJoinGen(request)
 	})
-	registerQueryGen("github.com/donnol/tools/query.InnerJoin", func(request queryGenRequest) *queryGenResponse {
+	registerQueryGen("github.com/donnol/tools/query.InnerJoin", func(request QueryGenRequest) *QueryGenResponse {
 		thridParty := types.TypeAndValue{
 			Type:  nil,
 			Value: constant.MakeString("inner"),
@@ -218,7 +218,7 @@ func init() {
 		request.args = newArgs
 		return QueryJoinGen(request)
 	})
-	registerQueryGen("github.com/donnol/tools/query.OuterJoin", func(request queryGenRequest) *queryGenResponse {
+	registerQueryGen("github.com/donnol/tools/query.OuterJoin", func(request QueryGenRequest) *QueryGenResponse {
 		thridParty := types.TypeAndValue{
 			Type:  nil,
 			Value: constant.MakeString("outer"),

@@ -5,7 +5,7 @@ import (
 )
 
 // QueryCombineGen QueryCombineGen
-func QueryCombineGen(request queryGenRequest) *queryGenResponse {
+func QueryCombineGen(request QueryGenRequest) *QueryGenResponse {
 	args := request.args
 	line := request.pkg.FileSet().Position(request.expr.Pos()).String()
 
@@ -56,7 +56,7 @@ func QueryCombineGen(request queryGenRequest) *queryGenResponse {
 		"signature":      signature,
 		"argumentDefine": argumentDefine,
 	})
-	return &queryGenResponse{
+	return &QueryGenResponse{
 		importPackage: importPackage,
 		funcName:      "queryCombine_" + signature,
 		funcBody:      funcBody,
