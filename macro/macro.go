@@ -56,7 +56,11 @@ func (mp *MacroPackage) fireFuncCall(n ast.Node) {
 	//获取caller信息
 	exprIdent, ok := expr.Fun.(*ast.Ident)
 	if ok == false {
-		return
+		selectorExpr, ok := expr.Fun.(*ast.SelectorExpr)
+		if ok == false {
+			return
+		}
+		exprIdent = selectorExpr.Sel
 	}
 
 	info := mp.pkg.Info
