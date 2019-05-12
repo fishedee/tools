@@ -432,7 +432,7 @@ func querySort_7156c5177f9a3291d16da5de11a32d3872285009(data interface{}, sortTy
 	newData := make([]User, len(dataIn), len(dataIn))
 	copy(newData, dataIn)
 
-	language.QuerySortInternal(len(newData), func(i int, j int) int {
+	query.SortInternal(len(newData), func(i int, j int) int {
 		if newData[i].UserId < newData[j].UserId {
 			return -1
 		} else if newData[i].UserId > newData[j].UserId {
@@ -451,7 +451,7 @@ func querySort_af891d058d5a2e0a3ac4b4b291ae9bb959364795(data interface{}, sortTy
 	newData := make([]int, len(dataIn), len(dataIn))
 	copy(newData, dataIn)
 
-	language.QuerySortInternal(len(newData), func(i int, j int) int {
+	query.SortInternal(len(newData), func(i int, j int) int {
 		if newData[i] < newData[j] {
 			return 1
 		} else if newData[i] > newData[j] {
@@ -470,7 +470,7 @@ func querySort_b27281fbf5dcbd12639fa2e2405ea432ced93be3(data interface{}, sortTy
 	newData := make([]User, len(dataIn), len(dataIn))
 	copy(newData, dataIn)
 
-	language.QuerySortInternal(len(newData), func(i int, j int) int {
+	query.SortInternal(len(newData), func(i int, j int) int {
 		if newData[i].UserId < newData[j].UserId {
 			return 1
 		} else if newData[i].UserId > newData[j].UserId {
