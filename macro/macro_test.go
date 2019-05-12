@@ -20,12 +20,12 @@ func nodeString(fset *token.FileSet, n ast.Node) string {
 
 func TestFuncCallInspect(t *testing.T) {
 	macro := NewMacro()
-	err := macro.ImportRecursive("github.com/donnol/gox")
+	err := macro.ImportRecursive("github.com/donnol/tools/query")
 	assert.Equal(t, err, nil)
 
 	err = macro.Walk(func(pkg MacroPackage) {
 		pkg.OnFuncCall(func(expr *ast.CallExpr, caller *types.Func, args []types.TypeAndValue) {
-			if caller.Pkg().Path() != "github.com/donnol/gox" {
+			if caller.Pkg().Path() != "github.com/donnol/tools/query" {
 				return
 			}
 			fmt.Printf("%v:%v\n", pkg.FileSet().Position(expr.Pos()), nodeString(pkg.FileSet(), expr))
