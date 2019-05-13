@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/donnol/tools/assert"
+	"github.com/fishedee/tools/assert"
 )
 
 func TestQuerySelect(t *testing.T) {

@@ -1,7 +1,7 @@
 package subtest
 
 import (
-	"github.com/donnol/tools/query"
+	"github.com/fishedee/tools/query"
 )
 
 // Address Address

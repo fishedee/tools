@@ -181,8 +181,8 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	registerQueryGen("github.com/donnol/tools/query.Join", QueryJoinGen)
-	registerQueryGen("github.com/donnol/tools/query.LeftJoin", func(request QueryGenRequest) *QueryGenResponse {
+	registerQueryGen("github.com/fishedee/tools/query.Join", QueryJoinGen)
+	registerQueryGen("github.com/fishedee/tools/query.LeftJoin", func(request QueryGenRequest) *QueryGenResponse {
 		thridParty := types.TypeAndValue{
 			Type:  nil,
 			Value: constant.MakeString("left"),
@@ -194,7 +194,7 @@ func init() {
 		request.args = newArgs
 		return QueryJoinGen(request)
 	})
-	registerQueryGen("github.com/donnol/tools/query.RightJoin", func(request QueryGenRequest) *QueryGenResponse {
+	registerQueryGen("github.com/fishedee/tools/query.RightJoin", func(request QueryGenRequest) *QueryGenResponse {
 		thridParty := types.TypeAndValue{
 			Type:  nil,
 			Value: constant.MakeString("right"),
@@ -206,7 +206,7 @@ func init() {
 		request.args = newArgs
 		return QueryJoinGen(request)
 	})
-	registerQueryGen("github.com/donnol/tools/query.InnerJoin", func(request QueryGenRequest) *QueryGenResponse {
+	registerQueryGen("github.com/fishedee/tools/query.InnerJoin", func(request QueryGenRequest) *QueryGenResponse {
 		thridParty := types.TypeAndValue{
 			Type:  nil,
 			Value: constant.MakeString("inner"),
@@ -218,7 +218,7 @@ func init() {
 		request.args = newArgs
 		return QueryJoinGen(request)
 	})
-	registerQueryGen("github.com/donnol/tools/query.OuterJoin", func(request QueryGenRequest) *QueryGenResponse {
+	registerQueryGen("github.com/fishedee/tools/query.OuterJoin", func(request QueryGenRequest) *QueryGenResponse {
 		thridParty := types.TypeAndValue{
 			Type:  nil,
 			Value: constant.MakeString("outer"),

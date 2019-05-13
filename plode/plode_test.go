@@ -3,7 +3,7 @@ package plode
 import (
 	"testing"
 
-	"github.com/donnol/tools/assert"
+	"github.com/fishedee/tools/assert"
 )
 
 func TestPlode(t *testing.T) {

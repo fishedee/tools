@@ -1,4 +1,4 @@
-module github.com/donnol/tools
+module github.com/fishedee/tools
 
 go 1.12
 

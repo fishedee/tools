@@ -3,7 +3,7 @@ package decimal
 import (
 	"testing"
 
-	"github.com/donnol/tools/assert"
+	"github.com/fishedee/tools/assert"
 )
 
 func TestDecimalOperation(t *testing.T) {

@@ -9,7 +9,7 @@ import (
 	"go/types"
 	"testing"
 
-	"github.com/donnol/tools/assert"
+	"github.com/fishedee/tools/assert"
 )
 
 func nodeString(fset *token.FileSet, n ast.Node) string {
@@ -20,12 +20,16 @@ func nodeString(fset *token.FileSet, n ast.Node) string {
 
 func TestFuncCallInspect(t *testing.T) {
 	macro := NewMacro()
-	err := macro.ImportRecursive("github.com/donnol/tools/query")
+	err := macro.ImportRecursive("github.com/fishedee/tools/query")
 	assert.Equal(t, err, nil)
 
 	err = macro.Walk(func(pkg MacroPackage) {
 		pkg.OnFuncCall(func(expr *ast.CallExpr, caller *types.Func, args []types.TypeAndValue) {
-			if caller.Pkg().Path() != "github.com/donnol/tools/query" {
+			packag := caller.Pkg()
+			if packag == nil {
+				return
+			}
+			if packag.Path() != "github.com/fishedee/tools/query" {
 				return
 			}
 			fmt.Printf("%v:%v\n", pkg.FileSet().Position(expr.Pos()), nodeString(pkg.FileSet(), expr))

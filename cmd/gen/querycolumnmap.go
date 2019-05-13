@@ -75,6 +75,6 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	registerQueryGen("github.com/donnol/tools/query.ColumnMap", QueryColumnMapGen)
+	registerQueryGen("github.com/fishedee/tools/query.ColumnMap", QueryColumnMapGen)
 	hasQueryColumnMapGenerate = map[string]bool{}
 }

@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/donnol/tools/assert"
-	"github.com/donnol/tools/decimal"
+	"github.com/fishedee/tools/assert"
+	"github.com/fishedee/tools/decimal"
 )
 
 func TestArrayToMapBasic(t *testing.T) {

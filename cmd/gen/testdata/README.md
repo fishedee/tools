@@ -7,7 +7,7 @@ go test -v -bench=. -benchmem
 
 goos: linux
 goarch: amd64
-pkg: github.com/donnol/tools/cmd/gen/testdata
+pkg: github.com/fishedee/tools/cmd/gen/testdata
 
 BenchmarkQueryColumnHand-8 300000 5001 ns/op 8192 B/op 1 allocs/op
 BenchmarkQueryColumnMacro-8 300000 5033 ns/op 8256 B/op 3 allocs/op
@@ -34,5 +34,5 @@ BenchmarkQueryWhereHand-8 100000 15417 ns/op 57344 B/op 1 allocs/op
 BenchmarkQueryWhereMacro-8 100000 19301 ns/op 57408 B/op 3 allocs/op
 
 PASS
-ok github.com/donnol/tools/cmd/gen/testdata 28.909s
+ok github.com/fishedee/tools/cmd/gen/testdata 28.909s
 ```

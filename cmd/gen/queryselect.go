@@ -86,6 +86,6 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	registerQueryGen("github.com/donnol/tools/query.Select", QuerySelectGen)
+	registerQueryGen("github.com/fishedee/tools/query.Select", QuerySelectGen)
 	hasQuerySelectGenerate = map[string]bool{}
 }

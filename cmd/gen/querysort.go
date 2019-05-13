@@ -81,6 +81,6 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	registerQueryGen("github.com/donnol/tools/query.Sort", QuerySortGen)
+	registerQueryGen("github.com/fishedee/tools/query.Sort", QuerySortGen)
 	hasQuerySortGenerate = map[string]bool{}
 }

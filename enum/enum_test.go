@@ -3,7 +3,7 @@ package enum
 import (
 	"testing"
 
-	"github.com/donnol/tools/assert"
+	"github.com/fishedee/tools/assert"
 )
 
 func getEnumStructError(handler func()) (lastErr string) {

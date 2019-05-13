@@ -13,8 +13,8 @@ import (
 	"os"
 	"sort"
 
-	"github.com/donnol/tools/macro"
-	"github.com/donnol/tools/plode"
+	"github.com/fishedee/tools/macro"
+	"github.com/fishedee/tools/plode"
 )
 
 var (
@@ -90,7 +90,7 @@ func generate(packageName string, packagePath string, packages []QueryGenRespons
 			importPackageMap[singleImport] = true
 		}
 	}
-	importPackageMap["github.com/donnol/tools/query"] = true
+	importPackageMap["github.com/fishedee/tools/query"] = true
 	delete(importPackageMap, packagePath)
 	importPackageList := []string{}
 	for singlePackage := range importPackageMap {

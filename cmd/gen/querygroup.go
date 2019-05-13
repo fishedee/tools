@@ -124,6 +124,6 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	registerQueryGen("github.com/donnol/tools/query.Group", QueryGroupGen)
+	registerQueryGen("github.com/fishedee/tools/query.Group", QueryGroupGen)
 	hasQueryGroupGenerate = map[string]bool{}
 }

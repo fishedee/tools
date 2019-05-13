@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/donnol/tools/enum"
-	"github.com/donnol/tools/plode"
+	"github.com/fishedee/tools/enum"
+	"github.com/fishedee/tools/plode"
 )
 
 // TypeKind 类型

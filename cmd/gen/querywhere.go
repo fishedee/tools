@@ -90,6 +90,6 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	registerQueryGen("github.com/donnol/tools/query.Where", QueryWhereGen)
+	registerQueryGen("github.com/fishedee/tools/query.Where", QueryWhereGen)
 	hasQueryWhereGenerate = map[string]bool{}
 }

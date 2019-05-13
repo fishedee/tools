@@ -3,7 +3,7 @@ package testdata
 import (
 	"time"
 
-	"github.com/donnol/tools/query"
+	"github.com/fishedee/tools/query"
 )
 
 // Department Department

@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/donnol/tools/decimal"
-	"github.com/donnol/tools/kind"
-	"github.com/donnol/tools/plode"
+	"github.com/fishedee/tools/decimal"
+	"github.com/fishedee/tools/kind"
+	"github.com/fishedee/tools/plode"
 )
 
 // SelectMacroHandler 基础类函数QuerySelect

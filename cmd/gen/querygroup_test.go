@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/donnol/tools/assert"
-	"github.com/donnol/tools/query"
+	"github.com/fishedee/tools/assert"
+	"github.com/fishedee/tools/query"
 )
 
 func TestQueryGroup(t *testing.T) {

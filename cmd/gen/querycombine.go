@@ -94,6 +94,6 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	registerQueryGen("github.com/donnol/tools/query.Combine", QueryCombineGen)
+	registerQueryGen("github.com/fishedee/tools/query.Combine", QueryCombineGen)
 	hasQueryCombineGenerate = map[string]bool{}
 }
