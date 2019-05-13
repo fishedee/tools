@@ -12,26 +12,26 @@ import (
 
 func TestQuerySort(t *testing.T) {
 	data := []User{
-		User{UserId: 3, Name: "a"},
-		User{UserId: 3, Name: "c"},
-		User{UserId: 23, Name: "d"},
-		User{UserId: 23, Name: "c", CreateTime: time.Unix(29, 0)},
-		User{UserId: 23, Name: "c", CreateTime: time.Unix(1, 0)},
-		User{UserId: 23, Name: "c", CreateTime: time.Unix(33, 0)},
-		User{UserId: 23, Name: "a"},
-		User{UserId: 1},
-		User{UserId: 1},
+		User{UserID: 3, Name: "a"},
+		User{UserID: 3, Name: "c"},
+		User{UserID: 23, Name: "d"},
+		User{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
+		User{UserID: 23, Name: "c", CreateTime: time.Unix(1, 0)},
+		User{UserID: 23, Name: "c", CreateTime: time.Unix(33, 0)},
+		User{UserID: 23, Name: "a"},
+		User{UserID: 1},
+		User{UserID: 1},
 	}
-	assert.Equal(t, query.Sort(data, "UserId desc,Name asc,CreateTime asc"), []User{
-		User{UserId: 23, Name: "a"},
-		User{UserId: 23, Name: "c", CreateTime: time.Unix(1, 0)},
-		User{UserId: 23, Name: "c", CreateTime: time.Unix(29, 0)},
-		User{UserId: 23, Name: "c", CreateTime: time.Unix(33, 0)},
-		User{UserId: 23, Name: "d"},
-		User{UserId: 3, Name: "a"},
-		User{UserId: 3, Name: "c"},
-		User{UserId: 1},
-		User{UserId: 1},
+	assert.Equal(t, query.Sort(data, "UserID desc,Name asc,CreateTime asc"), []User{
+		User{UserID: 23, Name: "a"},
+		User{UserID: 23, Name: "c", CreateTime: time.Unix(1, 0)},
+		User{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
+		User{UserID: 23, Name: "c", CreateTime: time.Unix(33, 0)},
+		User{UserID: 23, Name: "d"},
+		User{UserID: 3, Name: "a"},
+		User{UserID: 3, Name: "c"},
+		User{UserID: 1},
+		User{UserID: 1},
 	})
 	assert.Equal(t, query.Sort([]int{3, 2, 1, 7, -8}, ". desc"), []int{7, 3, 2, 1, -8})
 }
@@ -39,7 +39,7 @@ func TestQuerySort(t *testing.T) {
 func initQuerySortData() []User {
 	data := make([]User, 1000, 1000)
 	for i := range data {
-		data[i].UserId = rand.Int()
+		data[i].UserID = rand.Int()
 		data[i].Age = rand.Int()
 	}
 	return data
@@ -53,7 +53,7 @@ func BenchmarkQuerySortHand(b *testing.B) {
 		newData := make([]User, len(data), len(data))
 		copy(newData, data)
 		sort.SliceStable(newData, func(i int, j int) bool {
-			return newData[i].UserId < newData[j].UserId
+			return newData[i].UserID < newData[j].UserID
 		})
 	}
 }
@@ -63,7 +63,7 @@ func BenchmarkQuerySortMacro(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
-		query.Sort(data, "UserId asc")
+		query.Sort(data, "UserID asc")
 	}
 }
 

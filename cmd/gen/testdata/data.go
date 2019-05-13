@@ -8,14 +8,14 @@ import (
 
 // Department Department
 type Department struct {
-	DepartmentId int
+	DepartmentID int
 	Name         string
 	Employees    []User
 }
 
 // User User
 type User struct {
-	UserId     int
+	UserID     int
 	Age        int
 	Name       string
 	CreateTime time.Time
@@ -23,13 +23,13 @@ type User struct {
 
 // Admin Admin
 type Admin struct {
-	AdminId int
+	AdminID int
 	Level   int
 }
 
 // AdminUser AdminUser
 type AdminUser struct {
-	AdminId    int
+	AdminID    int
 	Level      int
 	Age        int
 	Name       string
@@ -42,7 +42,7 @@ type Sex struct {
 }
 
 func logic() {
-	query.Column([]User{}, "UserId")
+	query.Column([]User{}, "UserID")
 	query.Column([]User{}, ".")
 	query.Column([]int{}, ".")
 	query.Select([]User{}, func(d User) Sex {
@@ -54,12 +54,12 @@ func logic() {
 	query.Where([]User{}, func(c User) bool {
 		return true
 	})
-	query.Sort([]User{}, "UserId desc,Name asc,CreateTime asc")
-	query.Sort([]User{}, "UserId asc")
+	query.Sort([]User{}, "UserID desc,Name asc,CreateTime asc")
+	query.Sort([]User{}, "UserID asc")
 	query.Sort([]int{}, ". desc")
-	query.ColumnMap([]User{}, "UserId")
+	query.ColumnMap([]User{}, "UserID")
 	query.ColumnMap([]int{}, ".")
-	query.Group([]User{}, "UserId", func(user []User) Department {
+	query.Group([]User{}, "UserID", func(user []User) Department {
 		return Department{}
 	})
 	query.Group([]User{}, "CreateTime", func(user []User) Department {
@@ -67,17 +67,17 @@ func logic() {
 	})
 	query.Group([]int{}, ".", func(ids []int) Department {
 		users := query.Select(ids, func(id int) User {
-			return User{UserId: id}
+			return User{UserID: id}
 		}).([]User)
 		return Department{Employees: users}
 	})
-	query.LeftJoin([]Admin{}, []User{}, "AdminId = UserId", func(left Admin, right User) AdminUser {
+	query.LeftJoin([]Admin{}, []User{}, "AdminID = UserID", func(left Admin, right User) AdminUser {
 		return AdminUser{}
 	})
-	query.RightJoin([]User{}, []int{}, "UserId = .", func(left User, right int) User {
+	query.RightJoin([]User{}, []int{}, "UserID = .", func(left User, right int) User {
 		return User{}
 	})
-	query.Join([]Admin{}, []User{}, "inner", "AdminId = UserId", func(left Admin, right User) AdminUser {
+	query.Join([]Admin{}, []User{}, "inner", "AdminID = UserID", func(left Admin, right User) AdminUser {
 		return AdminUser{}
 	})
 	query.Combine([]Admin{}, []User{}, func(left Admin, right User) AdminUser {

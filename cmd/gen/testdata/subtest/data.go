@@ -6,7 +6,7 @@ import (
 
 // Address Address
 type Address struct {
-	AddressId int
+	AddressID int
 	City      string
 }
 

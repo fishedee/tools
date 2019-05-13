@@ -25,12 +25,12 @@ func TestQuerySelect(t *testing.T) {
 		Sex{IsMale: true},
 	})
 	assert.Equal(t, query.Select([]int{3, 4, 5, -1}, func(a int) User {
-		return User{UserId: a}
+		return User{UserID: a}
 	}), []User{
-		User{UserId: 3},
-		User{UserId: 4},
-		User{UserId: 5},
-		User{UserId: -1},
+		User{UserID: 3},
+		User{UserID: 4},
+		User{UserID: 5},
+		User{UserID: -1},
 	})
 }
 
