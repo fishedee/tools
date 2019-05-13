@@ -23,7 +23,7 @@ func TestFuncCallInspect(t *testing.T) {
 	err := macro.ImportRecursive("github.com/fishedee/tools/query")
 	assert.Equal(t, err, nil)
 
-	err = macro.Walk(func(pkg MacroPackage) {
+	err = macro.Walk(func(pkg Package) {
 		pkg.OnFuncCall(func(expr *ast.CallExpr, caller *types.Func, args []types.TypeAndValue) {
 			packag := caller.Pkg()
 			if packag == nil {

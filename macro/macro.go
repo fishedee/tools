@@ -13,37 +13,37 @@ import (
 	"golang.org/x/tools/go/loader"
 )
 
-// MacroFuncCallInspector MacroFuncCallInspector
-type MacroFuncCallInspector func(expr *ast.CallExpr, caller *types.Func, args []types.TypeAndValue)
+// FuncCallInspector FuncCallInspector
+type FuncCallInspector func(expr *ast.CallExpr, caller *types.Func, args []types.TypeAndValue)
 
-// MacroPackage MacroPackage
-type MacroPackage struct {
+// Package Package
+type Package struct {
 	fset     *token.FileSet
 	pkg      *loader.PackageInfo
-	funcCall MacroFuncCallInspector
+	funcCall FuncCallInspector
 }
 
 // Package Package
-func (mp *MacroPackage) Package() *types.Package {
+func (mp *Package) Package() *types.Package {
 	return mp.pkg.Pkg
 }
 
 // FileSet FileSet
-func (mp *MacroPackage) FileSet() *token.FileSet {
+func (mp *Package) FileSet() *token.FileSet {
 	return mp.fset
 }
 
 // TypeInfo TypeInfo
-func (mp *MacroPackage) TypeInfo() types.Info {
+func (mp *Package) TypeInfo() types.Info {
 	return mp.pkg.Info
 }
 
 // OnFuncCall OnFuncCall
-func (mp *MacroPackage) OnFuncCall(funcCall MacroFuncCallInspector) {
+func (mp *Package) OnFuncCall(funcCall FuncCallInspector) {
 	mp.funcCall = funcCall
 }
 
-func (mp *MacroPackage) fireFuncCall(n ast.Node) {
+func (mp *Package) fireFuncCall(n ast.Node) {
 	if mp.funcCall == nil {
 		return
 	}
@@ -84,7 +84,7 @@ func (mp *MacroPackage) fireFuncCall(n ast.Node) {
 }
 
 // Inspect Inspect
-func (mp *MacroPackage) Inspect() {
+func (mp *Package) Inspect() {
 	for _, file := range mp.pkg.Files {
 		ast.Inspect(file, func(n ast.Node) bool {
 			//检查函数
@@ -94,8 +94,8 @@ func (mp *MacroPackage) Inspect() {
 	}
 }
 
-// MacroWalker MacroWalker
-type MacroWalker func(inspector MacroPackage)
+// Walker Walker
+type Walker func(inspector Package)
 
 // Macro Macro
 type Macro struct {
@@ -149,7 +149,7 @@ func (m *Macro) ImportRecursive(pkg string) error {
 }
 
 // Walk Walk
-func (m *Macro) Walk(walker MacroWalker) error {
+func (m *Macro) Walk(walker Walker) error {
 	var conf loader.Config
 	if len(m.packages) == 0 {
 		return errors.New("none package have to load")
@@ -165,7 +165,7 @@ func (m *Macro) Walk(walker MacroWalker) error {
 		if len(singlePackage.Errors) != 0 {
 			return singlePackage.Errors[0]
 		}
-		inspector := MacroPackage{
+		inspector := Package{
 			fset: lprog.Fset,
 			pkg:  singlePackage,
 		}

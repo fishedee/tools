@@ -40,7 +40,7 @@ func nodeString(fset *token.FileSet, n ast.Node) string {
 
 // QueryGenRequest QueryGenRequest
 type QueryGenRequest struct {
-	pkg    macro.MacroPackage
+	pkg    macro.Package
 	expr   *ast.CallExpr
 	caller *types.Func
 	args   []types.TypeAndValue
@@ -154,7 +154,7 @@ func run() {
 	genPackage := []QueryGenResponse{}
 	initPackageName := ""
 	globalGeneratePackagePath = args[0]
-	err := macroObj.Walk(func(pkg macro.MacroPackage) {
+	err := macroObj.Walk(func(pkg macro.Package) {
 		if pkg.Package().Path() == args[0] {
 			initPackageName = pkg.Package().Name()
 		}
