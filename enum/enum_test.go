@@ -17,15 +17,15 @@ func getEnumStructError(handler func()) (lastErr string) {
 	return ""
 }
 
-func TestEnumStruct(t *testing.T) {
+func TestStruct(t *testing.T) {
 	var testCase struct {
-		EnumStruct
+		Struct
 		ENUM1 int `enum:"1,枚举1"`
 		ENUM2 int `enum:"2,枚举2"`
 		ENUM3 int `enum:"3,枚举3"`
 	}
 
-	InitEnumStruct(&testCase)
+	InitStruct(&testCase)
 
 	//断言基本枚举值
 	assert.Equal(t, testCase.ENUM1, 1)
@@ -43,7 +43,7 @@ func TestEnumStruct(t *testing.T) {
 		2: "枚举2",
 		3: "枚举3",
 	})
-	assert.Equal(t, testCase.Datas(), []EnumData{
+	assert.Equal(t, testCase.Datas(), []Data{
 		{1, "枚举1"},
 		{2, "枚举2"},
 		{3, "枚举3"},
@@ -55,59 +55,59 @@ func TestEnumStruct(t *testing.T) {
 	var err string
 	var realErr = "invalid enum struct"
 	var testCaseErr1 struct {
-		EnumStruct
+		Struct
 		ENUM1 int `enum:1,枚举1`
 		ENUM2 int `enum:"2,枚举2"`
 		ENUM3 int `enum:"3,枚举3"`
 	}
 	err = getEnumStructError(func() {
-		InitEnumStruct(&testCaseErr1)
+		InitStruct(&testCaseErr1)
 	})
 	assert.Equal(t, err[0:len(realErr)], realErr)
 
 	var testCaseErr2 struct {
-		EnumStruct
+		Struct
 		ENUM1 int `enum:"枚举1"`
 		ENUM2 int `enum:"2,枚举2"`
 		ENUM3 int `enum:"3,枚举3"`
 	}
 	err = getEnumStructError(func() {
-		InitEnumStruct(&testCaseErr2)
+		InitStruct(&testCaseErr2)
 	})
 	assert.Equal(t, err[0:len(realErr)], realErr)
 
 	var testCaseErr3 struct {
-		EnumStruct
+		Struct
 		ENUM1 int `enum:"1"`
 		ENUM2 int `enum:"2,枚举2"`
 		ENUM3 int `enum:"3,枚举3"`
 	}
 	err = getEnumStructError(func() {
-		InitEnumStruct(&testCaseErr3)
+		InitStruct(&testCaseErr3)
 	})
 	assert.Equal(t, err[0:len(realErr)], realErr)
 
 	var testCaseErr4 struct {
-		EnumStruct
+		Struct
 		ENUM1 int `enum:"1z,枚举1"`
 		ENUM2 int `enum:"2,枚举2"`
 		ENUM3 int `enum:"3,枚举3"`
 	}
 	err = getEnumStructError(func() {
-		InitEnumStruct(&testCaseErr4)
+		InitStruct(&testCaseErr4)
 	})
 	assert.Equal(t, err[0:len(realErr)], realErr)
 }
 
 func TestEnumStructString(t *testing.T) {
 	var testCase struct {
-		EnumStructString
+		StructString
 		ENUM1 string `enum:"/content/del1,枚举1"`
 		ENUM2 string `enum:"/content/del2,枚举2"`
 		ENUM3 string `enum:"/content/del3,枚举3"`
 	}
 
-	InitEnumStructString(&testCase)
+	InitStructString(&testCase)
 
 	//断言基本枚举值
 	assert.Equal(t, testCase.ENUM1, "/content/del1")
@@ -125,7 +125,7 @@ func TestEnumStructString(t *testing.T) {
 		"/content/del2": "枚举2",
 		"/content/del3": "枚举3",
 	})
-	assert.Equal(t, testCase.Datas(), []EnumDataString{
+	assert.Equal(t, testCase.Datas(), []DataString{
 		{"/content/del1", "枚举1"},
 		{"/content/del2", "枚举2"},
 		{"/content/del3", "枚举3"},
@@ -137,35 +137,35 @@ func TestEnumStructString(t *testing.T) {
 	var err string
 	var realErr = "invalid enum struct"
 	var testCaseErr1 struct {
-		EnumStructString
+		StructString
 		ENUM1 string `enum:/content/del1,枚举1`
 		ENUM2 string `enum:"/content/del2,枚举2"`
 		ENUM3 string `enum:"/content/del3,枚举3"`
 	}
 	err = getEnumStructError(func() {
-		InitEnumStructString(&testCaseErr1)
+		InitStructString(&testCaseErr1)
 	})
 	assert.Equal(t, err[0:len(realErr)], realErr)
 
 	var testCaseErr2 struct {
-		EnumStructString
+		StructString
 		ENUM1 string `enum:"/content/del1"`
 		ENUM2 string `enum:"/content/del2,枚举2"`
 		ENUM3 string `enum:"/content/del3,枚举3"`
 	}
 	err = getEnumStructError(func() {
-		InitEnumStructString(&testCaseErr2)
+		InitStructString(&testCaseErr2)
 	})
 	assert.Equal(t, err[0:len(realErr)], realErr)
 
 	var testCaseErr3 struct {
-		EnumStructString
+		StructString
 		ENUM1 string `enum:"枚举1"`
 		ENUM2 string `enum:"/content/del2,枚举2"`
 		ENUM3 string `enum:"/content/del3,枚举3"`
 	}
 	err = getEnumStructError(func() {
-		InitEnumStructString(&testCaseErr3)
+		InitStructString(&testCaseErr3)
 	})
 	assert.Equal(t, err[0:len(realErr)], realErr)
 }

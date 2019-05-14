@@ -10,7 +10,7 @@ import (
 
 // TypeKind 类型
 var TypeKind struct {
-	enum.EnumStruct
+	enum.Struct
 	BOOL      int `enum:"1,布尔"`
 	INT       int `enum:"2,有符号整数"`
 	UINT      int `enum:"3,无符号整数"`
@@ -27,7 +27,7 @@ var TypeKind struct {
 }
 
 func init() {
-	enum.InitEnumStruct(&TypeKind)
+	enum.InitStruct(&TypeKind)
 }
 
 // GetTypeKind 获取类型

@@ -6,25 +6,25 @@ import (
 	"strings"
 )
 
-// EnumData 枚举数据
-type EnumData struct {
+// Data 枚举数据
+type Data struct {
 	ID   int
 	Name string
 }
 
-// EnumStruct 枚举结构体
-type EnumStruct struct {
+// Struct 枚举结构体
+type Struct struct {
 	names map[string]string
-	datas []EnumData
+	datas []Data
 }
 
-// InitEnumStruct 初始化
-func InitEnumStruct(this interface{}) {
+// InitStruct 初始化
+func InitStruct(this interface{}) {
 	enumInfo := reflect.TypeOf(this).Elem()
 	enumValue := reflect.ValueOf(this)
-	result := enumValue.Elem().FieldByName("EnumStruct").Addr().Interface().(*EnumStruct)
+	result := enumValue.Elem().FieldByName("Struct").Addr().Interface().(*Struct)
 	result.names = map[string]string{}
-	result.datas = []EnumData{}
+	result.datas = []Data{}
 
 	for i := 0; i != enumInfo.NumField(); i++ {
 		singleField := enumInfo.Field(i)
@@ -49,7 +49,7 @@ func InitEnumStruct(this interface{}) {
 		}
 
 		result.names[singleFieldTagArray[0]] = singleFieldTagSeeName
-		result.datas = append(result.datas, EnumData{
+		result.datas = append(result.datas, Data{
 			ID:   singleFieldTagValue,
 			Name: singleFieldTagSeeName,
 		})
@@ -58,12 +58,12 @@ func InitEnumStruct(this interface{}) {
 }
 
 // Names 名字
-func (es *EnumStruct) Names() map[string]string {
+func (es *Struct) Names() map[string]string {
 	return es.names
 }
 
 // Entrys 条目
-func (es *EnumStruct) Entrys() map[int]string {
+func (es *Struct) Entrys() map[int]string {
 	result := map[int]string{}
 	for key, value := range es.names {
 		singleKey, _ := strconv.Atoi(key)
@@ -73,12 +73,12 @@ func (es *EnumStruct) Entrys() map[int]string {
 }
 
 // Datas 数据
-func (es *EnumStruct) Datas() []EnumData {
+func (es *Struct) Datas() []Data {
 	return es.datas
 }
 
 // Keys 键
-func (es *EnumStruct) Keys() []int {
+func (es *Struct) Keys() []int {
 	result := []int{}
 	for _, singleEnum := range es.datas {
 		result = append(
@@ -90,7 +90,7 @@ func (es *EnumStruct) Keys() []int {
 }
 
 // Values 值
-func (es *EnumStruct) Values() []string {
+func (es *Struct) Values() []string {
 	result := []string{}
 	for _, singleEnum := range es.datas {
 		result = append(
@@ -101,25 +101,25 @@ func (es *EnumStruct) Values() []string {
 	return result
 }
 
-// EnumDataString 字符串类型
-type EnumDataString struct {
+// DataString 字符串类型
+type DataString struct {
 	ID   string
 	Name string
 }
 
-// EnumStructString 字符串类型
-type EnumStructString struct {
+// StructString 字符串类型
+type StructString struct {
 	names map[string]string
-	datas []EnumDataString
+	datas []DataString
 }
 
-// InitEnumStructString 初始化
-func InitEnumStructString(this interface{}) {
+// InitStructString 初始化
+func InitStructString(this interface{}) {
 	enumInfo := reflect.TypeOf(this).Elem()
 	enumValue := reflect.ValueOf(this)
-	result := enumValue.Elem().FieldByName("EnumStructString").Addr().Interface().(*EnumStructString)
+	result := enumValue.Elem().FieldByName("StructString").Addr().Interface().(*StructString)
 	result.names = map[string]string{}
-	result.datas = []EnumDataString{}
+	result.datas = []DataString{}
 
 	for i := 0; i != enumInfo.NumField(); i++ {
 		singleField := enumInfo.Field(i)
@@ -141,7 +141,7 @@ func InitEnumStructString(this interface{}) {
 		}
 
 		result.names[singleFieldTagValue] = singleFieldTagSeeName
-		result.datas = append(result.datas, EnumDataString{
+		result.datas = append(result.datas, DataString{
 			ID:   singleFieldTagValue,
 			Name: singleFieldTagSeeName,
 		})
@@ -151,22 +151,22 @@ func InitEnumStructString(this interface{}) {
 }
 
 // Names 名字
-func (ess *EnumStructString) Names() map[string]string {
+func (ess *StructString) Names() map[string]string {
 	return ess.names
 }
 
 // Entrys 条目
-func (ess *EnumStructString) Entrys() map[string]string {
+func (ess *StructString) Entrys() map[string]string {
 	return ess.names
 }
 
 // Datas 数据
-func (ess *EnumStructString) Datas() []EnumDataString {
+func (ess *StructString) Datas() []DataString {
 	return ess.datas
 }
 
 // Keys 键
-func (ess *EnumStructString) Keys() []string {
+func (ess *StructString) Keys() []string {
 	result := []string{}
 	for _, singleEnum := range ess.datas {
 		result = append(
@@ -178,7 +178,7 @@ func (ess *EnumStructString) Keys() []string {
 }
 
 // Values 值
-func (ess *EnumStructString) Values() []string {
+func (ess *StructString) Values() []string {
 	result := []string{}
 	for _, singleEnum := range ess.datas {
 		result = append(
