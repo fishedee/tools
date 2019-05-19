@@ -6,17 +6,7 @@ import (
 	"time"
 )
 
-func queryColumn904b262f8e2329ec73c320ca0e5ca82f14165586(data interface{}, column string) interface{} {
-	dataIn := data.([]int)
-	result := make([]int, len(dataIn), len(dataIn))
-
-	for i, single := range dataIn {
-		result[i] = single
-	}
-	return result
-}
-
-func queryColumnMap904b262f8e2329ec73c320ca0e5ca82f14165586(data interface{}, column string) interface{} {
+func queryColumnMapV904b262f8e2329ec73c320ca0e5ca82f14165586(data interface{}, column string) interface{} {
 	dataIn := data.([]int)
 	result := make(map[int]int, len(dataIn))
 
@@ -26,7 +16,7 @@ func queryColumnMap904b262f8e2329ec73c320ca0e5ca82f14165586(data interface{}, co
 	return result
 }
 
-func queryColumnMapac46a6e2d4d6d4f163cc177eb335bc2bb166d92b(data interface{}, column string) interface{} {
+func queryColumnMapVac46a6e2d4d6d4f163cc177eb335bc2bb166d92b(data interface{}, column string) interface{} {
 	dataIn := data.([]User)
 	result := make(map[int]User, len(dataIn))
 
@@ -36,7 +26,17 @@ func queryColumnMapac46a6e2d4d6d4f163cc177eb335bc2bb166d92b(data interface{}, co
 	return result
 }
 
-func queryColumnac46a6e2d4d6d4f163cc177eb335bc2bb166d92b(data interface{}, column string) interface{} {
+func queryColumnV904b262f8e2329ec73c320ca0e5ca82f14165586(data interface{}, column string) interface{} {
+	dataIn := data.([]int)
+	result := make([]int, len(dataIn), len(dataIn))
+
+	for i, single := range dataIn {
+		result[i] = single
+	}
+	return result
+}
+
+func queryColumnVac46a6e2d4d6d4f163cc177eb335bc2bb166d92b(data interface{}, column string) interface{} {
 	dataIn := data.([]User)
 	result := make([]int, len(dataIn), len(dataIn))
 
@@ -46,7 +46,7 @@ func queryColumnac46a6e2d4d6d4f163cc177eb335bc2bb166d92b(data interface{}, colum
 	return result
 }
 
-func queryColumnb6a4a6f17a7bc9f4857b953563c0a001e04b0df4(data interface{}, column string) interface{} {
+func queryColumnVb6a4a6f17a7bc9f4857b953563c0a001e04b0df4(data interface{}, column string) interface{} {
 	dataIn := data.([]subtest.Address)
 	result := make([]string, len(dataIn), len(dataIn))
 
@@ -56,7 +56,7 @@ func queryColumnb6a4a6f17a7bc9f4857b953563c0a001e04b0df4(data interface{}, colum
 	return result
 }
 
-func queryColumnc6bebe695f9ff26a9409d88809a85fd9cceda86d(data interface{}, column string) interface{} {
+func queryColumnVc6bebe695f9ff26a9409d88809a85fd9cceda86d(data interface{}, column string) interface{} {
 	dataIn := data.([]User)
 	result := make([]User, len(dataIn), len(dataIn))
 
@@ -66,7 +66,7 @@ func queryColumnc6bebe695f9ff26a9409d88809a85fd9cceda86d(data interface{}, colum
 	return result
 }
 
-func queryCombine38f41d1ea9151d195cb01ed01c28e94b7fbd938b(leftData interface{}, rightData interface{}, combineFunctor interface{}) interface{} {
+func queryCombineV38f41d1ea9151d195cb01ed01c28e94b7fbd938b(leftData interface{}, rightData interface{}, combineFunctor interface{}) interface{} {
 	leftDataIn := leftData.([]int)
 	rightDataIn := rightData.([]User)
 	combineFunctorIn := combineFunctor.(func(int, User) User)
@@ -78,7 +78,7 @@ func queryCombine38f41d1ea9151d195cb01ed01c28e94b7fbd938b(leftData interface{}, 
 	return newData
 }
 
-func queryCombinedd9cf383efe9adb9dedf293cf43f875133066c23(leftData interface{}, rightData interface{}, combineFunctor interface{}) interface{} {
+func queryCombineVdd9cf383efe9adb9dedf293cf43f875133066c23(leftData interface{}, rightData interface{}, combineFunctor interface{}) interface{} {
 	leftDataIn := leftData.([]Admin)
 	rightDataIn := rightData.([]User)
 	combineFunctorIn := combineFunctor.(func(Admin, User) AdminUser)
@@ -90,7 +90,7 @@ func queryCombinedd9cf383efe9adb9dedf293cf43f875133066c23(leftData interface{}, 
 	return newData
 }
 
-func queryGroup7c15a02754e8e39a158cd3d3e8088258012c6f55(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+func queryGroupV7c15a02754e8e39a158cd3d3e8088258012c6f55(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]User)
 	groupFunctorIn := groupFunctor.(func([]User) Department)
 	bufferData := make([]User, len(dataIn), len(dataIn))
@@ -132,7 +132,7 @@ func queryGroup7c15a02754e8e39a158cd3d3e8088258012c6f55(data interface{}, groupT
 	return result
 }
 
-func queryGroupb6f1c2171838a5cc1ac9e63d0ecaada8ee2f1e41(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+func queryGroupVb6f1c2171838a5cc1ac9e63d0ecaada8ee2f1e41(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]User)
 	groupFunctorIn := groupFunctor.(func([]User) Department)
 	bufferData := make([]User, len(dataIn), len(dataIn))
@@ -174,7 +174,7 @@ func queryGroupb6f1c2171838a5cc1ac9e63d0ecaada8ee2f1e41(data interface{}, groupT
 	return result
 }
 
-func queryGroupec4d3b2c280c9fc398a0f8a554bc1c2ec7010257(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+func queryGroupVec4d3b2c280c9fc398a0f8a554bc1c2ec7010257(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]int)
 	groupFunctorIn := groupFunctor.(func([]int) Department)
 	bufferData := make([]int, len(dataIn), len(dataIn))
@@ -216,7 +216,7 @@ func queryGroupec4d3b2c280c9fc398a0f8a554bc1c2ec7010257(data interface{}, groupT
 	return result
 }
 
-func queryJoin29a4e5efaa3321b67511a20dc57f29e0ec5aa0cf(leftData interface{}, rightData interface{}, joinPlace string, joinType string, joinFunctor interface{}) interface{} {
+func queryJoinV29a4e5efaa3321b67511a20dc57f29e0ec5aa0cf(leftData interface{}, rightData interface{}, joinPlace string, joinType string, joinFunctor interface{}) interface{} {
 	leftDataIn := leftData.([]Admin)
 	rightDataIn := rightData.([]User)
 	joinFunctorIn := joinFunctor.(func(Admin, User) AdminUser)
@@ -279,7 +279,7 @@ func queryJoin29a4e5efaa3321b67511a20dc57f29e0ec5aa0cf(leftData interface{}, rig
 	return result
 }
 
-func queryJoin3b9eb26d0b915e0c6d26c912e94883240a196b12(leftData interface{}, rightData interface{}, joinPlace string, joinType string, joinFunctor interface{}) interface{} {
+func queryJoinV3b9eb26d0b915e0c6d26c912e94883240a196b12(leftData interface{}, rightData interface{}, joinPlace string, joinType string, joinFunctor interface{}) interface{} {
 	leftDataIn := leftData.([]User)
 	rightDataIn := rightData.([]int)
 	joinFunctorIn := joinFunctor.(func(User, int) User)
@@ -342,7 +342,7 @@ func queryJoin3b9eb26d0b915e0c6d26c912e94883240a196b12(leftData interface{}, rig
 	return result
 }
 
-func queryJoin4f860e3bcc925b8d2d6fae8fab6a2a5cc4fba96f(leftData interface{}, rightData interface{}, joinPlace string, joinType string, joinFunctor interface{}) interface{} {
+func queryJoinV4f860e3bcc925b8d2d6fae8fab6a2a5cc4fba96f(leftData interface{}, rightData interface{}, joinPlace string, joinType string, joinFunctor interface{}) interface{} {
 	leftDataIn := leftData.([]Admin)
 	rightDataIn := rightData.([]User)
 	joinFunctorIn := joinFunctor.(func(Admin, User) AdminUser)
@@ -405,7 +405,7 @@ func queryJoin4f860e3bcc925b8d2d6fae8fab6a2a5cc4fba96f(leftData interface{}, rig
 	return result
 }
 
-func querySelect6ee296b569bde42f94e969ef503e43ca5827eda6(data interface{}, selectFunctor interface{}) interface{} {
+func querySelectV6ee296b569bde42f94e969ef503e43ca5827eda6(data interface{}, selectFunctor interface{}) interface{} {
 	dataIn := data.([]int)
 	selectFunctorIn := selectFunctor.(func(int) User)
 	result := make([]User, len(dataIn), len(dataIn))
@@ -416,7 +416,7 @@ func querySelect6ee296b569bde42f94e969ef503e43ca5827eda6(data interface{}, selec
 	return result
 }
 
-func querySelectd595e8831f2025c62e11d6273f64a4d65d32f4c2(data interface{}, selectFunctor interface{}) interface{} {
+func querySelectVd595e8831f2025c62e11d6273f64a4d65d32f4c2(data interface{}, selectFunctor interface{}) interface{} {
 	dataIn := data.([]User)
 	selectFunctorIn := selectFunctor.(func(User) Sex)
 	result := make([]Sex, len(dataIn), len(dataIn))
@@ -427,7 +427,7 @@ func querySelectd595e8831f2025c62e11d6273f64a4d65d32f4c2(data interface{}, selec
 	return result
 }
 
-func querySort24a673fdaa750030447c9f4189cf7c07434d6efc(data interface{}, sortType string) interface{} {
+func querySortV24a673fdaa750030447c9f4189cf7c07434d6efc(data interface{}, sortType string) interface{} {
 	dataIn := data.([]User)
 	newData := make([]User, len(dataIn), len(dataIn))
 	copy(newData, dataIn)
@@ -446,7 +446,7 @@ func querySort24a673fdaa750030447c9f4189cf7c07434d6efc(data interface{}, sortTyp
 	return newData
 }
 
-func querySortaf891d058d5a2e0a3ac4b4b291ae9bb959364795(data interface{}, sortType string) interface{} {
+func querySortVaf891d058d5a2e0a3ac4b4b291ae9bb959364795(data interface{}, sortType string) interface{} {
 	dataIn := data.([]int)
 	newData := make([]int, len(dataIn), len(dataIn))
 	copy(newData, dataIn)
@@ -465,7 +465,7 @@ func querySortaf891d058d5a2e0a3ac4b4b291ae9bb959364795(data interface{}, sortTyp
 	return newData
 }
 
-func querySortc863de209dea4542794c518ccbd6908305b5d21e(data interface{}, sortType string) interface{} {
+func querySortVc863de209dea4542794c518ccbd6908305b5d21e(data interface{}, sortType string) interface{} {
 	dataIn := data.([]User)
 	newData := make([]User, len(dataIn), len(dataIn))
 	copy(newData, dataIn)
@@ -496,7 +496,7 @@ func querySortc863de209dea4542794c518ccbd6908305b5d21e(data interface{}, sortTyp
 	return newData
 }
 
-func queryWhereae59d599ddb6a7c038d3dc70deaebd78a39febff(data interface{}, whereFunctor interface{}) interface{} {
+func queryWhereVae59d599ddb6a7c038d3dc70deaebd78a39febff(data interface{}, whereFunctor interface{}) interface{} {
 	dataIn := data.([]User)
 	whereFunctorIn := whereFunctor.(func(User) bool)
 	result := make([]User, 0, len(dataIn))
@@ -510,7 +510,7 @@ func queryWhereae59d599ddb6a7c038d3dc70deaebd78a39febff(data interface{}, whereF
 	return result
 }
 
-func queryWheredf6742e675632943121cefdb3ad29ba75c08eaac(data interface{}, whereFunctor interface{}) interface{} {
+func queryWhereVdf6742e675632943121cefdb3ad29ba75c08eaac(data interface{}, whereFunctor interface{}) interface{} {
 	dataIn := data.([]int)
 	whereFunctorIn := whereFunctor.(func(int) bool)
 	result := make([]int, 0, len(dataIn))
@@ -526,46 +526,46 @@ func queryWheredf6742e675632943121cefdb3ad29ba75c08eaac(data interface{}, whereF
 
 func init() {
 
-	query.ColumnMacroRegister([]int{}, ".", queryColumn904b262f8e2329ec73c320ca0e5ca82f14165586)
+	query.ColumnMapMacroRegister([]int{}, ".", queryColumnMapV904b262f8e2329ec73c320ca0e5ca82f14165586)
 
-	query.ColumnMapMacroRegister([]int{}, ".", queryColumnMap904b262f8e2329ec73c320ca0e5ca82f14165586)
+	query.ColumnMapMacroRegister([]User{}, "UserID", queryColumnMapVac46a6e2d4d6d4f163cc177eb335bc2bb166d92b)
 
-	query.ColumnMapMacroRegister([]User{}, "UserID", queryColumnMapac46a6e2d4d6d4f163cc177eb335bc2bb166d92b)
+	query.ColumnMacroRegister([]int{}, ".", queryColumnV904b262f8e2329ec73c320ca0e5ca82f14165586)
 
-	query.ColumnMacroRegister([]User{}, "UserID", queryColumnac46a6e2d4d6d4f163cc177eb335bc2bb166d92b)
+	query.ColumnMacroRegister([]User{}, "UserID", queryColumnVac46a6e2d4d6d4f163cc177eb335bc2bb166d92b)
 
-	query.ColumnMacroRegister([]subtest.Address{}, "City", queryColumnb6a4a6f17a7bc9f4857b953563c0a001e04b0df4)
+	query.ColumnMacroRegister([]subtest.Address{}, "City", queryColumnVb6a4a6f17a7bc9f4857b953563c0a001e04b0df4)
 
-	query.ColumnMacroRegister([]User{}, ".", queryColumnc6bebe695f9ff26a9409d88809a85fd9cceda86d)
+	query.ColumnMacroRegister([]User{}, ".", queryColumnVc6bebe695f9ff26a9409d88809a85fd9cceda86d)
 
-	query.CombineMacroRegister([]int{}, []User{}, (func(int, User) User)(nil), queryCombine38f41d1ea9151d195cb01ed01c28e94b7fbd938b)
+	query.CombineMacroRegister([]int{}, []User{}, (func(int, User) User)(nil), queryCombineV38f41d1ea9151d195cb01ed01c28e94b7fbd938b)
 
-	query.CombineMacroRegister([]Admin{}, []User{}, (func(Admin, User) AdminUser)(nil), queryCombinedd9cf383efe9adb9dedf293cf43f875133066c23)
+	query.CombineMacroRegister([]Admin{}, []User{}, (func(Admin, User) AdminUser)(nil), queryCombineVdd9cf383efe9adb9dedf293cf43f875133066c23)
 
-	query.GroupMacroRegister([]User{}, "UserID", (func([]User) Department)(nil), queryGroup7c15a02754e8e39a158cd3d3e8088258012c6f55)
+	query.GroupMacroRegister([]User{}, "UserID", (func([]User) Department)(nil), queryGroupV7c15a02754e8e39a158cd3d3e8088258012c6f55)
 
-	query.GroupMacroRegister([]User{}, "CreateTime", (func([]User) Department)(nil), queryGroupb6f1c2171838a5cc1ac9e63d0ecaada8ee2f1e41)
+	query.GroupMacroRegister([]User{}, "CreateTime", (func([]User) Department)(nil), queryGroupVb6f1c2171838a5cc1ac9e63d0ecaada8ee2f1e41)
 
-	query.GroupMacroRegister([]int{}, ".", (func([]int) Department)(nil), queryGroupec4d3b2c280c9fc398a0f8a554bc1c2ec7010257)
+	query.GroupMacroRegister([]int{}, ".", (func([]int) Department)(nil), queryGroupVec4d3b2c280c9fc398a0f8a554bc1c2ec7010257)
 
-	query.JoinMacroRegister([]Admin{}, []User{}, "left", "AdminID = UserID", (func(Admin, User) AdminUser)(nil), queryJoin29a4e5efaa3321b67511a20dc57f29e0ec5aa0cf)
+	query.JoinMacroRegister([]Admin{}, []User{}, "left", "AdminID = UserID", (func(Admin, User) AdminUser)(nil), queryJoinV29a4e5efaa3321b67511a20dc57f29e0ec5aa0cf)
 
-	query.JoinMacroRegister([]User{}, []int{}, "right", "UserID = .", (func(User, int) User)(nil), queryJoin3b9eb26d0b915e0c6d26c912e94883240a196b12)
+	query.JoinMacroRegister([]User{}, []int{}, "right", "UserID = .", (func(User, int) User)(nil), queryJoinV3b9eb26d0b915e0c6d26c912e94883240a196b12)
 
-	query.JoinMacroRegister([]Admin{}, []User{}, "inner", "AdminID = UserID", (func(Admin, User) AdminUser)(nil), queryJoin4f860e3bcc925b8d2d6fae8fab6a2a5cc4fba96f)
+	query.JoinMacroRegister([]Admin{}, []User{}, "inner", "AdminID = UserID", (func(Admin, User) AdminUser)(nil), queryJoinV4f860e3bcc925b8d2d6fae8fab6a2a5cc4fba96f)
 
-	query.SelectMacroRegister([]int{}, (func(int) User)(nil), querySelect6ee296b569bde42f94e969ef503e43ca5827eda6)
+	query.SelectMacroRegister([]int{}, (func(int) User)(nil), querySelectV6ee296b569bde42f94e969ef503e43ca5827eda6)
 
-	query.SelectMacroRegister([]User{}, (func(User) Sex)(nil), querySelectd595e8831f2025c62e11d6273f64a4d65d32f4c2)
+	query.SelectMacroRegister([]User{}, (func(User) Sex)(nil), querySelectVd595e8831f2025c62e11d6273f64a4d65d32f4c2)
 
-	query.SortMacroRegister([]User{}, "UserID asc", querySort24a673fdaa750030447c9f4189cf7c07434d6efc)
+	query.SortMacroRegister([]User{}, "UserID asc", querySortV24a673fdaa750030447c9f4189cf7c07434d6efc)
 
-	query.SortMacroRegister([]int{}, ". desc", querySortaf891d058d5a2e0a3ac4b4b291ae9bb959364795)
+	query.SortMacroRegister([]int{}, ". desc", querySortVaf891d058d5a2e0a3ac4b4b291ae9bb959364795)
 
-	query.SortMacroRegister([]User{}, "UserID desc,Name asc,CreateTime asc", querySortc863de209dea4542794c518ccbd6908305b5d21e)
+	query.SortMacroRegister([]User{}, "UserID desc,Name asc,CreateTime asc", querySortVc863de209dea4542794c518ccbd6908305b5d21e)
 
-	query.WhereMacroRegister([]User{}, (func(User) bool)(nil), queryWhereae59d599ddb6a7c038d3dc70deaebd78a39febff)
+	query.WhereMacroRegister([]User{}, (func(User) bool)(nil), queryWhereVae59d599ddb6a7c038d3dc70deaebd78a39febff)
 
-	query.WhereMacroRegister([]int{}, (func(int) bool)(nil), queryWheredf6742e675632943121cefdb3ad29ba75c08eaac)
+	query.WhereMacroRegister([]int{}, (func(int) bool)(nil), queryWhereVdf6742e675632943121cefdb3ad29ba75c08eaac)
 
 }

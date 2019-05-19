@@ -65,7 +65,7 @@ func QueryGroupGen(request QueryGenRequest) *QueryGenResponse {
 }
 
 const (
-	groupFuncPrefix = "queryGroup"
+	groupFuncPrefix = "queryGroupV"
 )
 
 var (

@@ -58,7 +58,7 @@ func QuerySelectGen(request QueryGenRequest) *QueryGenResponse {
 }
 
 const (
-	selectFuncPrefix = "querySelect"
+	selectFuncPrefix = "querySelectV"
 )
 
 var (

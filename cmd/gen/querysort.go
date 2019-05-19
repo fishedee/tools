@@ -50,7 +50,7 @@ func QuerySortGen(request QueryGenRequest) *QueryGenResponse {
 }
 
 const (
-	sortFuncPrefix = "querySort"
+	sortFuncPrefix = "querySortV"
 )
 
 var (

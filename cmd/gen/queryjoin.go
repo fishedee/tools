@@ -101,7 +101,7 @@ func QueryJoinGen(request QueryGenRequest) *QueryGenResponse {
 }
 
 const (
-	joinFuncPrefix = "queryJoin"
+	joinFuncPrefix = "queryJoinV"
 )
 
 var (

@@ -65,7 +65,7 @@ func QueryCombineGen(request QueryGenRequest) *QueryGenResponse {
 }
 
 const (
-	combineFuncPrefix = "queryCombine"
+	combineFuncPrefix = "queryCombineV"
 )
 
 var (

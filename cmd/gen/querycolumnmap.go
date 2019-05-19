@@ -48,7 +48,7 @@ func QueryColumnMapGen(request QueryGenRequest) *QueryGenResponse {
 }
 
 const (
-	columnMapFuncPrefix = "queryColumnMap"
+	columnMapFuncPrefix = "queryColumnMapV"
 )
 
 var (

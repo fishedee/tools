@@ -59,7 +59,7 @@ func QueryWhereGen(request QueryGenRequest) *QueryGenResponse {
 }
 
 const (
-	whereFuncPrefix = "queryWhere"
+	whereFuncPrefix = "queryWhereV"
 )
 
 var (
