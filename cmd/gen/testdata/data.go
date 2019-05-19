@@ -43,6 +43,7 @@ type Sex struct {
 
 func logic() {
 	query.Column([]User{}, "UserID")
+	query.Column([]User{}, "Age")
 	query.Column([]User{}, ".")
 	query.Column([]int{}, ".")
 	query.Select([]User{}, func(d User) Sex {
@@ -58,6 +59,7 @@ func logic() {
 	query.Sort([]User{}, "UserID asc")
 	query.Sort([]int{}, ". desc")
 	query.ColumnMap([]User{}, "UserID")
+	query.ColumnMap([]User{}, "Age")
 	query.ColumnMap([]int{}, ".")
 	query.Group([]User{}, "UserID", func(user []User) Department {
 		return Department{}

@@ -6,6 +6,16 @@ import (
 	"time"
 )
 
+func queryColumnMapV15a424b34f5f3186a14908971a35c49d4f52436d(data interface{}, column string) interface{} {
+	dataIn := data.([]User)
+	result := make(map[int]User, len(dataIn))
+
+	for _, single := range dataIn {
+		result[single.Age] = single
+	}
+	return result
+}
+
 func queryColumnMapV904b262f8e2329ec73c320ca0e5ca82f14165586(data interface{}, column string) interface{} {
 	dataIn := data.([]int)
 	result := make(map[int]int, len(dataIn))
@@ -22,6 +32,16 @@ func queryColumnMapVac46a6e2d4d6d4f163cc177eb335bc2bb166d92b(data interface{}, c
 
 	for _, single := range dataIn {
 		result[single.UserID] = single
+	}
+	return result
+}
+
+func queryColumnV15a424b34f5f3186a14908971a35c49d4f52436d(data interface{}, column string) interface{} {
+	dataIn := data.([]User)
+	result := make([]int, len(dataIn), len(dataIn))
+
+	for i, single := range dataIn {
+		result[i] = single.Age
 	}
 	return result
 }
@@ -526,9 +546,13 @@ func queryWhereVdf6742e675632943121cefdb3ad29ba75c08eaac(data interface{}, where
 
 func init() {
 
+	query.ColumnMapMacroRegister([]User{}, "Age", queryColumnMapV15a424b34f5f3186a14908971a35c49d4f52436d)
+
 	query.ColumnMapMacroRegister([]int{}, ".", queryColumnMapV904b262f8e2329ec73c320ca0e5ca82f14165586)
 
 	query.ColumnMapMacroRegister([]User{}, "UserID", queryColumnMapVac46a6e2d4d6d4f163cc177eb335bc2bb166d92b)
+
+	query.ColumnMacroRegister([]User{}, "Age", queryColumnV15a424b34f5f3186a14908971a35c49d4f52436d)
 
 	query.ColumnMacroRegister([]int{}, ".", queryColumnV904b262f8e2329ec73c320ca0e5ca82f14165586)
 

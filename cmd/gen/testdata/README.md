@@ -12,8 +12,14 @@ pkg: github.com/fishedee/tools/cmd/gen/testdata
 BenchmarkQueryColumnHand-8 300000 5001 ns/op 8192 B/op 1 allocs/op
 BenchmarkQueryColumnMacro-8 300000 5033 ns/op 8256 B/op 3 allocs/op
 
+BenchmarkQueryColumnHandMany-8 2000 902803 ns/op  1605632 B/op 2 allocs/op
+BenchmarkQueryColumnMacroMany-8 1000 1213797 ns/op  1605760 B/op 6 allocs/op
+
 BenchmarkQueryColumnMapHand-8 20000 62174 ns/op 147489 B/op 2 allocs/op
 BenchmarkQueryColumnMapMacro-8 20000 62215 ns/op 147568 B/op 4 allocs/op
+
+BenchmarkQueryColumnMapHandMany-8 10000 126767 ns/op 294979 B/op 4 allocs/op
+BenchmarkQueryColumnMapMacroMany-8 10000 119876 ns/op 295138 B/op 8 allocs/op
 
 BenchmarkQueryCombineHand-8 50000 23138 ns/op 65536 B/op 1 allocs/op
 BenchmarkQueryCombineMacro-8 50000 34255 ns/op 65632 B/op 4 allocs/op
