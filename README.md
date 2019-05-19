@@ -46,17 +46,17 @@ var users = make([]User, 1000, 1000)
 var admins = make([]Admin, 1000, 1000)
 
 // 获取指定列
-result := query.Column(users, "UserId")
+result := query.Column(users, "UserID")
 userIDs := result.([]int)
 
 // 以某列做映射
-result = query.ColumnMap(users, "UserId")
+result = query.ColumnMap(users, "UserID")
 userMap := result.(map[int]User)
 
 // 结合
 result = query.Combine(admins, users, func(admin Admin, user User) AdminUser {
     return AdminUser{
-        AdminId:    admin.AdminId,
+        AdminID:    admin.AdminID,
         Level:      admin.Level,
         Name:       user.Name,
         CreateTime: user.CreateTime,
@@ -65,7 +65,7 @@ result = query.Combine(admins, users, func(admin Admin, user User) AdminUser {
 combine := result.([]AdminUser)
 
 // 分组
-result = query.Group(users, "UserId", func(users []User) Department {
+result = query.Group(users, "UserID", func(users []User) Department {
     return Department{
         Employees: users,
     }
@@ -73,9 +73,9 @@ result = query.Group(users, "UserId", func(users []User) Department {
 group := result.([]Department)
 
 // 连接
-result = query.LeftJoin(admins, users, "AdminId = UserId", func(admin Admin, user User) AdminUser {
+result = query.LeftJoin(admins, users, "AdminID = UserID", func(admin Admin, user User) AdminUser {
     return AdminUser{
-        AdminId:    admin.AdminId,
+        AdminID:    admin.AdminID,
         Level:      admin.Level,
         Name:       user.Name,
         CreateTime: user.CreateTime,
@@ -93,7 +93,7 @@ result = query.Select(users, func(a User) Sex {
 sel := result.([]Sex)
 
 // 排序
-result = query.Sort(users, "UserId asc")
+result = query.Sort(users, "UserID asc")
 sort := result.([]User)
 
 // 条件
