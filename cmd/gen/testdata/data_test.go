@@ -15,7 +15,7 @@ func BenchmarkQueryColumnHand(b *testing.B) {
 	for i := 0; i != b.N; i++ {
 		newData := make([]int, len(data), len(data))
 		for i, single := range data {
-			newData[i] = single.UserId
+			newData[i] = single.UserID
 		}
 	}
 }
@@ -25,14 +25,38 @@ func BenchmarkQueryColumnMacro(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
-		query.Column(data, "UserId")
+		query.Column(data, "UserID")
+	}
+}
+
+func BenchmarkQueryColumnHandMany(b *testing.B) {
+	data := make([]User, 1000, 1000)
+
+	b.ResetTimer()
+	for i := 0; i != b.N; i++ {
+		newData := make([]int, len(data), len(data))
+		newDataAge := make([]int, len(data), len(data))
+		for i, single := range data {
+			newData[i] = single.UserID
+			newDataAge[i] = single.Age
+		}
+	}
+}
+
+func BenchmarkQueryColumnMacroMany(b *testing.B) {
+	data := make([]User, 1000, 1000)
+
+	b.ResetTimer()
+	for i := 0; i != b.N; i++ {
+		query.Column(data, "UserID")
+		query.Column(data, "Age")
 	}
 }
 
 func initQueryColumnMapData() []User {
 	data := make([]User, 1000, 1000)
 	for i := range data {
-		data[i].UserId = rand.Int()
+		data[i].UserID = rand.Int()
 		data[i].Age = rand.Int()
 	}
 	return data
@@ -45,7 +69,7 @@ func BenchmarkQueryColumnMapHand(b *testing.B) {
 	for i := 0; i != b.N; i++ {
 		newData := make(map[int]User, len(data))
 		for _, single := range data {
-			newData[single.UserId] = single
+			newData[single.UserID] = single
 		}
 	}
 }
@@ -55,7 +79,31 @@ func BenchmarkQueryColumnMapMacro(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
-		query.ColumnMap(data, "UserId")
+		query.ColumnMap(data, "UserID")
+	}
+}
+
+func BenchmarkQueryColumnMapHandMany(b *testing.B) {
+	data := initQueryColumnMapData()
+
+	b.ResetTimer()
+	for i := 0; i != b.N; i++ {
+		newData := make(map[int]User, len(data))
+		newDataAge := make(map[int]User, len(data))
+		for _, single := range data {
+			newData[single.UserID] = single
+			newDataAge[single.Age] = single
+		}
+	}
+}
+
+func BenchmarkQueryColumnMapMacroMany(b *testing.B) {
+	data := initQueryColumnMapData()
+
+	b.ResetTimer()
+	for i := 0; i != b.N; i++ {
+		query.ColumnMap(data, "UserID")
+		query.ColumnMap(data, "Age")
 	}
 }
 
@@ -63,9 +111,9 @@ func initQueryCombineData() ([]User, []Admin) {
 	user := make([]User, 1000, 1000)
 	admin := make([]Admin, 1000, 1000)
 	for i := range user {
-		user[i].UserId = rand.Int()
+		user[i].UserID = rand.Int()
 		user[i].Age = rand.Int()
-		admin[i].AdminId = rand.Int()
+		admin[i].AdminID = rand.Int()
 	}
 	return user, admin
 }
@@ -78,7 +126,7 @@ func BenchmarkQueryCombineHand(b *testing.B) {
 		result := make([]AdminUser, len(users), len(users))
 		for i := range users {
 			result[i] = AdminUser{
-				AdminId:    admins[i].AdminId,
+				AdminID:    admins[i].AdminID,
 				Level:      admins[i].Level,
 				Name:       users[i].Name,
 				CreateTime: users[i].CreateTime,
@@ -94,7 +142,7 @@ func BenchmarkQueryCombineMacro(b *testing.B) {
 	for i := 0; i != b.N; i++ {
 		query.Combine(admin, user, func(admin Admin, user User) AdminUser {
 			return AdminUser{
-				AdminId:    admin.AdminId,
+				AdminID:    admin.AdminID,
 				Level:      admin.Level,
 				Name:       user.Name,
 				CreateTime: user.CreateTime,
@@ -106,7 +154,7 @@ func BenchmarkQueryCombineMacro(b *testing.B) {
 func initQueryGroupData() []User {
 	data := make([]User, 1000, 1000)
 	for i := range data {
-		data[i].UserId = rand.Int()
+		data[i].UserID = rand.Int()
 		data[i].Age = rand.Int()
 	}
 	return data
@@ -120,19 +168,19 @@ func BenchmarkQueryGroupHand(b *testing.B) {
 		findMap := make(map[int][]User, len(data))
 		result := make([]Department, 0, len(data))
 		for _, single := range data {
-			users, isExist := findMap[single.UserId]
+			users, isExist := findMap[single.UserID]
 			if isExist == false {
 				users = []User{}
 			}
 			users = append(users, single)
-			findMap[single.UserId] = users
+			findMap[single.UserID] = users
 		}
 		for _, single := range data {
-			users, isExist := findMap[single.UserId]
+			users, isExist := findMap[single.UserID]
 			if isExist {
 				continue
 			}
-			delete(findMap, single.UserId)
+			delete(findMap, single.UserID)
 			result = append(result, Department{
 				Employees: users,
 			})
@@ -145,7 +193,7 @@ func BenchmarkQueryGroupMacro(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
-		query.Group(data, "UserId", func(users []User) Department {
+		query.Group(data, "UserID", func(users []User) Department {
 			return Department{
 				Employees: users,
 			}
@@ -157,9 +205,9 @@ func initQueryJoinData() ([]User, []Admin) {
 	user := make([]User, 1000, 1000)
 	admin := make([]Admin, 1000, 1000)
 	for i := range user {
-		user[i].UserId = rand.Int()
+		user[i].UserID = rand.Int()
 		user[i].Age = rand.Int()
-		admin[i].AdminId = rand.Int()
+		admin[i].AdminID = rand.Int()
 	}
 	return user, admin
 }
@@ -171,19 +219,19 @@ func BenchmarkQueryJoinHand(b *testing.B) {
 	for i := 0; i != b.N; i++ {
 		adminMap := map[int][]Admin{}
 		for _, admin := range admins {
-			findAdmins, isExist := adminMap[admin.AdminId]
+			findAdmins, isExist := adminMap[admin.AdminID]
 			if isExist == false {
 				findAdmins = []Admin{}
 			}
 			findAdmins = append(findAdmins, admin)
-			adminMap[admin.AdminId] = findAdmins
+			adminMap[admin.AdminID] = findAdmins
 		}
 		result := make([]AdminUser, 0, len(users))
 		for _, user := range users {
-			admins := adminMap[user.UserId]
+			admins := adminMap[user.UserID]
 			for _, admin := range admins {
 				result = append(result, AdminUser{
-					AdminId:    admin.AdminId,
+					AdminID:    admin.AdminID,
 					Level:      admin.Level,
 					Name:       user.Name,
 					CreateTime: user.CreateTime,
@@ -198,9 +246,9 @@ func BenchmarkQueryJoinMacro(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
-		query.LeftJoin(admin, user, "AdminId = UserId", func(admin Admin, user User) AdminUser {
+		query.LeftJoin(admin, user, "AdminID = UserID", func(admin Admin, user User) AdminUser {
 			return AdminUser{
-				AdminId:    admin.AdminId,
+				AdminID:    admin.AdminID,
 				Level:      admin.Level,
 				Name:       user.Name,
 				CreateTime: user.CreateTime,
@@ -243,7 +291,7 @@ func BenchmarkQuerySelectMacro(b *testing.B) {
 func initQuerySortData() []User {
 	data := make([]User, 1000, 1000)
 	for i := range data {
-		data[i].UserId = rand.Int()
+		data[i].UserID = rand.Int()
 		data[i].Age = rand.Int()
 	}
 	return data
@@ -257,7 +305,7 @@ func BenchmarkQuerySortHand(b *testing.B) {
 		newData := make([]User, len(data), len(data))
 		copy(newData, data)
 		sort.SliceStable(newData, func(i int, j int) bool {
-			return newData[i].UserId < newData[j].UserId
+			return newData[i].UserID < newData[j].UserID
 		})
 	}
 }
@@ -267,7 +315,7 @@ func BenchmarkQuerySortMacro(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
-		query.Sort(data, "UserId asc")
+		query.Sort(data, "UserID asc")
 	}
 }
 
