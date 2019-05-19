@@ -105,3 +105,18 @@ result = query.Where(users, func(a User) bool {
 })
 where := result.([]User)
 ```
+
+## Query generate
+
+我们都知道，使用反射来实现如 query.Column 的效率相对手写是非常低的，但是如果一直使用手写又太过啰嗦。得益于 Go 提供的标准库，以及官方 go generate 工具的启发。所以我们提供了 cmd/gen 工具来生成可以媲美手写版本性能的代码，从而我们既能享受到 query.Column 等方法的便利，又能保证性能。
+
+```shell
+安装：
+go install github.com/fishedee/tools/cmd/gen
+
+使用:
+rm -rf testdata/testdata_querygen.go
+gen -r github.com/fishedee/tools/cmd/gen/testdata
+
+生成的源码文件: cmd/gen/testdata/testdata_querygen.go, 里面的代码就是我们在实际开发中需要用到的各个手写版本的替代。
+```
