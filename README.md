@@ -4,6 +4,8 @@
 
 Efficient and convenient func for data processing.
 
+All code comes from [here](https://github.com/fishedee/fishgo/tree/master/src/github.com/fishedee/language). This repository make it easier to use.
+
 ## Query
 
 ```go
@@ -120,3 +122,11 @@ gen -r github.com/fishedee/tools/cmd/gen/testdata
 
 生成的源码文件: cmd/gen/testdata/testdata_querygen.go, 里面的代码就是我们在实际开发中需要用到的各个手写版本的替代。
 ```
+
+## Author
+
+[A very friendly, helpful, lazy, but to be honest, very good man.](https://github.com/fishedee)
+
+## License
+
+see [this](LICENSE).
