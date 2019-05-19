@@ -94,11 +94,15 @@ func QueryJoinGen(request QueryGenRequest) *QueryGenResponse {
 	})
 	return &QueryGenResponse{
 		importPackage: importPackage,
-		funcName:      "queryJoin_" + signature,
+		funcName:      joinFuncPrefix + signature,
 		funcBody:      funcBody,
 		initBody:      initBody,
 	}
 }
+
+const (
+	joinFuncPrefix = "queryJoin"
+)
 
 var (
 	queryJoinFuncTmpl    *template.Template
@@ -109,7 +113,7 @@ var (
 func init() {
 	var err error
 	queryJoinFuncTmpl, err = template.New("name").Parse(`
-	func queryJoin_{{ .signature }}(leftData interface{},rightData interface{},joinPlace string,joinType string,joinFunctor interface{})interface{}{
+	func ` + joinFuncPrefix + `{{ .signature }}(leftData interface{},rightData interface{},joinPlace string,joinType string,joinFunctor interface{})interface{}{
 		leftDataIn := leftData.([]{{ .firstArgElemType }})
 		rightDataIn := rightData.([]{{ .secondArgElemType }})
 		joinFunctorIn := joinFunctor.({{ .fifthArgType }})
@@ -176,7 +180,7 @@ func init() {
 		panic(err)
 	}
 	queryJoinInitTmpl, err = template.New("name").Parse(`
-		query.JoinMacroRegister({{.argumentDefine}},queryJoin_{{.signature}})
+		query.JoinMacroRegister({{.argumentDefine}},` + joinFuncPrefix + `{{.signature}})
 	`)
 	if err != nil {
 		panic(err)

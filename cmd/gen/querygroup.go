@@ -58,11 +58,15 @@ func QueryGroupGen(request QueryGenRequest) *QueryGenResponse {
 	})
 	return &QueryGenResponse{
 		importPackage: importPackage,
-		funcName:      "queryGroup_" + signature,
+		funcName:      groupFuncPrefix + signature,
 		funcBody:      funcBody,
 		initBody:      initBody,
 	}
 }
+
+const (
+	groupFuncPrefix = "queryGroup"
+)
 
 var (
 	queryGroupFuncTmpl    *template.Template
@@ -73,7 +77,7 @@ var (
 func init() {
 	var err error
 	queryGroupFuncTmpl, err = template.New("name").Parse(`
-	func queryGroup_{{ .signature }}(data interface{},groupType string,groupFunctor interface{})interface{}{
+	func ` + groupFuncPrefix + `{{ .signature }}(data interface{},groupType string,groupFunctor interface{})interface{}{
 		dataIn := data.([]{{ .firstArgElemType }})
 		groupFunctorIn := groupFunctor.({{ .thirdArgType }})
 		bufferData := make([]{{ .firstArgElemType }},len(dataIn),len(dataIn))
@@ -119,7 +123,7 @@ func init() {
 		panic(err)
 	}
 	queryGroupInitTmpl, err = template.New("name").Parse(`
-		query.GroupMacroRegister({{.argumentDefine}},queryGroup_{{.signature}})
+		query.GroupMacroRegister({{.argumentDefine}},` + groupFuncPrefix + `{{.signature}})
 	`)
 	if err != nil {
 		panic(err)

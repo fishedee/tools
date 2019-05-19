@@ -41,11 +41,15 @@ func QueryColumnMapGen(request QueryGenRequest) *QueryGenResponse {
 	})
 	return &QueryGenResponse{
 		importPackage: importPackage,
-		funcName:      "queryColumnMap_" + signature,
+		funcName:      columnMapFuncPrefix + signature,
 		funcBody:      funcBody,
 		initBody:      initBody,
 	}
 }
+
+const (
+	columnMapFuncPrefix = "queryColumnMap"
+)
 
 var (
 	queryColumnMapFuncTmpl    *template.Template
@@ -56,7 +60,7 @@ var (
 func init() {
 	var err error
 	queryColumnMapFuncTmpl, err = template.New("name").Parse(`
-	func queryColumnMap_{{ .signature }}(data interface{},column string)interface{}{
+	func ` + columnMapFuncPrefix + `{{ .signature }}(data interface{},column string)interface{}{
 		dataIn := data.([]{{ .firstArgElemType }})
 		result := make(map[{{ .firstArgElemColumnType }}]{{ .firstArgElemType }},len(dataIn))
 
@@ -70,7 +74,7 @@ func init() {
 		panic(err)
 	}
 	queryColumnMapInitTmpl, err = template.New("name").Parse(`
-		query.ColumnMapMacroRegister({{.argumentDefine}},queryColumnMap_{{.signature}})
+		query.ColumnMapMacroRegister({{.argumentDefine}},` + columnMapFuncPrefix + `{{.signature}})
 	`)
 	if err != nil {
 		panic(err)

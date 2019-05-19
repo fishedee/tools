@@ -51,11 +51,15 @@ func QuerySelectGen(request QueryGenRequest) *QueryGenResponse {
 	})
 	return &QueryGenResponse{
 		importPackage: importPackage,
-		funcName:      "querySelect_" + signature,
+		funcName:      selectFuncPrefix + signature,
 		funcBody:      funcBody,
 		initBody:      initBody,
 	}
 }
+
+const (
+	selectFuncPrefix = "querySelect"
+)
 
 var (
 	querySelectFuncTmpl    *template.Template
@@ -66,7 +70,7 @@ var (
 func init() {
 	var err error
 	querySelectFuncTmpl, err = template.New("name").Parse(`
-	func querySelect_{{ .signature }}(data interface{},selectFunctor interface{})interface{}{
+	func ` + selectFuncPrefix + `{{ .signature }}(data interface{},selectFunctor interface{})interface{}{
 		dataIn := data.([]{{ .firstArgElemType }})
 		selectFunctorIn := selectFunctor.({{ .secondArgType }})
 		result := make([]{{ .secondArgReturnType }},len(dataIn),len(dataIn))
@@ -81,7 +85,7 @@ func init() {
 		panic(err)
 	}
 	querySelectInitTmpl, err = template.New("name").Parse(`
-		query.SelectMacroRegister({{.argumentDefine}},querySelect_{{.signature}})
+		query.SelectMacroRegister({{.argumentDefine}},` + selectFuncPrefix + `{{.signature}})
 	`)
 	if err != nil {
 		panic(err)

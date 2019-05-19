@@ -52,11 +52,15 @@ func QueryWhereGen(request QueryGenRequest) *QueryGenResponse {
 	})
 	return &QueryGenResponse{
 		importPackage: importPackage,
-		funcName:      "queryWhere_" + signature,
+		funcName:      whereFuncPrefix + signature,
 		funcBody:      funcBody,
 		initBody:      initBody,
 	}
 }
+
+const (
+	whereFuncPrefix = "queryWhere"
+)
 
 var (
 	queryWhereFuncTmpl    *template.Template
@@ -67,7 +71,7 @@ var (
 func init() {
 	var err error
 	queryWhereFuncTmpl, err = template.New("name").Parse(`
-	func queryWhere_{{ .signature }}(data interface{},whereFunctor interface{})interface{}{
+	func ` + whereFuncPrefix + `{{ .signature }}(data interface{},whereFunctor interface{})interface{}{
 		dataIn := data.([]{{ .firstArgElemType }})
 		whereFunctorIn := whereFunctor.({{ .secondArgType }})
 		result := make([]{{ .firstArgElemType }},0,len(dataIn))
@@ -85,7 +89,7 @@ func init() {
 		panic(err)
 	}
 	queryWhereInitTmpl, err = template.New("name").Parse(`
-		query.WhereMacroRegister({{.argumentDefine}},queryWhere_{{.signature}})
+		query.WhereMacroRegister({{.argumentDefine}},` + whereFuncPrefix + `{{.signature}})
 	`)
 	if err != nil {
 		panic(err)

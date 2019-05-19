@@ -58,11 +58,15 @@ func QueryCombineGen(request QueryGenRequest) *QueryGenResponse {
 	})
 	return &QueryGenResponse{
 		importPackage: importPackage,
-		funcName:      "queryCombine_" + signature,
+		funcName:      combineFuncPrefix + signature,
 		funcBody:      funcBody,
 		initBody:      initBody,
 	}
 }
+
+const (
+	combineFuncPrefix = "queryCombine"
+)
 
 var (
 	queryCombineFuncTmpl    *template.Template
@@ -73,7 +77,7 @@ var (
 func init() {
 	var err error
 	queryCombineFuncTmpl, err = template.New("name").Parse(`
-	func queryCombine_{{ .signature }}(leftData interface{},rightData interface{},combineFunctor interface{})interface{}{
+	func ` + combineFuncPrefix + `{{ .signature }}(leftData interface{},rightData interface{},combineFunctor interface{})interface{}{
 		leftDataIn := leftData.([]{{ .firstArgElemType }})
 		rightDataIn := rightData.([]{{ .secondArgElemType }})
 		combineFunctorIn := combineFunctor.({{ .thirdArgType }})
@@ -89,7 +93,7 @@ func init() {
 		panic(err)
 	}
 	queryCombineInitTmpl, err = template.New("name").Parse(`
-		query.CombineMacroRegister({{.argumentDefine}},queryCombine_{{.signature}})
+		query.CombineMacroRegister({{.argumentDefine}},` + combineFuncPrefix + `{{.signature}})
 	`)
 	if err != nil {
 		panic(err)

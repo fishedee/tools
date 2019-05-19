@@ -41,11 +41,15 @@ func QueryColumnGen(request QueryGenRequest) *QueryGenResponse {
 	})
 	return &QueryGenResponse{
 		importPackage: importPackage,
-		funcName:      "queryColumn_" + signature,
+		funcName:      columnFuncPrefix + signature,
 		funcBody:      funcBody,
 		initBody:      initBody,
 	}
 }
+
+const (
+	columnFuncPrefix = "queryColumn"
+)
 
 var (
 	queryColumnFuncTmpl    *template.Template
@@ -56,7 +60,7 @@ var (
 func init() {
 	var err error
 	queryColumnFuncTmpl, err = template.New("name").Parse(`
-	func queryColumn_{{ .signature }}(data interface{},column string)interface{}{
+	func ` + columnFuncPrefix + `{{ .signature }}(data interface{},column string)interface{}{
 		dataIn := data.([]{{ .firstArgElemType }})
 		result := make([]{{ .firstArgElemColumnType }},len(dataIn),len(dataIn))
 
@@ -70,7 +74,7 @@ func init() {
 		panic(err)
 	}
 	queryColumnInitTmpl, err = template.New("name").Parse(`
-		query.ColumnMacroRegister({{.argumentDefine}},queryColumn_{{.signature}})
+		query.ColumnMacroRegister({{.argumentDefine}},` + columnFuncPrefix + `{{.signature}})
 	`)
 	if err != nil {
 		panic(err)

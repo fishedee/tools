@@ -43,11 +43,15 @@ func QuerySortGen(request QueryGenRequest) *QueryGenResponse {
 	})
 	return &QueryGenResponse{
 		importPackage: importPackage,
-		funcName:      "querySort_" + signature,
+		funcName:      sortFuncPrefix + signature,
 		funcBody:      funcBody,
 		initBody:      initBody,
 	}
 }
+
+const (
+	sortFuncPrefix = "querySort"
+)
 
 var (
 	querySortFuncTmpl    *template.Template
@@ -58,7 +62,7 @@ var (
 func init() {
 	var err error
 	querySortFuncTmpl, err = template.New("name").Parse(`
-	func querySort_{{ .signature }}(data interface{},sortType string)interface{}{
+	func ` + sortFuncPrefix + `{{ .signature }}(data interface{},sortType string)interface{}{
 		dataIn := data.([]{{ .firstArgElemType }})
 		newData := make([]{{ .firstArgElemType }},len(dataIn),len(dataIn))
 		copy(newData,dataIn)
@@ -76,7 +80,7 @@ func init() {
 		panic(err)
 	}
 	querySortInitTmpl, err = template.New("name").Parse(`
-		query.SortMacroRegister({{.argumentDefine}},querySort_{{.signature}})
+		query.SortMacroRegister({{.argumentDefine}},` + sortFuncPrefix + `{{.signature}})
 	`)
 	if err != nil {
 		panic(err)
