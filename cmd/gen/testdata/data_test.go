@@ -8,8 +8,17 @@ import (
 	"github.com/fishedee/tools/query"
 )
 
+func initQueryColumnData() []User {
+	data := make([]User, 100000, 100000)
+	for i := range data {
+		data[i].UserID = rand.Int()
+		data[i].Age = rand.Int()
+	}
+	return data
+}
+
 func BenchmarkQueryColumnHand(b *testing.B) {
-	data := make([]User, 1000, 1000)
+	data := initQueryColumnData()
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
@@ -21,7 +30,7 @@ func BenchmarkQueryColumnHand(b *testing.B) {
 }
 
 func BenchmarkQueryColumnMacro(b *testing.B) {
-	data := make([]User, 1000, 1000)
+	data := initQueryColumnData()
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
@@ -30,7 +39,7 @@ func BenchmarkQueryColumnMacro(b *testing.B) {
 }
 
 func BenchmarkQueryColumnHandMany(b *testing.B) {
-	data := make([]User, 1000, 1000)
+	data := initQueryColumnData()
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
@@ -44,7 +53,7 @@ func BenchmarkQueryColumnHandMany(b *testing.B) {
 }
 
 func BenchmarkQueryColumnMacroMany(b *testing.B) {
-	data := make([]User, 1000, 1000)
+	data := initQueryColumnData()
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
