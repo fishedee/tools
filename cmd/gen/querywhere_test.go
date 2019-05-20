@@ -26,6 +26,16 @@ func TestQueryWhere(t *testing.T) {
 	assert.Equal(t, query.Where([]int{3, 2, 3, 5, 9, 4}, func(c int) bool {
 		return c%2 == 0
 	}), []int{2, 4})
+
+	// 测试
+	testCase := GetQueryWhereTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		result := query.Where(singleTestCase.Origin, singleTestCase.Function)
+		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
+
+	}
 }
 
 func BenchmarkQueryWhereHand(b *testing.B) {

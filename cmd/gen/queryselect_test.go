@@ -32,6 +32,16 @@ func TestQuerySelect(t *testing.T) {
 		User{UserID: 5},
 		User{UserID: -1},
 	})
+
+	// 测试
+	testCase := GetQuerySelectTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		result := query.Select(singleTestCase.Origin, singleTestCase.Function)
+		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
+
+	}
 }
 
 func BenchmarkQuerySelectHand(b *testing.B) {

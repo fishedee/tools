@@ -18,6 +18,16 @@ func TestQueryColumn(t *testing.T) {
 	assert.Equal(t, query.Column(data, "UserID"), []int{1, -2, 3})
 	assert.Equal(t, query.Column(data, "."), data)
 	assert.Equal(t, query.Column([]int{1, -2, 3}, "."), []int{1, -2, 3})
+
+	// 测试
+	testCase := GetQueryColumnTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		result := query.Column(singleTestCase.Data, singleTestCase.Column)
+		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
+
+	}
 }
 
 func BenchmarkQueryColumnHand(b *testing.B) {

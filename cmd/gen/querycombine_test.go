@@ -51,6 +51,14 @@ func TestQueryCombine(t *testing.T) {
 		User{UserID: 4, Name: "a"},
 		User{UserID: 5, Name: "j"},
 	})
+
+	// 测试
+	testCase := GetQueryCombineTestCase()
+
+	for _, singleTestCase := range testCase {
+		result := query.Combine(singleTestCase.Origin, singleTestCase.Origin2, singleTestCase.Functor)
+		assert.Equal(t, result, singleTestCase.Target)
+	}
 }
 
 func initQueryCombineData() ([]User, []Admin) {

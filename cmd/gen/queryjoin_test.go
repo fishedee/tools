@@ -61,6 +61,16 @@ func TestQueryJoin(t *testing.T) {
 		User{UserID: 6},
 		User{UserID: 7},
 	})
+
+	// 测试
+	testCase := GetQueryJoinTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		result := query.Join(singleTestCase.LeftData, singleTestCase.RightData, singleTestCase.JoinPlace, singleTestCase.JoinType, singleTestCase.JoinFuctor)
+		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
+
+	}
 }
 
 func initQueryJoinData() ([]User, []Admin) {

@@ -61,6 +61,16 @@ func TestQueryGroup(t *testing.T) {
 			User{UserID: 4},
 		}},
 	})
+
+	// 测试
+	testCase := GetQueryGroupTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		result := query.Group(singleTestCase.Data, singleTestCase.GroupType, singleTestCase.GroupFuctor)
+		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
+
+	}
 }
 
 func initQueryGroupData() []User {

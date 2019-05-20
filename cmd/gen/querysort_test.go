@@ -34,6 +34,16 @@ func TestQuerySort(t *testing.T) {
 		User{UserID: 1},
 	})
 	assert.Equal(t, query.Sort([]int{3, 2, 1, 7, -8}, ". desc"), []int{7, 3, 2, 1, -8})
+
+	// 测试
+	testCase := GetQuerySortTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		result := query.Sort(singleTestCase.Origin, singleTestCase.SortName)
+		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
+
+	}
 }
 
 func initQuerySortData() []User {

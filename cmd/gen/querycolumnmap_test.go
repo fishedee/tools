@@ -25,6 +25,16 @@ func TestQueryColumnMap(t *testing.T) {
 		8: 8,
 		0: 0,
 	})
+
+	// 测试
+	testCase := GetQueryColumnMapTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		result := query.ColumnMap(singleTestCase.Data, singleTestCase.Column)
+		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
+
+	}
 }
 
 func initQueryColumnMapData() []User {
