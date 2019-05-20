@@ -7,146 +7,150 @@ import (
 	"github.com/fishedee/tools/assert"
 )
 
-func TestQuerySelect(t *testing.T) {
-	//测试类型 支持bool,int,float,string和time.Time
-	type contentType struct {
-		Name      string
-		Age       int
-		Ok        bool
-		Money     float32
-		CardMoney float64
-		Register  time.Time
-	}
+// ContentType 测试类型 支持bool,int,float,string和time.Time
+type ContentType struct {
+	Name      string
+	Age       int
+	Ok        bool
+	Money     float32
+	CardMoney float64
+	Register  time.Time
+}
+
+// SelectCase 测试用例
+type SelectCase struct {
+	Origin   interface{}
+	Function interface{}
+	Target   interface{}
+}
+
+func GetQuerySelectTestCase() []SelectCase {
 
 	nowTime := time.Now()
 	oldTime := nowTime.AddDate(-1, 0, 1)
 	zeroTime := time.Time{}
 
-	testCase := []struct {
-		origin   interface{}
-		function interface{}
-		target   interface{}
-	}{
+	testCase := []SelectCase{
 		{
-			[]contentType{},
-			func(singleData contentType) contentType {
+			[]ContentType{},
+			func(singleData ContentType) ContentType {
 				return singleData
 			},
-			[]contentType{},
+			[]ContentType{},
 		},
 		{
-			[]contentType{
-				contentType{"5", 1, true, -1.1, -1.1, oldTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"a", -1, false, 1.1, 1.1, nowTime},
+			[]ContentType{
+				ContentType{"5", 1, true, -1.1, -1.1, oldTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"a", -1, false, 1.1, 1.1, nowTime},
 			},
-			func(singleData contentType) contentType {
+			func(singleData ContentType) ContentType {
 
 				singleData.Name += "Edward"
 				return singleData
 			},
-			[]contentType{
-				contentType{"5Edward", 1, true, -1.1, -1.1, oldTime},
-				contentType{"Edward", 0, false, 0, 0, zeroTime},
-				contentType{"aEdward", -1, false, 1.1, 1.1, nowTime},
+			[]ContentType{
+				ContentType{"5Edward", 1, true, -1.1, -1.1, oldTime},
+				ContentType{"Edward", 0, false, 0, 0, zeroTime},
+				ContentType{"aEdward", -1, false, 1.1, 1.1, nowTime},
 			},
 		},
 		{
-			[]contentType{
-				contentType{"5", 1, true, -1.1, -1.1, oldTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"a", -1, false, 1.1, 1.1, nowTime},
+			[]ContentType{
+				ContentType{"5", 1, true, -1.1, -1.1, oldTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"a", -1, false, 1.1, 1.1, nowTime},
 			},
-			func(singleData contentType) contentType {
+			func(singleData ContentType) ContentType {
 
 				singleData.Name += "Edward"
 				return singleData
 			},
-			[]contentType{
-				contentType{"5Edward", 1, true, -1.1, -1.1, oldTime},
-				contentType{"Edward", 0, false, 0, 0, zeroTime},
-				contentType{"aEdward", -1, false, 1.1, 1.1, nowTime},
+			[]ContentType{
+				ContentType{"5Edward", 1, true, -1.1, -1.1, oldTime},
+				ContentType{"Edward", 0, false, 0, 0, zeroTime},
+				ContentType{"aEdward", -1, false, 1.1, 1.1, nowTime},
 			},
 		},
 		{
-			[]contentType{
-				contentType{"5", 1, true, -1.1, -1.1, oldTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"a", -1, false, 1.1, 1.1, nowTime},
+			[]ContentType{
+				ContentType{"5", 1, true, -1.1, -1.1, oldTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"a", -1, false, 1.1, 1.1, nowTime},
 			},
-			func(singleData contentType) string {
+			func(singleData ContentType) string {
 
 				return singleData.Name
 			},
 			[]string{"5", "", "a"},
 		},
 		{
-			[]contentType{
-				contentType{"5", 1, true, -1.1, -1.1, oldTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"a", -1, false, 1.1, 1.1, nowTime},
+			[]ContentType{
+				ContentType{"5", 1, true, -1.1, -1.1, oldTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"a", -1, false, 1.1, 1.1, nowTime},
 			},
-			func(singleData contentType) int {
+			func(singleData ContentType) int {
 
 				return singleData.Age
 			},
 			[]int{1, 0, -1},
 		},
 		{
-			[]contentType{
-				contentType{"5", 1, true, -1.1, -1.1, oldTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"a", -1, false, 1.1, 1.1, nowTime},
+			[]ContentType{
+				ContentType{"5", 1, true, -1.1, -1.1, oldTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"a", -1, false, 1.1, 1.1, nowTime},
 			},
-			func(singleData contentType) bool {
+			func(singleData ContentType) bool {
 
 				return singleData.Ok
 			},
 			[]bool{true, false, false},
 		},
 		{
-			[]contentType{
-				contentType{"5", 1, true, -1.1, -1.1, oldTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"a", -1, false, 1.1, 1.1, nowTime},
+			[]ContentType{
+				ContentType{"5", 1, true, -1.1, -1.1, oldTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"a", -1, false, 1.1, 1.1, nowTime},
 			},
-			func(singleData contentType) float32 {
+			func(singleData ContentType) float32 {
 
 				return singleData.Money
 			},
 			[]float32{-1.1, 0, 1.1},
 		},
 		{
-			[]contentType{
-				contentType{"5", 1, true, -1.1, -1.1, oldTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"a", -1, false, 1.1, 1.1, nowTime},
+			[]ContentType{
+				ContentType{"5", 1, true, -1.1, -1.1, oldTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"a", -1, false, 1.1, 1.1, nowTime},
 			},
-			func(singleData contentType) float64 {
+			func(singleData ContentType) float64 {
 
 				return singleData.CardMoney
 			},
 			[]float64{-1.1, 0, 1.1},
 		},
 		{
-			[]contentType{
-				contentType{"5", 1, true, -1.1, -1.1, oldTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"a", -1, false, 1.1, 1.1, nowTime},
+			[]ContentType{
+				ContentType{"5", 1, true, -1.1, -1.1, oldTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"a", -1, false, 1.1, 1.1, nowTime},
 			},
-			func(singleData contentType) time.Time {
+			func(singleData ContentType) time.Time {
 
 				return singleData.Register
 			},
 			[]time.Time{oldTime, zeroTime, nowTime},
 		},
 		{
-			[]contentType{
-				contentType{"5", 1, true, -1.1, -1.1, oldTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"a", -1, false, 1.1, 1.1, nowTime},
+			[]ContentType{
+				ContentType{"5", 1, true, -1.1, -1.1, oldTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"a", -1, false, 1.1, 1.1, nowTime},
 			},
-			func(singleData contentType) map[string]int {
+			func(singleData ContentType) map[string]int {
 
 				return map[string]int{singleData.Name: singleData.Age}
 			},
@@ -154,136 +158,125 @@ func TestQuerySelect(t *testing.T) {
 		},
 	}
 
-	// t.Error(QuerySelect(testCase[0].origin, testCase[0].function))
+	return testCase
+}
+
+func TestQuerySelect(t *testing.T) {
+	testCase := GetQuerySelectTestCase()
 
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
-		result := Select(singleTestCase.origin, singleTestCase.function)
-		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
+		result := Select(singleTestCase.Origin, singleTestCase.Function)
+		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
 
 	}
+}
+
+func GetQueryWhereTestCase() []SelectCase {
+	nowTime := time.Now()
+	oldTime := nowTime.AddDate(-1, 0, 1)
+	zeroTime := time.Time{}
+
+	testCase := []SelectCase{
+		{
+			[]ContentType{},
+			func(singleData ContentType) bool {
+				return true
+			},
+			[]ContentType{},
+		},
+		{
+			[]ContentType{
+				ContentType{"s", 3, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
+			},
+			func(singleData ContentType) bool {
+				return singleData.Age >= 1
+			},
+			[]ContentType{
+				ContentType{"s", 3, true, 0, 0, nowTime},
+				ContentType{"", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
+			},
+		},
+	}
+
+	return testCase
 }
 
 func TestQueryWhere(t *testing.T) {
-	//测试类型 支持bool,int,float,string和time.Time
-	type contentType struct {
-		Name      string
-		Age       int
-		Ok        bool
-		Money     float32
-		CardMoney float64
-		Register  time.Time
-	}
-
-	nowTime := time.Now()
-	oldTime := nowTime.AddDate(-1, 0, 1)
-	zeroTime := time.Time{}
-
-	testCase := []struct {
-		origin   interface{}
-		function interface{}
-		target   interface{}
-	}{
-		{
-			[]contentType{},
-			func(singleData contentType) bool {
-				return true
-			},
-			[]contentType{},
-		},
-		{
-			[]contentType{
-				contentType{"s", 3, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"", 10, true, -1.1, -1.1, oldTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
-			},
-			func(singleData contentType) bool {
-				return singleData.Age >= 1
-			},
-			[]contentType{
-				contentType{"s", 3, true, 0, 0, nowTime},
-				contentType{"", 10, true, -1.1, -1.1, oldTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
-			},
-		},
-	}
+	testCase := GetQueryWhereTestCase()
 
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
-		result := Where(singleTestCase.origin, singleTestCase.function)
-		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
+		result := Where(singleTestCase.Origin, singleTestCase.Function)
+		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
 
 	}
 }
 
-func TestQueryReduce(t *testing.T) {
-	//测试类型 支持bool,int,float,string和time.Time
-	type contentType struct {
-		Name      string
-		Age       int
-		Ok        bool
-		Money     float32
-		CardMoney float64
-		Register  time.Time
-	}
+type ReduceCase struct {
+	Origin   interface{}
+	Function interface{}
+	InitNum  int
+	Target   interface{}
+}
+
+func GetQueryReduceTestCase() []ReduceCase {
 
 	nowTime := time.Now()
 	oldTime := nowTime.AddDate(-1, 0, 1)
 	zeroTime := time.Time{}
 
-	testCase := []struct {
-		origin   interface{}
-		function interface{}
-		initNum  int
-		target   interface{}
-	}{
+	testCase := []ReduceCase{
 		{
-			[]contentType{},
-			func(sum int, singleData contentType) int {
+			[]ContentType{},
+			func(sum int, singleData ContentType) int {
 				return 1
 			},
 			0,
 			0,
 		},
 		{
-			[]contentType{
-				contentType{"s", 3, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"", 10, true, -1.1, -1.1, oldTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"s", 3, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
-			func(sum int, singleData contentType) int {
+			func(sum int, singleData ContentType) int {
 				return singleData.Age + sum
 			},
 			0,
 			15,
 		},
 		{
-			[]contentType{
-				contentType{"s", 3, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 2.2, 1.1, zeroTime},
-				contentType{"", 10, true, -1.1, -1.1, oldTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"s", 3, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 2.2, 1.1, zeroTime},
+				ContentType{"", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
-			func(sum float32, singleData contentType) float32 {
+			func(sum float32, singleData ContentType) float32 {
 				return singleData.Money + sum
 			},
 			0,
 			(float32)(1.1),
 		},
 		{
-			[]contentType{
-				contentType{"s", 3, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 2.2, 1.1, zeroTime},
-				contentType{"", 10, true, -1.1, -2.2, oldTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"s", 3, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 2.2, 1.1, zeroTime},
+				ContentType{"", 10, true, -1.1, -2.2, oldTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
-			func(sum float64, singleData contentType) float64 {
+			func(sum float64, singleData ContentType) float64 {
 				return singleData.CardMoney + sum
 			},
 			0,
@@ -291,10 +284,16 @@ func TestQueryReduce(t *testing.T) {
 		},
 	}
 
+	return testCase
+}
+
+func TestQueryReduce(t *testing.T) {
+	testCase := GetQueryReduceTestCase()
+
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
-		result := Reduce(singleTestCase.origin, singleTestCase.function, singleTestCase.initNum)
-		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
+		result := Reduce(singleTestCase.Origin, singleTestCase.Function, singleTestCase.InitNum)
+		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
 
 	}
 
@@ -310,31 +309,23 @@ type QueryInnerStruct2 struct {
 	DD float32
 }
 
-func TestQuerySort(t *testing.T) {
-	//测试类型 支持bool,int,float,string和time.Time
-	type contentType struct {
-		Name      string
-		Age       int
-		Ok        bool
-		Money     float32
-		CardMoney float64
-		Register  time.Time
-	}
+type SortCase struct {
+	SortName string
+	Origin   interface{}
+	Target   interface{}
+}
 
+func GetQuerySortTestCase() []SortCase {
 	nowTime := time.Now()
 	oldTime := nowTime.AddDate(-1, 0, 1)
 	zeroTime := time.Time{}
 
-	testCase := []struct {
-		sortName string
-		origin   interface{}
-		target   interface{}
-	}{
+	testCase := []SortCase{
 		//空集
 		{
 			"Name desc",
-			[]contentType{},
-			[]contentType{},
+			[]ContentType{},
+			[]ContentType{},
 		},
 		{
 			". asc",
@@ -353,126 +344,126 @@ func TestQuerySort(t *testing.T) {
 		},
 		{
 			"Name desc",
-			[]contentType{
-				contentType{"5", 0, true, -1.1, -1.1, oldTime},
-				contentType{"z", 1, true, 0, 0, nowTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
+			[]ContentType{
+				ContentType{"5", 0, true, -1.1, -1.1, oldTime},
+				ContentType{"z", 1, true, 0, 0, nowTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
 			},
-			[]contentType{
-				contentType{"z", 1, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"5", 0, true, -1.1, -1.1, oldTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
+			[]ContentType{
+				ContentType{"z", 1, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"5", 0, true, -1.1, -1.1, oldTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
 			},
 		},
 		{
 			"Age desc,Ok desc",
-			[]contentType{
-				contentType{"z", -1, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-				contentType{"", 5, false, 0, 0, zeroTime},
+			[]ContentType{
+				ContentType{"z", -1, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"", 5, false, 0, 0, zeroTime},
 			},
-			[]contentType{
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-				contentType{"", 5, false, 0, 0, zeroTime},
-				contentType{"z", -1, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
+			[]ContentType{
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"", 5, false, 0, 0, zeroTime},
+				ContentType{"z", -1, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			"Money,Register desc",
-			[]contentType{
-				contentType{"z", -1, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-				contentType{"", 5, false, 0, 0, zeroTime},
+			[]ContentType{
+				ContentType{"z", -1, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"", 5, false, 0, 0, zeroTime},
 			},
-			[]contentType{
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-				contentType{"z", -1, true, 0, 0, nowTime},
-				contentType{"", 5, false, 0, 0, zeroTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
+			[]ContentType{
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"z", -1, true, 0, 0, nowTime},
+				ContentType{"", 5, false, 0, 0, zeroTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			"CardMoney,Register desc",
-			[]contentType{
-				contentType{"z", -1, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-				contentType{"", 5, false, 0, 0, zeroTime},
+			[]ContentType{
+				ContentType{"z", -1, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"", 5, false, 0, 0, zeroTime},
 			},
-			[]contentType{
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-				contentType{"z", -1, true, 0, 0, nowTime},
-				contentType{"", 5, false, 0, 0, zeroTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
+			[]ContentType{
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"z", -1, true, 0, 0, nowTime},
+				ContentType{"", 5, false, 0, 0, zeroTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			"Ok desc,Name",
-			[]contentType{
-				contentType{"z", -1, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-				contentType{"", 5, false, 0, 0, zeroTime},
+			[]ContentType{
+				ContentType{"z", -1, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"", 5, false, 0, 0, zeroTime},
 			},
-			[]contentType{
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-				contentType{"z", -1, true, 0, 0, nowTime},
-				contentType{"", 5, false, 0, 0, zeroTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
+			[]ContentType{
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"z", -1, true, 0, 0, nowTime},
+				ContentType{"", 5, false, 0, 0, zeroTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			" Money desc,Age asc",
-			[]contentType{
-				contentType{"z", -1, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-				contentType{"", 5, false, 0, 0, zeroTime},
+			[]ContentType{
+				ContentType{"z", -1, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"", 5, false, 0, 0, zeroTime},
 			},
-			[]contentType{
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"z", -1, true, 0, 0, nowTime},
-				contentType{"", 5, false, 0, 0, zeroTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-			},
-		},
-		{
-			" Money desc,Age asc,Name desc",
-			[]contentType{
-				contentType{"b", -1, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-				contentType{"", 5, false, 0, 0, zeroTime},
-				contentType{"h", -1, true, 0, 0, nowTime},
-			},
-			[]contentType{
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"h", -1, true, 0, 0, nowTime},
-				contentType{"b", -1, true, 0, 0, nowTime},
-				contentType{"", 5, false, 0, 0, zeroTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
+			[]ContentType{
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"z", -1, true, 0, 0, nowTime},
+				ContentType{"", 5, false, 0, 0, zeroTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
 			},
 		},
 		{
 			" Money desc,Age asc,Name desc",
-			[]contentType{
-				contentType{"b", -1, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-				contentType{"", 5, false, 0, 0, zeroTime},
-				contentType{"h", -1, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"b", -1, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"", 5, false, 0, 0, zeroTime},
+				ContentType{"h", -1, true, 0, 0, nowTime},
 			},
-			[]contentType{
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"h", -1, true, 0, 0, nowTime},
-				contentType{"b", -1, true, 0, 0, nowTime},
-				contentType{"", 5, false, 0, 0, zeroTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
+			[]ContentType{
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"h", -1, true, 0, 0, nowTime},
+				ContentType{"b", -1, true, 0, 0, nowTime},
+				ContentType{"", 5, false, 0, 0, zeroTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+			},
+		},
+		{
+			" Money desc,Age asc,Name desc",
+			[]ContentType{
+				ContentType{"b", -1, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"", 5, false, 0, 0, zeroTime},
+				ContentType{"h", -1, true, 0, 0, nowTime},
+			},
+			[]ContentType{
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"h", -1, true, 0, 0, nowTime},
+				ContentType{"b", -1, true, 0, 0, nowTime},
+				ContentType{"", 5, false, 0, 0, zeroTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
 			},
 		},
 		{
@@ -503,58 +494,75 @@ func TestQuerySort(t *testing.T) {
 		},
 		{
 			"Name asc",
-			[]contentType{
-				contentType{"4", 7, true, 0, 0, nowTime},
-				contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"5", -9, true, 0, 0, nowTime},
-				contentType{"5", 3, true, 0, 0, nowTime},
-				contentType{"4", 13, true, 0, 0, nowTime},
-				contentType{"7", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"5", 9, true, 0, 0, nowTime},
-				contentType{"5", 1, true, -1.1, -1.1, oldTime},
-				contentType{"1", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"4", 6, true, 0, 0, nowTime},
-				contentType{"5", 2, false, 0, 0, zeroTime},
-				contentType{"5", 7, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"4", 7, true, 0, 0, nowTime},
+				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"5", -9, true, 0, 0, nowTime},
+				ContentType{"5", 3, true, 0, 0, nowTime},
+				ContentType{"4", 13, true, 0, 0, nowTime},
+				ContentType{"7", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"5", 9, true, 0, 0, nowTime},
+				ContentType{"5", 1, true, -1.1, -1.1, oldTime},
+				ContentType{"1", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"4", 6, true, 0, 0, nowTime},
+				ContentType{"5", 2, false, 0, 0, zeroTime},
+				ContentType{"5", 7, true, 0, 0, nowTime},
 			},
-			[]contentType{
-				contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"1", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"4", 7, true, 0, 0, nowTime},
-				contentType{"4", 13, true, 0, 0, nowTime},
-				contentType{"4", 6, true, 0, 0, nowTime},
-				contentType{"5", -9, true, 0, 0, nowTime},
-				contentType{"5", 3, true, 0, 0, nowTime},
-				contentType{"5", 9, true, 0, 0, nowTime},
-				contentType{"5", 1, true, -1.1, -1.1, oldTime},
-				contentType{"5", 2, false, 0, 0, zeroTime},
-				contentType{"5", 7, true, 0, 0, nowTime},
-				contentType{"7", -1, false, 1.1, 1.1, zeroTime},
+			[]ContentType{
+				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"1", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"4", 7, true, 0, 0, nowTime},
+				ContentType{"4", 13, true, 0, 0, nowTime},
+				ContentType{"4", 6, true, 0, 0, nowTime},
+				ContentType{"5", -9, true, 0, 0, nowTime},
+				ContentType{"5", 3, true, 0, 0, nowTime},
+				ContentType{"5", 9, true, 0, 0, nowTime},
+				ContentType{"5", 1, true, -1.1, -1.1, oldTime},
+				ContentType{"5", 2, false, 0, 0, zeroTime},
+				ContentType{"5", 7, true, 0, 0, nowTime},
+				ContentType{"7", -1, false, 1.1, 1.1, zeroTime},
 			},
 		},
 	}
 
+	return testCase
+}
+
+func TestQuerySort(t *testing.T) {
+	testCase := GetQuerySortTestCase()
+
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
-		result := Sort(singleTestCase.origin, singleTestCase.sortName)
-		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
+		result := Sort(singleTestCase.Origin, singleTestCase.SortName)
+		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
 
 	}
 
 }
 
-func TestQueryJoin(t *testing.T) {
-	//测试类型 支持bool,int,float,string和time.Time
-	type userType struct {
-		Name      string
-		Age       int
-		Ok        bool
-		Money     float64
-		CardMoney float64
-		Register  time.Time
-	}
+// UserType 测试类型 支持bool,int,float,string和time.Time
+type UserType struct {
+	Name      string
+	Age       int
+	Ok        bool
+	Money     float64
+	CardMoney float64
+	Register  time.Time
+}
 
-	type contentType struct {
+// JoinCase JoinCase
+type JoinCase struct {
+	LeftData   interface{}
+	RightData  interface{}
+	JoinPlace  string
+	JoinType   string
+	JoinFuctor interface{}
+	Target     interface{}
+}
+
+func GetQueryJoinTestCase() []JoinCase {
+
+	type ContentType struct {
 		UserName string
 		Title    string
 		Content  string
@@ -584,23 +592,16 @@ func TestQueryJoin(t *testing.T) {
 	oldTime := nowTime.AddDate(-1, 0, 1)
 	zeroTime := time.Time{}
 
-	testCase := []struct {
-		leftData   interface{}
-		rightData  interface{}
-		joinPlace  string
-		joinType   string
-		joinFuctor interface{}
-		target     interface{}
-	}{
+	testCase := []JoinCase{
 		{
 			[]string{},
-			[]userType{},
+			[]UserType{},
 			"left",
 			" . = Name",
-			func(left string, right userType) userType {
-				return userType{}
+			func(left string, right UserType) UserType {
+				return UserType{}
 			},
-			[]userType{},
+			[]UserType{},
 		},
 		{
 
@@ -615,14 +616,14 @@ func TestQueryJoin(t *testing.T) {
 		},
 		{
 
-			[]userType{},
-			[]userType{},
+			[]UserType{},
+			[]UserType{},
 			" left ",
 			"  Name  =  Name ",
-			func(left userType, right userType) userType {
-				return userType{}
+			func(left UserType, right UserType) UserType {
+				return UserType{}
 			},
-			[]userType{},
+			[]UserType{},
 		},
 		{
 
@@ -638,41 +639,41 @@ func TestQueryJoin(t *testing.T) {
 		{
 
 			[]string{"edward", "fish", "jd"},
-			[]contentType{
-				contentType{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
-				// contentType{"weinmey", "曲奇制作", "制作方法非常简单"},
-				// contentType{"jd", "马卡龙", "好吃好玩"},
+			[]ContentType{
+				ContentType{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
+				// ContentType{"weinmey", "曲奇制作", "制作方法非常简单"},
+				// ContentType{"jd", "马卡龙", "好吃好玩"},
 			},
 			"left",
 			"  .  =  UserName ",
-			func(left string, right contentType) contentType {
-				return contentType{
+			func(left string, right ContentType) ContentType {
+				return ContentType{
 					UserName: left,
 					Title:    right.Title,
 					Content:  right.Content,
 				}
 			},
-			[]contentType{
-				contentType{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
-				contentType{"fish", "", ""},
-				contentType{"jd", "", ""},
+			[]ContentType{
+				ContentType{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
+				ContentType{"fish", "", ""},
+				ContentType{"jd", "", ""},
 			},
 		},
 		{
 
-			[]userType{
-				userType{"edward", 0, false, 1.1, 0, nowTime},
-				userType{"fish", -1, true, -1.1, -1.1, zeroTime},
-				userType{"jd", 1, false, 0, 1.1, oldTime},
+			[]UserType{
+				UserType{"edward", 0, false, 1.1, 0, nowTime},
+				UserType{"fish", -1, true, -1.1, -1.1, zeroTime},
+				UserType{"jd", 1, false, 0, 1.1, oldTime},
 			},
-			[]contentType{
-				contentType{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
-				// contentType{"weinmey", "曲奇制作", "制作方法非常简单"},
-				// contentType{"jd", "马卡龙", "好吃好玩"},
+			[]ContentType{
+				ContentType{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
+				// ContentType{"weinmey", "曲奇制作", "制作方法非常简单"},
+				// ContentType{"jd", "马卡龙", "好吃好玩"},
 			},
 			"left",
 			"  Name  =  UserName ",
-			func(left userType, right contentType) resultType {
+			func(left UserType, right ContentType) resultType {
 				return resultType{
 					UserName:  left.Name,
 					Age:       left.Age,
@@ -692,19 +693,19 @@ func TestQueryJoin(t *testing.T) {
 		},
 		{
 
-			[]userType{
-				userType{"edward", 0, false, 1.1, 0, nowTime},
-				// userType{"fish", -1, true, -1.1, -1.1, zeroTime},
-				// userType{"jd", 1, false, 0, 1.1, oldTime},
+			[]UserType{
+				UserType{"edward", 0, false, 1.1, 0, nowTime},
+				// UserType{"fish", -1, true, -1.1, -1.1, zeroTime},
+				// UserType{"jd", 1, false, 0, 1.1, oldTime},
 			},
-			[]contentType{
-				contentType{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
-				contentType{"weinmey", "曲奇制作", "制作方法非常简单"},
-				contentType{"jd", "马卡龙", "好吃好玩"},
+			[]ContentType{
+				ContentType{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
+				ContentType{"weinmey", "曲奇制作", "制作方法非常简单"},
+				ContentType{"jd", "马卡龙", "好吃好玩"},
 			},
 			"left",
 			"  Name  =  UserName ",
-			func(left userType, right contentType) resultType {
+			func(left UserType, right ContentType) resultType {
 				return resultType{
 					UserName:  left.Name,
 					Age:       left.Age,
@@ -722,19 +723,19 @@ func TestQueryJoin(t *testing.T) {
 		},
 		{
 
-			[]userType{
-				userType{"edward", 0, false, 1.1, 0, nowTime},
-				// userType{"fish", -1, true, -1.1, -1.1, nowTime},
-				// userType{"jd", 1, false, 0, 1.1, oldTime},
+			[]UserType{
+				UserType{"edward", 0, false, 1.1, 0, nowTime},
+				// UserType{"fish", -1, true, -1.1, -1.1, nowTime},
+				// UserType{"jd", 1, false, 0, 1.1, oldTime},
 			},
-			[]contentType{
-				contentType{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
-				contentType{"weinmey", "曲奇制作", "制作方法非常简单"},
-				contentType{"jd", "马卡龙", "好吃好玩"},
+			[]ContentType{
+				ContentType{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
+				ContentType{"weinmey", "曲奇制作", "制作方法非常简单"},
+				ContentType{"jd", "马卡龙", "好吃好玩"},
 			},
 			"right",
 			"  Name  =  UserName ",
-			func(left userType, right contentType) resultType {
+			func(left UserType, right ContentType) resultType {
 				return resultType{
 					UserName:  left.Name,
 					Age:       left.Age,
@@ -754,19 +755,19 @@ func TestQueryJoin(t *testing.T) {
 		},
 		{
 
-			[]userType{
-				userType{"edward", 0, false, 1.1, 0, nowTime},
-				userType{"fish", -1, true, -1.1, -1.1, nowTime},
-				userType{"jd", 1, false, 0, 1.1, oldTime},
+			[]UserType{
+				UserType{"edward", 0, false, 1.1, 0, nowTime},
+				UserType{"fish", -1, true, -1.1, -1.1, nowTime},
+				UserType{"jd", 1, false, 0, 1.1, oldTime},
 			},
-			[]contentType{
-				contentType{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
-				// contentType{"weinmey", "曲奇制作", "制作方法非常简单"},
-				// contentType{"jd", "马卡龙", "好吃好玩"},
+			[]ContentType{
+				ContentType{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
+				// ContentType{"weinmey", "曲奇制作", "制作方法非常简单"},
+				// ContentType{"jd", "马卡龙", "好吃好玩"},
 			},
 			"right",
 			"  Name  =  UserName ",
-			func(left userType, right contentType) resultType {
+			func(left UserType, right ContentType) resultType {
 				return resultType{
 					UserName:  left.Name,
 					Age:       left.Age,
@@ -784,19 +785,19 @@ func TestQueryJoin(t *testing.T) {
 		},
 		{
 
-			[]userType{
-				userType{"edward", 0, false, 1.1, 0, nowTime},
-				userType{"fish", -1, true, -1.1, -1.1, nowTime},
-				userType{"jd", 1, false, 0, 1.1, oldTime},
+			[]UserType{
+				UserType{"edward", 0, false, 1.1, 0, nowTime},
+				UserType{"fish", -1, true, -1.1, -1.1, nowTime},
+				UserType{"jd", 1, false, 0, 1.1, oldTime},
 			},
-			[]contentType{
-				contentType{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
-				// contentType{"weinmey", "曲奇制作", "制作方法非常简单"},
-				// contentType{"jd", "马卡龙", "好吃好玩"},
+			[]ContentType{
+				ContentType{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
+				// ContentType{"weinmey", "曲奇制作", "制作方法非常简单"},
+				// ContentType{"jd", "马卡龙", "好吃好玩"},
 			},
 			"inner",
 			"  Name  =  UserName ",
-			func(left userType, right contentType) resultType {
+			func(left UserType, right ContentType) resultType {
 				return resultType{
 					UserName:  left.Name,
 					Age:       left.Age,
@@ -814,19 +815,19 @@ func TestQueryJoin(t *testing.T) {
 		},
 		{
 
-			[]userType{
-				userType{"edward", 0, false, 1.1, 0, nowTime},
-				userType{"fish", -1, true, -1.1, -1.1, nowTime},
-				userType{"jd", 1, false, 0, 1.1, oldTime},
+			[]UserType{
+				UserType{"edward", 0, false, 1.1, 0, nowTime},
+				UserType{"fish", -1, true, -1.1, -1.1, nowTime},
+				UserType{"jd", 1, false, 0, 1.1, oldTime},
 			},
-			[]contentType{
-				contentType{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
-				contentType{"weinmey", "曲奇制作", "制作方法非常简单"},
-				contentType{"jd", "马卡龙", "好吃好玩"},
+			[]ContentType{
+				ContentType{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
+				ContentType{"weinmey", "曲奇制作", "制作方法非常简单"},
+				ContentType{"jd", "马卡龙", "好吃好玩"},
 			},
 			"outer",
 			"  Name  =  UserName ",
-			func(left userType, right contentType) resultType {
+			func(left UserType, right ContentType) resultType {
 				return resultType{
 					UserName:  right.UserName,
 					Age:       left.Age,
@@ -847,24 +848,24 @@ func TestQueryJoin(t *testing.T) {
 		},
 
 		{
-			[]userType{
-				userType{"s", 0, false, 1.1, 0, oldTime},
-				userType{"a", -1, true, -1.1, -1.1, nowTime},
-				userType{"", 1, false, 1.1, 1.1, oldTime},
-				userType{"", 0, true, 0, 0, zeroTime},
-				userType{"z", -1, false, 0, 0, oldTime},
+			[]UserType{
+				UserType{"s", 0, false, 1.1, 0, oldTime},
+				UserType{"a", -1, true, -1.1, -1.1, nowTime},
+				UserType{"", 1, false, 1.1, 1.1, oldTime},
+				UserType{"", 0, true, 0, 0, zeroTime},
+				UserType{"z", -1, false, 0, 0, oldTime},
 			},
-			[]userType{
-				userType{"s", -1, true, 0, 0, nowTime},
-				userType{"a", 0, false, 1.1, 1.1, zeroTime},
-				userType{"", -1, true, -1.1, -1.1, oldTime},
-				userType{"", 1, false, 1, 1, zeroTime},
-				userType{"z", 1, true, -1, -1, nowTime},
+			[]UserType{
+				UserType{"s", -1, true, 0, 0, nowTime},
+				UserType{"a", 0, false, 1.1, 1.1, zeroTime},
+				UserType{"", -1, true, -1.1, -1.1, oldTime},
+				UserType{"", 1, false, 1, 1, zeroTime},
+				UserType{"z", 1, true, -1, -1, nowTime},
 			},
 			"right",
 			"Age=Age",
-			func(left userType, right userType) userType {
-				return userType{
+			func(left UserType, right UserType) UserType {
+				return UserType{
 					Name:      left.Name,
 					Age:       right.Age,
 					Ok:        left.Ok,
@@ -873,31 +874,31 @@ func TestQueryJoin(t *testing.T) {
 					Register:  right.Register,
 				}
 			},
-			[]userType{
-				userType{"s", 0, false, 1.1, 0, zeroTime},
-				userType{"a", -1, true, 0, -1.1, nowTime},
-				userType{"a", -1, true, -1.1, -1.1, oldTime},
-				userType{"", 1, false, 1, 1.1, zeroTime},
-				userType{"", 1, false, -1, 1.1, nowTime},
-				userType{"", 0, true, 1.1, 0, zeroTime},
-				userType{"z", -1, false, 0, 0, nowTime},
-				userType{"z", -1, false, -1.1, 0, oldTime},
+			[]UserType{
+				UserType{"s", 0, false, 1.1, 0, zeroTime},
+				UserType{"a", -1, true, 0, -1.1, nowTime},
+				UserType{"a", -1, true, -1.1, -1.1, oldTime},
+				UserType{"", 1, false, 1, 1.1, zeroTime},
+				UserType{"", 1, false, -1, 1.1, nowTime},
+				UserType{"", 0, true, 1.1, 0, zeroTime},
+				UserType{"z", -1, false, 0, 0, nowTime},
+				UserType{"z", -1, false, -1.1, 0, oldTime},
 			},
 		},
 		{
-			[]userType{
-				userType{"s", 0, false, 1.1, 0, oldTime},
-				userType{"a", -1, true, -1.1, -1.1, nowTime},
-				userType{"", 1, false, 1.1, 1.1, oldTime},
+			[]UserType{
+				UserType{"s", 0, false, 1.1, 0, oldTime},
+				UserType{"a", -1, true, -1.1, -1.1, nowTime},
+				UserType{"", 1, false, 1.1, 1.1, oldTime},
 			},
-			[]userType{
-				userType{"s", -1, true, 0, 0, nowTime},
-				userType{"a", 0, false, 1.1, 1.1, zeroTime},
+			[]UserType{
+				UserType{"s", -1, true, 0, 0, nowTime},
+				UserType{"a", 0, false, 1.1, 1.1, zeroTime},
 			},
 			"left",
 			"Ok  =  Ok",
-			func(left userType, right userType) userType {
-				return userType{
+			func(left UserType, right UserType) UserType {
+				return UserType{
 					Name:      left.Name,
 					Age:       right.Age,
 					Ok:        left.Ok,
@@ -906,26 +907,26 @@ func TestQueryJoin(t *testing.T) {
 					Register:  right.Register,
 				}
 			},
-			[]userType{
-				userType{"s", 0, false, 1.1, 0, zeroTime},
-				userType{"a", -1, true, 0, -1.1, nowTime},
-				userType{"", 0, false, 1.1, 1.1, zeroTime},
+			[]UserType{
+				UserType{"s", 0, false, 1.1, 0, zeroTime},
+				UserType{"a", -1, true, 0, -1.1, nowTime},
+				UserType{"", 0, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
-			[]userType{
-				userType{"s", 0, false, 1.1, 0, oldTime},
-				userType{"a", -1, true, -1.1, -1.1, nowTime},
-				userType{"", 1, false, 0, 1.1, oldTime},
+			[]UserType{
+				UserType{"s", 0, false, 1.1, 0, oldTime},
+				UserType{"a", -1, true, -1.1, -1.1, nowTime},
+				UserType{"", 1, false, 0, 1.1, oldTime},
 			},
-			[]userType{
-				userType{"s", -1, true, 0, 0, nowTime},
-				userType{"a", 0, false, 1.1, 1.1, zeroTime},
+			[]UserType{
+				UserType{"s", -1, true, 0, 0, nowTime},
+				UserType{"a", 0, false, 1.1, 1.1, zeroTime},
 			},
 			"left",
 			" Money=Money ",
-			func(left userType, right userType) userType {
-				return userType{
+			func(left UserType, right UserType) UserType {
+				return UserType{
 					Name:      left.Name,
 					Age:       right.Age,
 					Ok:        left.Ok,
@@ -934,27 +935,27 @@ func TestQueryJoin(t *testing.T) {
 					Register:  right.Register,
 				}
 			},
-			[]userType{
-				userType{"s", 0, false, 1.1, 0, zeroTime},
-				userType{"a", 0, true, 0, -1.1, zeroTime},
-				userType{"", -1, false, 0, 1.1, nowTime},
+			[]UserType{
+				UserType{"s", 0, false, 1.1, 0, zeroTime},
+				UserType{"a", 0, true, 0, -1.1, zeroTime},
+				UserType{"", -1, false, 0, 1.1, nowTime},
 			},
 		},
 
 		{
-			[]userType{
-				userType{"s", 0, false, 1.1, 0, oldTime},
-				userType{"a", -1, true, -1.1, -1.1, nowTime},
-				userType{"", 1, false, 0, 1.1, oldTime},
+			[]UserType{
+				UserType{"s", 0, false, 1.1, 0, oldTime},
+				UserType{"a", -1, true, -1.1, -1.1, nowTime},
+				UserType{"", 1, false, 0, 1.1, oldTime},
 			},
-			[]userType{
-				userType{"s", -1, true, 0, 0, nowTime},
-				userType{"a", 0, false, 1.1, 1.1, zeroTime},
+			[]UserType{
+				UserType{"s", -1, true, 0, 0, nowTime},
+				UserType{"a", 0, false, 1.1, 1.1, zeroTime},
 			},
 			"left",
 			" CardMoney = Money ",
-			func(left userType, right userType) userType {
-				return userType{
+			func(left UserType, right UserType) UserType {
+				return UserType{
 					Name:      left.Name,
 					Age:       right.Age,
 					Ok:        left.Ok,
@@ -963,26 +964,26 @@ func TestQueryJoin(t *testing.T) {
 					Register:  right.Register,
 				}
 			},
-			[]userType{
-				userType{"s", -1, false, 0, 0, nowTime},
-				userType{"a", 0, true, 0, -1.1, zeroTime},
-				userType{"", 0, false, 1.1, 1.1, zeroTime},
+			[]UserType{
+				UserType{"s", -1, false, 0, 0, nowTime},
+				UserType{"a", 0, true, 0, -1.1, zeroTime},
+				UserType{"", 0, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
-			[]userType{
-				userType{"s", 0, false, 1.1, 0, oldTime},
-				userType{"a", -1, true, -1.1, -1.1, nowTime},
-				userType{"", 1, false, 0, 1.1, oldTime},
+			[]UserType{
+				UserType{"s", 0, false, 1.1, 0, oldTime},
+				UserType{"a", -1, true, -1.1, -1.1, nowTime},
+				UserType{"", 1, false, 0, 1.1, oldTime},
 			},
-			[]userType{
-				userType{"s", -1, true, 0, 0, nowTime},
-				userType{"a", 0, false, 1.1, 1.1, zeroTime},
+			[]UserType{
+				UserType{"s", -1, true, 0, 0, nowTime},
+				UserType{"a", 0, false, 1.1, 1.1, zeroTime},
 			},
 			"left",
 			" Register = Register ",
-			func(left userType, right userType) userType {
-				return userType{
+			func(left UserType, right UserType) UserType {
+				return UserType{
 					Name:      left.Name,
 					Age:       right.Age,
 					Ok:        left.Ok,
@@ -991,10 +992,10 @@ func TestQueryJoin(t *testing.T) {
 					Register:  right.Register,
 				}
 			},
-			[]userType{
-				userType{"s", 0, false, 0, 0, zeroTime},
-				userType{"a", -1, true, 0, -1.1, nowTime},
-				userType{"", 0, false, 0, 1.1, zeroTime},
+			[]UserType{
+				UserType{"s", 0, false, 0, 0, zeroTime},
+				UserType{"a", -1, true, 0, -1.1, nowTime},
+				UserType{"", 0, false, 0, 1.1, zeroTime},
 			},
 		},
 		{
@@ -1025,164 +1026,163 @@ func TestQueryJoin(t *testing.T) {
 		},
 	}
 
+	return testCase
+}
+
+func TestQueryJoin(t *testing.T) {
+	testCase := GetQueryJoinTestCase()
+
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
-		result := Join(singleTestCase.leftData, singleTestCase.rightData, singleTestCase.joinPlace, singleTestCase.joinType, singleTestCase.joinFuctor)
-		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
+		result := Join(singleTestCase.LeftData, singleTestCase.RightData, singleTestCase.JoinPlace, singleTestCase.JoinType, singleTestCase.JoinFuctor)
+		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
 
 	}
 }
 
-func TestQueryGroup(t *testing.T) {
+// GroupCase GroupCase
+type GroupCase struct {
+	Data        interface{}
+	GroupType   string
+	GroupFuctor interface{}
+	Target      interface{}
+}
 
-	type contentType struct {
-		Name      string
-		Age       int
-		Ok        bool
-		Money     float32
-		CardMoney float64
-		Register  time.Time
-	}
-
+func GetQueryGroupTestCase() []GroupCase {
 	nowTime := time.Now()
 	oldTime := nowTime.AddDate(-1, 0, 1)
 	zeroTime := time.Time{}
 
-	testCase := []struct {
-		data        interface{}
-		groupType   string
-		groupFuctor interface{}
-		target      interface{}
-	}{
+	testCase := []GroupCase{
 		{
 			[]int{},
 			".",
-			func(data []int) int {
-				return len(data)
+			func(Data []int) int {
+				return len(Data)
 			},
 			[]int{},
 		},
 		{
-			[]contentType{},
+			[]ContentType{},
 			" Ok ",
-			func(list []contentType) []contentType {
-				return []contentType{}
+			func(list []ContentType) []ContentType {
+				return []ContentType{}
 			},
-			[]contentType{},
+			[]ContentType{},
 		},
 		{
 			[]string{"a", "a", "", "", "z"},
 			".",
-			func(list []string) contentType {
-				return contentType{
+			func(list []string) ContentType {
+				return ContentType{
 					Name: list[0],
 					Age:  len(list),
 				}
 			},
-			[]contentType{
-				contentType{"a", 2, false, 0, 0, zeroTime},
-				contentType{"", 2, false, 0, 0, zeroTime},
-				contentType{"z", 1, false, 0, 0, zeroTime},
+			[]ContentType{
+				ContentType{"a", 2, false, 0, 0, zeroTime},
+				ContentType{"", 2, false, 0, 0, zeroTime},
+				ContentType{"z", 1, false, 0, 0, zeroTime},
 			},
 		},
 		{
-			[]contentType{
-				contentType{"a", 3, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"", 10, true, -2.2, -1.2, oldTime},
-				contentType{"", -2, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"a", 3, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"", 10, true, -2.2, -1.2, oldTime},
+				ContentType{"", -2, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
 			"Name",
-			func(list []contentType) []contentType {
+			func(list []ContentType) []ContentType {
 				sum := Sum(Column(list, "  Money  "))
 				list[0].Money = sum.(float32)
-				return []contentType{list[0]}
+				return []ContentType{list[0]}
 			},
-			[]contentType{
-				contentType{"a", 3, true, 1.1, 0, nowTime},
-				contentType{"", 10, true, -2.2, -1.2, oldTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"a", 3, true, 1.1, 0, nowTime},
+				ContentType{"", 10, true, -2.2, -1.2, oldTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
 		},
 		{
-			[]contentType{
-				contentType{"a", 3, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"", 10, true, -2.2, -1.2, oldTime},
-				contentType{"", -2, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"a", 3, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"", 10, true, -2.2, -1.2, oldTime},
+				ContentType{"", -2, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
 			"Name",
-			func(list []contentType) float32 {
+			func(list []ContentType) float32 {
 				return Sum(Column(list, "  Money  ")).(float32)
 			},
 			[]float32{1.1, -2.2, 0},
 		},
 		{
-			[]contentType{
-				contentType{"a", 3, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"", 10, true, -2.2, -1.2, oldTime},
-				contentType{"", -2, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"a", 3, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"", 10, true, -2.2, -1.2, oldTime},
+				ContentType{"", -2, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
 			"Ok",
-			func(list []contentType) []contentType {
+			func(list []ContentType) []ContentType {
 				sum := Sum(Column(list, "CardMoney  "))
 				list[0].CardMoney = sum.(float64)
-				return []contentType{list[0]}
+				return []ContentType{list[0]}
 			},
-			[]contentType{
-				contentType{"a", 3, true, 0, -1.2, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
+			[]ContentType{
+				ContentType{"a", 3, true, 0, -1.2, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
-			[]contentType{
-				contentType{"s", 1, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"", 0, true, -1.1, -1.1, oldTime},
-				contentType{"", -1, false, 0, 0, zeroTime},
-				contentType{"z", 1, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"s", 1, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"", 0, true, -1.1, -1.1, oldTime},
+				ContentType{"", -1, false, 0, 0, zeroTime},
+				ContentType{"z", 1, true, 0, 0, nowTime},
 			},
 			" Age ",
-			func(list []contentType) []contentType {
+			func(list []ContentType) []ContentType {
 				sum := Sum(Column(list, "  CardMoney  "))
 				list[0].CardMoney = sum.(float64)
-				return []contentType{list[0]}
+				return []ContentType{list[0]}
 			},
-			[]contentType{
-				contentType{"s", 1, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"", 0, true, -1.1, -1.1, oldTime},
+			[]ContentType{
+				ContentType{"s", 1, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"", 0, true, -1.1, -1.1, oldTime},
 			},
 		},
 		{
-			[]contentType{
-				contentType{"s", 1, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"", 0, true, -1.1, -1.1, oldTime},
-				contentType{"", -1, false, 0, 0, zeroTime},
-				contentType{"z", 1, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"s", 1, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"", 0, true, -1.1, -1.1, oldTime},
+				ContentType{"", -1, false, 0, 0, zeroTime},
+				ContentType{"z", 1, true, 0, 0, nowTime},
 			},
 			" Age ",
-			func(list []contentType) float64 {
+			func(list []ContentType) float64 {
 				return Sum(Column(list, "  CardMoney  ")).(float64)
 
 			},
 			[]float64{0, 1.1, -1.1},
 		},
 		{
-			[]contentType{
-				contentType{"s", 1, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"", 0, true, -1.1, -1.1, oldTime},
-				contentType{"", -1, false, 0, 0, zeroTime},
-				contentType{"z", 1, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"s", 1, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"", 0, true, -1.1, -1.1, oldTime},
+				ContentType{"", -1, false, 0, 0, zeroTime},
+				ContentType{"z", 1, true, 0, 0, nowTime},
 			},
 			" Age ",
-			func(list []contentType) []float64 {
+			func(list []ContentType) []float64 {
 				sum := Sum(Column(list, "  CardMoney  "))
 				return []float64{sum.(float64)}
 
@@ -1190,15 +1190,15 @@ func TestQueryGroup(t *testing.T) {
 			[]float64{0, 1.1, -1.1},
 		},
 		{
-			[]contentType{
-				contentType{"s", 1, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"", 0, true, -1.1, -1.1, oldTime},
-				contentType{"", -1, false, 0, 0, zeroTime},
-				contentType{"z", 1, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"s", 1, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"", 0, true, -1.1, -1.1, oldTime},
+				ContentType{"", -1, false, 0, 0, zeroTime},
+				ContentType{"z", 1, true, 0, 0, nowTime},
 			},
 			"Register ",
-			func(list []contentType) int {
+			func(list []ContentType) int {
 				sum := Sum(Column(list, "  Age  "))
 				return sum.(int)
 
@@ -1206,45 +1206,45 @@ func TestQueryGroup(t *testing.T) {
 			[]int{2, -2, 0},
 		},
 		{
-			[]contentType{
-				contentType{"s", 1, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"", 0, true, -1.1, -1.1, oldTime},
-				contentType{"", -1, false, 0, 0, zeroTime},
-				contentType{"z", 1, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"s", 1, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"", 0, true, -1.1, -1.1, oldTime},
+				ContentType{"", -1, false, 0, 0, zeroTime},
+				ContentType{"z", 1, true, 0, 0, nowTime},
 			},
 			"Register ",
-			func(list []contentType) []contentType {
+			func(list []ContentType) []ContentType {
 				sum := Sum(Column(list, "  Age  "))
 				list[0].Age = sum.(int)
-				return []contentType{list[0]}
+				return []ContentType{list[0]}
 			},
-			[]contentType{
-				contentType{"s", 2, true, 0, 0, nowTime},
-				contentType{"a", -2, false, 1.1, 1.1, zeroTime},
-				contentType{"", 0, true, -1.1, -1.1, oldTime},
+			[]ContentType{
+				ContentType{"s", 2, true, 0, 0, nowTime},
+				ContentType{"a", -2, false, 1.1, 1.1, zeroTime},
+				ContentType{"", 0, true, -1.1, -1.1, oldTime},
 			},
 		},
 		/*DO NOT SUPPORT MULTIPLE COLUMN GROUP
 		{
-			[]contentType{
-				contentType{"s", 1, true, 0, 0, nowTime},
-				contentType{"s", 1, true, 6.6, 6.6, nowTime},
-				contentType{"", 0, true, -5.1, -5.1, oldTime},
-				contentType{"", 0, true, 2.1, 2.1, oldTime},
-				contentType{"", -1, false, -3.3, -3.3, zeroTime},
-				contentType{"", -1, false, 4.3, 4.3, zeroTime},
+			[]ContentType{
+				ContentType{"s", 1, true, 0, 0, nowTime},
+				ContentType{"s", 1, true, 6.6, 6.6, nowTime},
+				ContentType{"", 0, true, -5.1, -5.1, oldTime},
+				ContentType{"", 0, true, 2.1, 2.1, oldTime},
+				ContentType{"", -1, false, -3.3, -3.3, zeroTime},
+				ContentType{"", -1, false, 4.3, 4.3, zeroTime},
 			},
 			" Name , Ok ",
-			func(list []contentType) []contentType {
+			func(list []ContentType) []ContentType {
 				sum := Sum(Column(list, "  Age  "))
 				list[0].Age = sum.(int)
-				return []contentType{list[0]}
+				return []ContentType{list[0]}
 			},
-			[]contentType{
-				contentType{"", -2, false, -3.3, -3.3, zeroTime},
-				contentType{"", 0, true, -5.1, -5.1, oldTime},
-				contentType{"s", 2, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"", -2, false, -3.3, -3.3, zeroTime},
+				ContentType{"", 0, true, -5.1, -5.1, oldTime},
+				ContentType{"s", 2, true, 0, 0, nowTime},
 			},
 		},
 		*/
@@ -1269,35 +1269,34 @@ func TestQueryGroup(t *testing.T) {
 		},
 	}
 
+	return testCase
+}
+
+func TestQueryGroup(t *testing.T) {
+	testCase := GetQueryGroupTestCase()
+
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
-		result := Group(singleTestCase.data, singleTestCase.groupType, singleTestCase.groupFuctor)
-		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
+		result := Group(singleTestCase.Data, singleTestCase.GroupType, singleTestCase.GroupFuctor)
+		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
 
 	}
 
 }
 
-func TestQueryColumn(t *testing.T) {
+// ColumnCase ColumnCase
+type ColumnCase struct {
+	Data   interface{}
+	Column string
+	Target interface{}
+}
 
-	type contentType struct {
-		Name      string
-		Age       int
-		Ok        bool
-		Money     float32
-		CardMoney float64
-		Register  time.Time
-	}
-
+func GetQueryColumnTestCase() []ColumnCase {
 	nowTime := time.Now()
 	oldTime := nowTime.AddDate(-1, 0, 1)
 	zeroTime := time.Time{}
 
-	testCase := []struct {
-		data   interface{}
-		Column string
-		target interface{}
-	}{
+	testCase := []ColumnCase{
 		{
 			[]int{},
 			" . ",
@@ -1309,61 +1308,61 @@ func TestQueryColumn(t *testing.T) {
 			[]string{"1", "7", "8"},
 		},
 		{
-			[]contentType{},
+			[]ContentType{},
 			" Name ",
 			[]string{},
 		},
 		{
-			[]contentType{
-				contentType{"a", 3, true, 0, 0, nowTime},
-				contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"1", 10, true, -2.2, -1.2, oldTime},
-				contentType{"-1", -2, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"a", 3, true, 0, 0, nowTime},
+				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+				ContentType{"-1", -2, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
 			"     Name         ",
 			[]string{"a", "0", "1", "-1", "z"},
 		},
 		{
-			[]contentType{
-				contentType{"a", 3, true, 0, 0, nowTime},
-				contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"1", 10, true, -2.2, -1.2, oldTime},
-				contentType{"-1", -2, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"a", 3, true, 0, 0, nowTime},
+				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+				ContentType{"-1", -2, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
 			"Age        ",
 			[]int{3, -1, 10, -2, 3},
 		},
 		{
-			[]contentType{
-				contentType{"a", 3, true, 0, 0, nowTime},
-				contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"1", 10, true, -2.2, -1.2, oldTime},
-				contentType{"-1", -2, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"a", 3, true, 0, 0, nowTime},
+				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+				ContentType{"-1", -2, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
 			"Ok        ",
 			[]bool{true, false, true, false, true},
 		},
 		{
-			[]contentType{
-				contentType{"a", 3, true, 0, 0, nowTime},
-				contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"1", 10, true, -2.2, -1.2, oldTime},
-				contentType{"-1", -2, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"a", 3, true, 0, 0, nowTime},
+				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+				ContentType{"-1", -2, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
 			"    Money  ",
 			[]float32{0, 1.1, -2.2, 0, 0},
 		},
 		{
-			[]contentType{
-				contentType{"a", 3, true, 0, 0, nowTime},
-				contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"1", 10, true, -2.2, -1.2, oldTime},
-				contentType{"-1", -2, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"a", 3, true, 0, 0, nowTime},
+				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+				ContentType{"-1", -2, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
 			"    CardMoney",
 			[]float64{0, 1.1, -1.2, 0, 0},
@@ -1379,34 +1378,33 @@ func TestQueryColumn(t *testing.T) {
 		},
 	}
 
+	return testCase
+}
+
+func TestQueryColumn(t *testing.T) {
+	testCase := GetQueryColumnTestCase()
+
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
-		result := Column(singleTestCase.data, singleTestCase.Column)
-		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
+		result := Column(singleTestCase.Data, singleTestCase.Column)
+		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
 
 	}
 }
 
-func TestQueryColumnMap(t *testing.T) {
+// ColumnMapCase ColumnMapCase
+type ColumnMapCase struct {
+	Data   interface{}
+	Column string
+	Target interface{}
+}
 
-	type contentType struct {
-		Name      string
-		Age       int
-		Ok        bool
-		Money     float32
-		CardMoney float64
-		Register  time.Time
-	}
-
+func GetQueryColumnMapTestCase() []ColumnMapCase {
 	nowTime := time.Now()
 	oldTime := nowTime.AddDate(-1, 0, 1)
 	zeroTime := time.Time{}
 
-	testCase := []struct {
-		data   interface{}
-		Column string
-		target interface{}
-	}{
+	testCase := []ColumnMapCase{
 		{
 			[]int{},
 			" . ",
@@ -1418,85 +1416,85 @@ func TestQueryColumnMap(t *testing.T) {
 			map[string]string{"1": "1", "7": "7", "8": "8"},
 		},
 		{
-			[]contentType{},
+			[]ContentType{},
 			" Name ",
-			map[string]contentType{},
+			map[string]ContentType{},
 		},
 		{
-			[]contentType{
-				contentType{"a", 3, true, 0, 0, nowTime},
-				contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"1", 10, true, -2.2, -1.2, oldTime},
-				contentType{"-1", -2, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"a", 3, true, 0, 0, nowTime},
+				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+				ContentType{"-1", -2, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
 			"     Name         ",
-			map[string]contentType{
-				"a":  contentType{"a", 3, true, 0, 0, nowTime},
-				"0":  contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				"1":  contentType{"1", 10, true, -2.2, -1.2, oldTime},
-				"-1": contentType{"-1", -2, false, 0, 0, zeroTime},
-				"z":  contentType{"z", 3, true, 0, 0, nowTime},
+			map[string]ContentType{
+				"a":  ContentType{"a", 3, true, 0, 0, nowTime},
+				"0":  ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				"1":  ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+				"-1": ContentType{"-1", -2, false, 0, 0, zeroTime},
+				"z":  ContentType{"z", 3, true, 0, 0, nowTime},
 			},
 		},
 		{
-			[]contentType{
-				contentType{"a", 3, true, 0, 0, nowTime},
-				contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"1", 10, true, -2.2, -1.2, oldTime},
-				contentType{"-1", -2, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"a", 3, true, 0, 0, nowTime},
+				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+				ContentType{"-1", -2, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
 			"Age        ",
-			map[int]contentType{
-				3:  contentType{"a", 3, true, 0, 0, nowTime},
-				-1: contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				10: contentType{"1", 10, true, -2.2, -1.2, oldTime},
-				-2: contentType{"-1", -2, false, 0, 0, zeroTime},
+			map[int]ContentType{
+				3:  ContentType{"a", 3, true, 0, 0, nowTime},
+				-1: ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				10: ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+				-2: ContentType{"-1", -2, false, 0, 0, zeroTime},
 			},
 		},
 		{
-			[]contentType{
-				contentType{"a", 3, true, 0, 0, nowTime},
-				contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"1", 10, true, -2.2, -1.2, oldTime},
-				contentType{"-1", -2, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"a", 3, true, 0, 0, nowTime},
+				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+				ContentType{"-1", -2, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
 			"Ok        ",
-			map[bool]contentType{
-				true:  contentType{"a", 3, true, 0, 0, nowTime},
-				false: contentType{"0", -1, false, 1.1, 1.1, zeroTime},
+			map[bool]ContentType{
+				true:  ContentType{"a", 3, true, 0, 0, nowTime},
+				false: ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
-			[]contentType{
-				contentType{"a", 3, true, 0, 0, nowTime},
-				contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"1", 10, true, -2.2, -1.2, oldTime},
-				contentType{"-1", -2, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"a", 3, true, 0, 0, nowTime},
+				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+				ContentType{"-1", -2, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
 			"    Money  ",
-			map[float32]contentType{
-				0:    contentType{"a", 3, true, 0, 0, nowTime},
-				1.1:  contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				-2.2: contentType{"1", 10, true, -2.2, -1.2, oldTime},
+			map[float32]ContentType{
+				0:    ContentType{"a", 3, true, 0, 0, nowTime},
+				1.1:  ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				-2.2: ContentType{"1", 10, true, -2.2, -1.2, oldTime},
 			},
 		},
 		{
-			[]contentType{
-				contentType{"a", 3, true, 0, 0, nowTime},
-				contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"1", 10, true, -2.2, -1.2, oldTime},
-				contentType{"-1", -2, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"a", 3, true, 0, 0, nowTime},
+				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+				ContentType{"-1", -2, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
 			"    CardMoney",
-			map[float64]contentType{
-				0:    contentType{"a", 3, true, 0, 0, nowTime},
-				1.1:  contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				-1.2: contentType{"1", 10, true, -2.2, -1.2, oldTime},
+			map[float64]ContentType{
+				0:    ContentType{"a", 3, true, 0, 0, nowTime},
+				1.1:  ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				-1.2: ContentType{"1", 10, true, -2.2, -1.2, oldTime},
 			},
 		},
 		{
@@ -1514,144 +1512,141 @@ func TestQueryColumnMap(t *testing.T) {
 		},
 	}
 
+	return testCase
+}
+
+func TestQueryColumnMap(t *testing.T) {
+	testCase := GetQueryColumnMapTestCase()
+
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
-		result := ColumnMap(singleTestCase.data, singleTestCase.Column)
-		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
+		result := ColumnMap(singleTestCase.Data, singleTestCase.Column)
+		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
 
 	}
 }
 
-func TestQueryReverse(t *testing.T) {
+// ReverseCase ReverseCase
+type ReverseCase struct {
+	Data   interface{}
+	Target interface{}
+}
 
-	type contentType struct {
-		Name      string
-		Age       int
-		Ok        bool
-		Money     float32
-		CardMoney float64
-		Register  time.Time
-	}
-
+func GetQueryReverseTestCase() []ReverseCase {
 	nowTime := time.Now()
 	oldTime := nowTime.AddDate(-1, 0, 1)
 	zeroTime := time.Time{}
 
-	testCase := []struct {
-		data   interface{}
-		target interface{}
-	}{
-
+	testCase := []ReverseCase{
 		{
-			[]contentType{},
-			[]contentType{},
+			[]ContentType{},
+			[]ContentType{},
 		},
 		{
-			[]contentType{
-				contentType{"a", 3, true, 0, 0, nowTime},
-				contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"1", 10, true, -2.2, -1.2, oldTime},
-				contentType{"-1", -2, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"a", 3, true, 0, 0, nowTime},
+				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+				ContentType{"-1", -2, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
-			[]contentType{
-				contentType{"z", 3, true, 0, 0, nowTime},
-				contentType{"-1", -2, false, 0, 0, zeroTime},
-				contentType{"1", 10, true, -2.2, -1.2, oldTime},
-				contentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"a", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"z", 3, true, 0, 0, nowTime},
+				ContentType{"-1", -2, false, 0, 0, zeroTime},
+				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"a", 3, true, 0, 0, nowTime},
 			},
 		},
 	}
 
+	return testCase
+}
+
+func TestQueryReverse(t *testing.T) {
+	testCase := GetQueryReverseTestCase()
+
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
-		result := Reverse(singleTestCase.data)
-		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
+		result := Reverse(singleTestCase.Data)
+		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
 
 	}
 }
 
-func TestQueryCombine(t *testing.T) {
-	type contentType struct {
-		Name      string
-		Age       int
-		Ok        bool
-		Money     float32
-		CardMoney float64
-		Register  time.Time
-	}
-	testCase := []struct {
-		origin  interface{}
-		origin2 interface{}
-		functor interface{}
-		target  interface{}
-	}{
+type CombineCase struct {
+	Origin  interface{}
+	Origin2 interface{}
+	Functor interface{}
+	Target  interface{}
+}
+
+func GetQueryCombineTestCase() []CombineCase {
+	testCase := []CombineCase{
 		{
-			[]contentType{},
-			[]contentType{},
-			func(left contentType, right contentType) contentType {
-				return contentType{}
+			[]ContentType{},
+			[]ContentType{},
+			func(left ContentType, right ContentType) ContentType {
+				return ContentType{}
 			},
-			[]contentType{},
+			[]ContentType{},
 		},
 		{
-			[]contentType{
-				contentType{Name: "1"},
-				contentType{Name: "2"},
-				contentType{Name: "3"},
+			[]ContentType{
+				ContentType{Name: "1"},
+				ContentType{Name: "2"},
+				ContentType{Name: "3"},
 			},
 			[]int{1, 2, 3},
-			func(left contentType, right int) contentType {
-				return contentType{
+			func(left ContentType, right int) ContentType {
+				return ContentType{
 					Name: left.Name,
 					Age:  right,
 				}
 			},
-			[]contentType{
-				contentType{Name: "1", Age: 1},
-				contentType{Name: "2", Age: 2},
-				contentType{Name: "3", Age: 3},
+			[]ContentType{
+				ContentType{Name: "1", Age: 1},
+				ContentType{Name: "2", Age: 2},
+				ContentType{Name: "3", Age: 3},
 			},
 		},
 	}
 
+	return testCase
+}
+
+func TestQueryCombine(t *testing.T) {
+	testCase := GetQueryCombineTestCase()
+
 	for _, singleTestCase := range testCase {
-		result := Combine(singleTestCase.origin, singleTestCase.origin2, singleTestCase.functor)
-		assert.Equal(t, result, singleTestCase.target)
+		result := Combine(singleTestCase.Origin, singleTestCase.Origin2, singleTestCase.Functor)
+		assert.Equal(t, result, singleTestCase.Target)
 	}
 }
 
-func TestQueryDistinct(t *testing.T) {
+type DistinctCase struct {
+	UniqueName string
+	Origin     interface{}
+	Target     interface{}
+}
 
-	type contentType struct {
-		Name      string
-		Age       int
-		Ok        bool
-		Money     float32
-		CardMoney float64
-		Register  time.Time
-	}
+func GetQueryDistinctTestCase() []DistinctCase {
 
 	nowTime := time.Now()
 	oldTime := nowTime.AddDate(-1, 0, 1)
 	zeroTime := time.Time{}
 
-	testCase := []struct {
-		uniqueName string
-		origin     interface{}
-		target     interface{}
-	}{
+	testCase := []DistinctCase{
 		//空集
 		{
 			"",
-			[]contentType{},
-			[]contentType{},
+			[]ContentType{},
+			[]ContentType{},
 		},
 		{
 			"   Name    ",
-			[]contentType{},
-			[]contentType{},
+			[]ContentType{},
+			[]ContentType{},
 		},
 		{
 			"",
@@ -1661,11 +1656,11 @@ func TestQueryDistinct(t *testing.T) {
 		//默认值
 		{
 			"",
-			[]contentType{
-				contentType{"", 0, false, 0, 0, zeroTime},
+			[]ContentType{
+				ContentType{"", 0, false, 0, 0, zeroTime},
 			},
-			[]contentType{
-				contentType{"", 0, false, 0, 0, zeroTime},
+			[]ContentType{
+				ContentType{"", 0, false, 0, 0, zeroTime},
 			},
 		},
 		//单排除
@@ -1676,128 +1671,128 @@ func TestQueryDistinct(t *testing.T) {
 		},
 		{
 			"Name",
-			[]contentType{
-				contentType{"s", 3, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"", 10, true, -1.1, -1.1, oldTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"s", 3, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
-			[]contentType{
-				contentType{"s", 3, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"", 10, true, -1.1, -1.1, oldTime},
-				contentType{"z", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"s", 3, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"z", 3, true, 0, 0, nowTime},
 			},
 		},
 		{
 			"Ok",
-			[]contentType{
-				contentType{"b", 3, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"h", 3, true, 0, 0, nowTime},
+			[]ContentType{
+				ContentType{"b", 3, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"h", 3, true, 0, 0, nowTime},
 			},
-			[]contentType{
-				contentType{"b", 3, true, 0, 0, nowTime},
-				contentType{"a", -1, false, 1.1, 1.1, zeroTime},
+			[]ContentType{
+				ContentType{"b", 3, true, 0, 0, nowTime},
+				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			"   Age   ",
-			[]contentType{
-				contentType{"b", -1, true, 0, 0, nowTime},
-				contentType{"a", 0, false, 1.1, 1.1, zeroTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"h", -1, true, 0, 0, nowTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
+			[]ContentType{
+				ContentType{"b", -1, true, 0, 0, nowTime},
+				ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"h", -1, true, 0, 0, nowTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
 			},
-			[]contentType{
-				contentType{"b", -1, true, 0, 0, nowTime},
-				contentType{"a", 0, false, 1.1, 1.1, zeroTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
+			[]ContentType{
+				ContentType{"b", -1, true, 0, 0, nowTime},
+				ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
 			},
 		},
 		{
 			"   Money",
-			[]contentType{
-				contentType{"b", -1, true, 0, 0, nowTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"a", 0, false, 1.1, 1.1, zeroTime},
-				contentType{"h", -1, true, 0, 0, nowTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
+			[]ContentType{
+				ContentType{"b", -1, true, 0, 0, nowTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
+				ContentType{"h", -1, true, 0, 0, nowTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
 			},
-			[]contentType{
-				contentType{"b", -1, true, 0, 0, nowTime},
-				contentType{"a", 0, false, 1.1, 1.1, zeroTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
+			[]ContentType{
+				ContentType{"b", -1, true, 0, 0, nowTime},
+				ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
 			},
 		},
 		{
 			"   CardMoney",
-			[]contentType{
-				contentType{"b", -1, true, 0, 0, nowTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"a", 0, false, 1.1, 1.1, zeroTime},
-				contentType{"h", -1, true, 0, 0, nowTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
+			[]ContentType{
+				ContentType{"b", -1, true, 0, 0, nowTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
+				ContentType{"h", -1, true, 0, 0, nowTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
 			},
-			[]contentType{
-				contentType{"b", -1, true, 0, 0, nowTime},
-				contentType{"a", 0, false, 1.1, 1.1, zeroTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
+			[]ContentType{
+				ContentType{"b", -1, true, 0, 0, nowTime},
+				ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
 			},
 		},
 		{
 			"Register   ",
-			[]contentType{
-				contentType{"b", -1, true, 0, 0, nowTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"h", -1, true, 0, 0, nowTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-				contentType{"a", 0, false, 1.1, 1.1, zeroTime},
+			[]ContentType{
+				ContentType{"b", -1, true, 0, 0, nowTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"h", -1, true, 0, 0, nowTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
 			},
-			[]contentType{
-				contentType{"b", -1, true, 0, 0, nowTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
+			[]ContentType{
+				ContentType{"b", -1, true, 0, 0, nowTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
 			},
 		},
 		//多值传递
 		{
 			"  Age  ,  Money",
-			[]contentType{
-				contentType{"b", -1, true, 0, 0, nowTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"h", -1, true, 0, 0, nowTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-				contentType{"a", 0, false, 1.1, 1.1, zeroTime},
+			[]ContentType{
+				ContentType{"b", -1, true, 0, 0, nowTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"h", -1, true, 0, 0, nowTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
 			},
-			[]contentType{
-				contentType{"b", -1, true, 0, 0, nowTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-				contentType{"a", 0, false, 1.1, 1.1, zeroTime},
+			[]ContentType{
+				ContentType{"b", -1, true, 0, 0, nowTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			"  Name  ,  Money,Register  ",
-			[]contentType{
-				contentType{"b", -1, true, 0, 0, nowTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"h", -1, true, 0, 0, nowTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"a", 15, true, 1.1, 1.1, zeroTime},
-				contentType{"5", 0, false, -1.1, -1.1, oldTime},
+			[]ContentType{
+				ContentType{"b", -1, true, 0, 0, nowTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"h", -1, true, 0, 0, nowTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"a", 15, true, 1.1, 1.1, zeroTime},
+				ContentType{"5", 0, false, -1.1, -1.1, oldTime},
 			},
-			[]contentType{
-				contentType{"b", -1, true, 0, 0, nowTime},
-				contentType{"", 0, false, 0, 0, zeroTime},
-				contentType{"h", -1, true, 0, 0, nowTime},
-				contentType{"5", 10, true, -1.1, -1.1, oldTime},
-				contentType{"a", 15, true, 1.1, 1.1, zeroTime},
+			[]ContentType{
+				ContentType{"b", -1, true, 0, 0, nowTime},
+				ContentType{"", 0, false, 0, 0, zeroTime},
+				ContentType{"h", -1, true, 0, 0, nowTime},
+				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				ContentType{"a", 15, true, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
@@ -1816,10 +1811,15 @@ func TestQueryDistinct(t *testing.T) {
 		},
 	}
 
+	return testCase
+}
+func TestQueryDistinct(t *testing.T) {
+	testCase := GetQueryDistinctTestCase()
+
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
-		result := Distinct(singleTestCase.origin, singleTestCase.uniqueName)
-		assert.Equal(t, result, singleTestCase.target, singleTestCaseIndex)
+		result := Distinct(singleTestCase.Origin, singleTestCase.UniqueName)
+		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
 
 	}
 }
