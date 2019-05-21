@@ -6,6 +6,7 @@ import (
 
 	"github.com/fishedee/tools/assert"
 	"github.com/fishedee/tools/query"
+	"github.com/fishedee/tools/query/testdata"
 )
 
 func TestQueryColumnMap(t *testing.T) {
@@ -27,7 +28,7 @@ func TestQueryColumnMap(t *testing.T) {
 	})
 
 	// 测试
-	testCase := GetQueryColumnMapTestCase()
+	testCase := testdata.GetQueryColumnMapTestCase()
 
 	for singleTestCaseIndex, singleTestCase := range testCase {
 

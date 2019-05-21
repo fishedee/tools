@@ -7,6 +7,7 @@ import (
 
 	"github.com/fishedee/tools/assert"
 	"github.com/fishedee/tools/query"
+	"github.com/fishedee/tools/query/testdata"
 )
 
 func TestQueryColumn(t *testing.T) {
@@ -20,7 +21,7 @@ func TestQueryColumn(t *testing.T) {
 	assert.Equal(t, query.Column([]int{1, -2, 3}, "."), []int{1, -2, 3})
 
 	// 测试
-	testCase := GetQueryColumnTestCase()
+	testCase := testdata.GetQueryColumnTestCase()
 
 	for singleTestCaseIndex, singleTestCase := range testCase {
 

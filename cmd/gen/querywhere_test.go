@@ -5,6 +5,7 @@ import (
 
 	"github.com/fishedee/tools/assert"
 	"github.com/fishedee/tools/query"
+	"github.com/fishedee/tools/query/testdata"
 )
 
 func TestQueryWhere(t *testing.T) {
@@ -28,7 +29,7 @@ func TestQueryWhere(t *testing.T) {
 	}), []int{2, 4})
 
 	// 测试
-	testCase := GetQueryWhereTestCase()
+	testCase := testdata.GetQueryWhereTestCase()
 
 	for singleTestCaseIndex, singleTestCase := range testCase {
 

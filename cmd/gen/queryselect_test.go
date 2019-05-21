@@ -5,6 +5,7 @@ import (
 
 	"github.com/fishedee/tools/assert"
 	"github.com/fishedee/tools/query"
+	"github.com/fishedee/tools/query/testdata"
 )
 
 func TestQuerySelect(t *testing.T) {
@@ -34,7 +35,7 @@ func TestQuerySelect(t *testing.T) {
 	})
 
 	// 测试
-	testCase := GetQuerySelectTestCase()
+	testCase := testdata.GetQuerySelectTestCase()
 
 	for singleTestCaseIndex, singleTestCase := range testCase {
 

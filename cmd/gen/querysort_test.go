@@ -8,6 +8,7 @@ import (
 
 	"github.com/fishedee/tools/assert"
 	"github.com/fishedee/tools/query"
+	"github.com/fishedee/tools/query/testdata"
 )
 
 func TestQuerySort(t *testing.T) {
@@ -36,7 +37,7 @@ func TestQuerySort(t *testing.T) {
 	assert.Equal(t, query.Sort([]int{3, 2, 1, 7, -8}, ". desc"), []int{7, 3, 2, 1, -8})
 
 	// 测试
-	testCase := GetQuerySortTestCase()
+	testCase := testdata.GetQuerySortTestCase()
 
 	for singleTestCaseIndex, singleTestCase := range testCase {
 

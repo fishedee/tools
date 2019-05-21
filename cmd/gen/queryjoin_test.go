@@ -7,6 +7,7 @@ import (
 
 	"github.com/fishedee/tools/assert"
 	"github.com/fishedee/tools/query"
+	"github.com/fishedee/tools/query/testdata"
 )
 
 func TestQueryJoin(t *testing.T) {
@@ -63,7 +64,7 @@ func TestQueryJoin(t *testing.T) {
 	})
 
 	// 测试
-	testCase := GetQueryJoinTestCase()
+	testCase := testdata.GetQueryJoinTestCase()
 
 	for singleTestCaseIndex, singleTestCase := range testCase {
 

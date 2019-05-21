@@ -7,6 +7,7 @@ import (
 
 	"github.com/fishedee/tools/assert"
 	"github.com/fishedee/tools/query"
+	"github.com/fishedee/tools/query/testdata"
 )
 
 func TestQueryCombine(t *testing.T) {
@@ -53,7 +54,7 @@ func TestQueryCombine(t *testing.T) {
 	})
 
 	// 测试
-	testCase := GetQueryCombineTestCase()
+	testCase := testdata.GetQueryCombineTestCase()
 
 	for _, singleTestCase := range testCase {
 		result := query.Combine(singleTestCase.Origin, singleTestCase.Origin2, singleTestCase.Functor)
