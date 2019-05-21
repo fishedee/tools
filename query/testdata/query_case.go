@@ -1,6 +1,10 @@
-package query
+package testdata
 
-import "time"
+import (
+	"time"
+
+	"github.com/fishedee/tools/query"
+)
 
 // ContentType 测试类型 支持bool,int,float,string和time.Time
 type ContentType struct {
@@ -1043,7 +1047,7 @@ func GetQueryGroupTestCase() []GroupCase {
 			},
 			"Name",
 			func(list []ContentType) []ContentType {
-				sum := Sum(Column(list, "  Money  "))
+				sum := query.Sum(query.Column(list, "  Money  "))
 				list[0].Money = sum.(float32)
 				return []ContentType{list[0]}
 			},
@@ -1063,7 +1067,7 @@ func GetQueryGroupTestCase() []GroupCase {
 			},
 			"Name",
 			func(list []ContentType) float32 {
-				sum := Sum(Column(list, "  Money  ")).(float32)
+				sum := query.Sum(query.Column(list, "  Money  ")).(float32)
 				return sum
 			},
 			[]float32{1.1, -2.2, 0},
@@ -1078,7 +1082,7 @@ func GetQueryGroupTestCase() []GroupCase {
 			},
 			"Ok",
 			func(list []ContentType) []ContentType {
-				sum := Sum(Column(list, "CardMoney  "))
+				sum := query.Sum(query.Column(list, "CardMoney  "))
 				list[0].CardMoney = sum.(float64)
 				return []ContentType{list[0]}
 			},
@@ -1097,7 +1101,7 @@ func GetQueryGroupTestCase() []GroupCase {
 			},
 			" Age ",
 			func(list []ContentType) []ContentType {
-				sum := Sum(Column(list, "  CardMoney  "))
+				sum := query.Sum(query.Column(list, "  CardMoney  "))
 				list[0].CardMoney = sum.(float64)
 				return []ContentType{list[0]}
 			},
@@ -1117,7 +1121,7 @@ func GetQueryGroupTestCase() []GroupCase {
 			},
 			" Age ",
 			func(list []ContentType) float64 {
-				sum := Sum(Column(list, "  CardMoney  ")).(float64)
+				sum := query.Sum(query.Column(list, "  CardMoney  ")).(float64)
 				return sum
 
 			},
@@ -1133,7 +1137,7 @@ func GetQueryGroupTestCase() []GroupCase {
 			},
 			" Age ",
 			func(list []ContentType) []float64 {
-				sum := Sum(Column(list, "  CardMoney  "))
+				sum := query.Sum(query.Column(list, "  CardMoney  "))
 				return []float64{sum.(float64)}
 
 			},
@@ -1149,7 +1153,7 @@ func GetQueryGroupTestCase() []GroupCase {
 			},
 			"Register ",
 			func(list []ContentType) int {
-				sum := Sum(Column(list, "  Age  "))
+				sum := query.Sum(query.Column(list, "  Age  "))
 				return sum.(int)
 
 			},
@@ -1165,7 +1169,7 @@ func GetQueryGroupTestCase() []GroupCase {
 			},
 			"Register ",
 			func(list []ContentType) []ContentType {
-				sum := Sum(Column(list, "  Age  "))
+				sum := query.Sum(query.Column(list, "  Age  "))
 				list[0].Age = sum.(int)
 				return []ContentType{list[0]}
 			},
@@ -1187,7 +1191,7 @@ func GetQueryGroupTestCase() []GroupCase {
 			},
 			" Name , Ok ",
 			func(list [] ContentType) [] ContentType {
-				sum := Sum(Column(list, "  Age  "))
+				sum := query.Sum(query.Column(list, "  Age  "))
 				list[0].Age = sum.(int)
 				return [] ContentType{list[0]}
 			},
@@ -1207,7 +1211,7 @@ func GetQueryGroupTestCase() []GroupCase {
 			},
 			"QueryInnerStruct.MM",
 			func(list []QueryInnerStruct2) []QueryInnerStruct2 {
-				sum := Sum(Column(list, "  MM  "))
+				sum := query.Sum(query.Column(list, "  MM  "))
 				list[0].MM = sum.(int)
 				return []QueryInnerStruct2{list[0]}
 			},
