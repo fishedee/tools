@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/fishedee/tools/assert"
+	_ "github.com/fishedee/tools/cmd/gen/testdata"
 	"github.com/fishedee/tools/query"
 	"github.com/fishedee/tools/query/testdata"
 )

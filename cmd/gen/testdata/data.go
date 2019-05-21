@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/fishedee/tools/query"
+	"github.com/fishedee/tools/query/testdata"
 )
 
 // Department Department
@@ -42,19 +43,12 @@ type Sex struct {
 }
 
 // ContentType 测试类型 支持bool,int,float,string和time.Time
-type ContentType struct {
-	Name      string
-	Age       int
-	Ok        bool
-	Money     float32
-	CardMoney float64
-	Register  time.Time
-}
+type ContentType = testdata.ContentType
 
 func logic() {
 	query.Column([]User{}, "UserID")
 	query.Column([]User{}, "Age")
-	query.Column([]ContentType{}, "Name")
+	query.Column([]ContentType{}, " Name ")
 	query.Column([]User{}, ".")
 	query.Column([]int{}, ".")
 	query.Select([]User{}, func(d User) Sex {

@@ -3,6 +3,7 @@ package testdata
 import (
 	"github.com/fishedee/tools/cmd/gen/testdata/subtest"
 	"github.com/fishedee/tools/query"
+	"github.com/fishedee/tools/query/testdata"
 	"time"
 )
 
@@ -46,8 +47,8 @@ func queryColumnV15a424b34f5f3186a14908971a35c49d4f52436d(data interface{}, colu
 	return result
 }
 
-func queryColumnV36ffeb97aa0306625ccd428ec48bc6fe7e42ce03(data interface{}, column string) interface{} {
-	dataIn := data.([]ContentType)
+func queryColumnV1a5b7250371597524e364f0c816390c77a8b3331(data interface{}, column string) interface{} {
+	dataIn := data.([]testdata.ContentType)
 	result := make([]string, len(dataIn), len(dataIn))
 
 	for i, single := range dataIn {
@@ -564,7 +565,7 @@ func init() {
 
 	query.ColumnMacroRegister([]User{}, "Age", queryColumnV15a424b34f5f3186a14908971a35c49d4f52436d)
 
-	query.ColumnMacroRegister([]ContentType{}, "Name", queryColumnV36ffeb97aa0306625ccd428ec48bc6fe7e42ce03)
+	query.ColumnMacroRegister([]testdata.ContentType{}, " Name ", queryColumnV1a5b7250371597524e364f0c816390c77a8b3331)
 
 	query.ColumnMacroRegister([]int{}, ".", queryColumnV904b262f8e2329ec73c320ca0e5ca82f14165586)
 
