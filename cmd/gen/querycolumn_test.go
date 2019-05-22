@@ -6,16 +6,16 @@ import (
 	"testing"
 
 	"github.com/fishedee/tools/assert"
-	_ "github.com/fishedee/tools/cmd/gen/testdata"
+	gentestdata "github.com/fishedee/tools/cmd/gen/testdata"
 	"github.com/fishedee/tools/query"
 	"github.com/fishedee/tools/query/testdata"
 )
 
 func TestQueryColumn(t *testing.T) {
-	data := []User{
-		User{UserID: 1},
-		User{UserID: -2},
-		User{UserID: 3},
+	data := []gentestdata.User{
+		gentestdata.User{UserID: 1},
+		gentestdata.User{UserID: -2},
+		gentestdata.User{UserID: 3},
 	}
 	assert.Equal(t, query.Column(data, "UserID"), []int{1, -2, 3})
 	assert.Equal(t, query.Column(data, "."), data)
@@ -33,7 +33,7 @@ func TestQueryColumn(t *testing.T) {
 }
 
 func BenchmarkQueryColumnHand(b *testing.B) {
-	data := make([]User, 1000, 1000)
+	data := make([]gentestdata.User, 1000, 1000)
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
@@ -45,7 +45,7 @@ func BenchmarkQueryColumnHand(b *testing.B) {
 }
 
 func BenchmarkQueryColumnMacro(b *testing.B) {
-	data := make([]User, 1000, 1000)
+	data := make([]gentestdata.User, 1000, 1000)
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
@@ -54,7 +54,7 @@ func BenchmarkQueryColumnMacro(b *testing.B) {
 }
 
 func BenchmarkQueryColumnReflect(b *testing.B) {
-	data := make([]User, 1000, 1000)
+	data := make([]gentestdata.User, 1000, 1000)
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {

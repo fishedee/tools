@@ -37,6 +37,16 @@ func queryColumnMapVac46a6e2d4d6d4f163cc177eb335bc2bb166d92b(data interface{}, c
 	return result
 }
 
+func queryColumnV0210877b9f45b0e2d7c760cad71c8d1aa3e70a6f(data interface{}, column string) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	result := make([]string, len(dataIn), len(dataIn))
+
+	for i, single := range dataIn {
+		result[i] = single.Name
+	}
+	return result
+}
+
 func queryColumnV15a424b34f5f3186a14908971a35c49d4f52436d(data interface{}, column string) interface{} {
 	dataIn := data.([]User)
 	result := make([]int, len(dataIn), len(dataIn))
@@ -57,7 +67,57 @@ func queryColumnV1a5b7250371597524e364f0c816390c77a8b3331(data interface{}, colu
 	return result
 }
 
+func queryColumnV268d58dff08fb0947b9b47bcae328d584ec43d6c(data interface{}, column string) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	result := make([]bool, len(dataIn), len(dataIn))
+
+	for i, single := range dataIn {
+		result[i] = single.Ok
+	}
+	return result
+}
+
+func queryColumnV3923b792e276005e09637544ecb3aec8be870f41(data interface{}, column string) interface{} {
+	dataIn := data.([]string)
+	result := make([]string, len(dataIn), len(dataIn))
+
+	for i, single := range dataIn {
+		result[i] = single
+	}
+	return result
+}
+
+func queryColumnV6b4a4fd9e192f5ca29db73c69b9472328b1d4cd7(data interface{}, column string) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	result := make([]float32, len(dataIn), len(dataIn))
+
+	for i, single := range dataIn {
+		result[i] = single.Money
+	}
+	return result
+}
+
 func queryColumnV904b262f8e2329ec73c320ca0e5ca82f14165586(data interface{}, column string) interface{} {
+	dataIn := data.([]int)
+	result := make([]int, len(dataIn), len(dataIn))
+
+	for i, single := range dataIn {
+		result[i] = single
+	}
+	return result
+}
+
+func queryColumnV904f7e5061ea0a11202b104fcb01960d528c1ccd(data interface{}, column string) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	result := make([]float64, len(dataIn), len(dataIn))
+
+	for i, single := range dataIn {
+		result[i] = single.CardMoney
+	}
+	return result
+}
+
+func queryColumnV91dacd60e87431951940b4b4c51428e7c1e5c1f2(data interface{}, column string) interface{} {
 	dataIn := data.([]int)
 	result := make([]int, len(dataIn), len(dataIn))
 
@@ -93,6 +153,16 @@ func queryColumnVc6bebe695f9ff26a9409d88809a85fd9cceda86d(data interface{}, colu
 
 	for i, single := range dataIn {
 		result[i] = single
+	}
+	return result
+}
+
+func queryColumnVe56b49b3fa0f6bf953dd89ffa8677a9ed1f2dfe3(data interface{}, column string) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	result := make([]int, len(dataIn), len(dataIn))
+
+	for i, single := range dataIn {
+		result[i] = single.Age
 	}
 	return result
 }
@@ -563,17 +633,31 @@ func init() {
 
 	query.ColumnMapMacroRegister([]User{}, "UserID", queryColumnMapVac46a6e2d4d6d4f163cc177eb335bc2bb166d92b)
 
+	query.ColumnMacroRegister([]testdata.ContentType{}, "     Name         ", queryColumnV0210877b9f45b0e2d7c760cad71c8d1aa3e70a6f)
+
 	query.ColumnMacroRegister([]User{}, "Age", queryColumnV15a424b34f5f3186a14908971a35c49d4f52436d)
 
 	query.ColumnMacroRegister([]testdata.ContentType{}, " Name ", queryColumnV1a5b7250371597524e364f0c816390c77a8b3331)
 
+	query.ColumnMacroRegister([]testdata.ContentType{}, "Ok        ", queryColumnV268d58dff08fb0947b9b47bcae328d584ec43d6c)
+
+	query.ColumnMacroRegister([]string{}, " . ", queryColumnV3923b792e276005e09637544ecb3aec8be870f41)
+
+	query.ColumnMacroRegister([]testdata.ContentType{}, "    Money  ", queryColumnV6b4a4fd9e192f5ca29db73c69b9472328b1d4cd7)
+
 	query.ColumnMacroRegister([]int{}, ".", queryColumnV904b262f8e2329ec73c320ca0e5ca82f14165586)
+
+	query.ColumnMacroRegister([]testdata.ContentType{}, "    CardMoney", queryColumnV904f7e5061ea0a11202b104fcb01960d528c1ccd)
+
+	query.ColumnMacroRegister([]int{}, " . ", queryColumnV91dacd60e87431951940b4b4c51428e7c1e5c1f2)
 
 	query.ColumnMacroRegister([]User{}, "UserID", queryColumnVac46a6e2d4d6d4f163cc177eb335bc2bb166d92b)
 
 	query.ColumnMacroRegister([]subtest.Address{}, "City", queryColumnVb6a4a6f17a7bc9f4857b953563c0a001e04b0df4)
 
 	query.ColumnMacroRegister([]User{}, ".", queryColumnVc6bebe695f9ff26a9409d88809a85fd9cceda86d)
+
+	query.ColumnMacroRegister([]testdata.ContentType{}, "Age        ", queryColumnVe56b49b3fa0f6bf953dd89ffa8677a9ed1f2dfe3)
 
 	query.CombineMacroRegister([]int{}, []User{}, (func(int, User) User)(nil), queryCombineV38f41d1ea9151d195cb01ed01c28e94b7fbd938b)
 

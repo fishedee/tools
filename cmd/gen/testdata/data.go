@@ -45,12 +45,26 @@ type Sex struct {
 // ContentType 测试类型 支持bool,int,float,string和time.Time
 type ContentType = testdata.ContentType
 
+// QueryInnerStruct QueryInnerStruct
+type QueryInnerStruct = testdata.QueryInnerStruct
+
+// QueryInnerStruct2 QueryInnerStruct2
+type QueryInnerStruct2 = testdata.QueryInnerStruct2
+
 func logic() {
 	query.Column([]User{}, "UserID")
 	query.Column([]User{}, "Age")
 	query.Column([]ContentType{}, " Name ")
+	query.Column([]ContentType{}, "     Name         ")
+	query.Column([]ContentType{}, "Age        ")
+	query.Column([]ContentType{}, "Ok        ")
+	query.Column([]ContentType{}, "    Money  ")
+	query.Column([]ContentType{}, "    CardMoney")
+	// query.Column([]QueryInnerStruct2{}, "QueryInnerStruct.MM")
 	query.Column([]User{}, ".")
 	query.Column([]int{}, ".")
+	query.Column([]int{}, " . ")
+	query.Column([]string{}, " . ")
 	query.Select([]User{}, func(d User) Sex {
 		return Sex{}
 	})
