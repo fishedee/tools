@@ -8,6 +8,7 @@ import (
 	"go/types"
 	"html/template"
 	"log"
+	"strconv"
 	"strings"
 
 	"github.com/fishedee/tools/plode"
@@ -15,7 +16,7 @@ import (
 
 // Throw 临时使用
 func Throw(code int, format string, args ...interface{}) {
-	log.Printf("code: %d, "+format, code, args)
+	log.Printf("code: "+strconv.Itoa(code)+", "+format, args...)
 }
 
 func getFunctionSignature(line string, arguments []types.TypeAndValue, isConstant []bool) string {
@@ -145,6 +146,10 @@ func getTypeDeclareCode(line string, t types.Type) string {
 			return "int"
 		case types.String:
 			return "string"
+		case types.Float32:
+			return "float32"
+		case types.Float64:
+			return "float64"
 		default:
 			Throw(1, "%v:unknown basic type %v", line, t.String())
 			return ""
