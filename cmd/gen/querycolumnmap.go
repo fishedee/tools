@@ -65,6 +65,9 @@ func init() {
 		result := make(map[{{ .firstArgElemColumnType }}]{{ .firstArgElemType }},len(dataIn))
 
 		for _,single := range dataIn{
+			if _, ok := result[single{{ .columnExtract }}]; ok {
+				continue
+			}
 			result[single{{ .columnExtract }}] = single
 		}
 		return result
