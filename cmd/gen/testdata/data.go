@@ -80,6 +80,15 @@ func logic() {
 	query.ColumnMap([]User{}, "UserID")
 	query.ColumnMap([]User{}, "Age")
 	query.ColumnMap([]int{}, ".")
+	query.ColumnMap([]int{}, " . ")
+	query.ColumnMap([]string{}, " . ")
+	query.ColumnMap([]ContentType{}, " Name ")
+	query.ColumnMap([]ContentType{}, "     Name         ")
+	query.ColumnMap([]ContentType{}, "Age        ")
+	query.ColumnMap([]ContentType{}, "Ok        ")
+	query.ColumnMap([]ContentType{}, "    Money  ")
+	query.ColumnMap([]ContentType{}, "    CardMoney")
+	// query.ColumnMap([]ContentType{}, "QueryInnerStruct.MM")
 	query.Group([]User{}, "UserID", func(user []User) Department {
 		return Department{}
 	})
