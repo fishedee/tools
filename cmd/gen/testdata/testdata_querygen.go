@@ -11,11 +11,8 @@ func queryColumnMapV0210877b9f45b0e2d7c760cad71c8d1aa3e70a6f(data interface{}, c
 	dataIn := data.([]testdata.ContentType)
 	result := make(map[string]testdata.ContentType, len(dataIn))
 
-	for _, single := range dataIn {
-		if _, ok := result[single.Name]; ok {
-			continue
-		}
-		result[single.Name] = single
+	for i := len(dataIn) - 1; i >= 0; i-- {
+		result[dataIn[i].Name] = dataIn[i]
 	}
 	return result
 }
@@ -24,11 +21,8 @@ func queryColumnMapV15a424b34f5f3186a14908971a35c49d4f52436d(data interface{}, c
 	dataIn := data.([]User)
 	result := make(map[int]User, len(dataIn))
 
-	for _, single := range dataIn {
-		if _, ok := result[single.Age]; ok {
-			continue
-		}
-		result[single.Age] = single
+	for i := len(dataIn) - 1; i >= 0; i-- {
+		result[dataIn[i].Age] = dataIn[i]
 	}
 	return result
 }
@@ -37,11 +31,8 @@ func queryColumnMapV1a5b7250371597524e364f0c816390c77a8b3331(data interface{}, c
 	dataIn := data.([]testdata.ContentType)
 	result := make(map[string]testdata.ContentType, len(dataIn))
 
-	for _, single := range dataIn {
-		if _, ok := result[single.Name]; ok {
-			continue
-		}
-		result[single.Name] = single
+	for i := len(dataIn) - 1; i >= 0; i-- {
+		result[dataIn[i].Name] = dataIn[i]
 	}
 	return result
 }
@@ -50,11 +41,8 @@ func queryColumnMapV268d58dff08fb0947b9b47bcae328d584ec43d6c(data interface{}, c
 	dataIn := data.([]testdata.ContentType)
 	result := make(map[bool]testdata.ContentType, len(dataIn))
 
-	for _, single := range dataIn {
-		if _, ok := result[single.Ok]; ok {
-			continue
-		}
-		result[single.Ok] = single
+	for i := len(dataIn) - 1; i >= 0; i-- {
+		result[dataIn[i].Ok] = dataIn[i]
 	}
 	return result
 }
@@ -63,11 +51,8 @@ func queryColumnMapV3923b792e276005e09637544ecb3aec8be870f41(data interface{}, c
 	dataIn := data.([]string)
 	result := make(map[string]string, len(dataIn))
 
-	for _, single := range dataIn {
-		if _, ok := result[single]; ok {
-			continue
-		}
-		result[single] = single
+	for i := len(dataIn) - 1; i >= 0; i-- {
+		result[dataIn[i]] = dataIn[i]
 	}
 	return result
 }
@@ -76,11 +61,8 @@ func queryColumnMapV6b4a4fd9e192f5ca29db73c69b9472328b1d4cd7(data interface{}, c
 	dataIn := data.([]testdata.ContentType)
 	result := make(map[float32]testdata.ContentType, len(dataIn))
 
-	for _, single := range dataIn {
-		if _, ok := result[single.Money]; ok {
-			continue
-		}
-		result[single.Money] = single
+	for i := len(dataIn) - 1; i >= 0; i-- {
+		result[dataIn[i].Money] = dataIn[i]
 	}
 	return result
 }
@@ -89,11 +71,8 @@ func queryColumnMapV904b262f8e2329ec73c320ca0e5ca82f14165586(data interface{}, c
 	dataIn := data.([]int)
 	result := make(map[int]int, len(dataIn))
 
-	for _, single := range dataIn {
-		if _, ok := result[single]; ok {
-			continue
-		}
-		result[single] = single
+	for i := len(dataIn) - 1; i >= 0; i-- {
+		result[dataIn[i]] = dataIn[i]
 	}
 	return result
 }
@@ -102,11 +81,8 @@ func queryColumnMapV904f7e5061ea0a11202b104fcb01960d528c1ccd(data interface{}, c
 	dataIn := data.([]testdata.ContentType)
 	result := make(map[float64]testdata.ContentType, len(dataIn))
 
-	for _, single := range dataIn {
-		if _, ok := result[single.CardMoney]; ok {
-			continue
-		}
-		result[single.CardMoney] = single
+	for i := len(dataIn) - 1; i >= 0; i-- {
+		result[dataIn[i].CardMoney] = dataIn[i]
 	}
 	return result
 }
@@ -115,11 +91,8 @@ func queryColumnMapV91dacd60e87431951940b4b4c51428e7c1e5c1f2(data interface{}, c
 	dataIn := data.([]int)
 	result := make(map[int]int, len(dataIn))
 
-	for _, single := range dataIn {
-		if _, ok := result[single]; ok {
-			continue
-		}
-		result[single] = single
+	for i := len(dataIn) - 1; i >= 0; i-- {
+		result[dataIn[i]] = dataIn[i]
 	}
 	return result
 }
@@ -128,11 +101,8 @@ func queryColumnMapVac46a6e2d4d6d4f163cc177eb335bc2bb166d92b(data interface{}, c
 	dataIn := data.([]User)
 	result := make(map[int]User, len(dataIn))
 
-	for _, single := range dataIn {
-		if _, ok := result[single.UserID]; ok {
-			continue
-		}
-		result[single.UserID] = single
+	for i := len(dataIn) - 1; i >= 0; i-- {
+		result[dataIn[i].UserID] = dataIn[i]
 	}
 	return result
 }
@@ -141,11 +111,8 @@ func queryColumnMapVe56b49b3fa0f6bf953dd89ffa8677a9ed1f2dfe3(data interface{}, c
 	dataIn := data.([]testdata.ContentType)
 	result := make(map[int]testdata.ContentType, len(dataIn))
 
-	for _, single := range dataIn {
-		if _, ok := result[single.Age]; ok {
-			continue
-		}
-		result[single.Age] = single
+	for i := len(dataIn) - 1; i >= 0; i-- {
+		result[dataIn[i].Age] = dataIn[i]
 	}
 	return result
 }
