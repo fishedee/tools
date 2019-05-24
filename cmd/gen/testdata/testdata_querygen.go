@@ -280,6 +280,30 @@ func queryColumnVe56b49b3fa0f6bf953dd89ffa8677a9ed1f2dfe3(data interface{}, colu
 	return result
 }
 
+func queryCombineV09c7dc794885ed91aba0c8d6332ac0560ddd8c38(leftData interface{}, rightData interface{}, combineFunctor interface{}) interface{} {
+	leftDataIn := leftData.([]testdata.ContentType)
+	rightDataIn := rightData.([]testdata.ContentType)
+	combineFunctorIn := combineFunctor.(func(testdata.ContentType, testdata.ContentType) testdata.ContentType)
+	newData := make([]testdata.ContentType, len(leftDataIn), len(leftDataIn))
+
+	for i := 0; i != len(leftDataIn); i++ {
+		newData[i] = combineFunctorIn(leftDataIn[i], rightDataIn[i])
+	}
+	return newData
+}
+
+func queryCombineV228612e67e8c710669fd5517896357f50582a609(leftData interface{}, rightData interface{}, combineFunctor interface{}) interface{} {
+	leftDataIn := leftData.([]testdata.ContentType)
+	rightDataIn := rightData.([]int)
+	combineFunctorIn := combineFunctor.(func(testdata.ContentType, int) testdata.ContentType)
+	newData := make([]testdata.ContentType, len(leftDataIn), len(leftDataIn))
+
+	for i := 0; i != len(leftDataIn); i++ {
+		newData[i] = combineFunctorIn(leftDataIn[i], rightDataIn[i])
+	}
+	return newData
+}
+
 func queryCombineV38f41d1ea9151d195cb01ed01c28e94b7fbd938b(leftData interface{}, rightData interface{}, combineFunctor interface{}) interface{} {
 	leftDataIn := leftData.([]int)
 	rightDataIn := rightData.([]User)
@@ -787,6 +811,10 @@ func init() {
 	query.ColumnMacroRegister([]User{}, ".", queryColumnVc6bebe695f9ff26a9409d88809a85fd9cceda86d)
 
 	query.ColumnMacroRegister([]testdata.ContentType{}, "Age        ", queryColumnVe56b49b3fa0f6bf953dd89ffa8677a9ed1f2dfe3)
+
+	query.CombineMacroRegister([]testdata.ContentType{}, []testdata.ContentType{}, (func(testdata.ContentType, testdata.ContentType) testdata.ContentType)(nil), queryCombineV09c7dc794885ed91aba0c8d6332ac0560ddd8c38)
+
+	query.CombineMacroRegister([]testdata.ContentType{}, []int{}, (func(testdata.ContentType, int) testdata.ContentType)(nil), queryCombineV228612e67e8c710669fd5517896357f50582a609)
 
 	query.CombineMacroRegister([]int{}, []User{}, (func(int, User) User)(nil), queryCombineV38f41d1ea9151d195cb01ed01c28e94b7fbd938b)
 

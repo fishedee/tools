@@ -113,6 +113,12 @@ func logic() {
 	query.Combine([]Admin{}, []User{}, func(left Admin, right User) AdminUser {
 		return AdminUser{}
 	})
+	query.Combine([]ContentType{}, []ContentType{}, func(left ContentType, right ContentType) ContentType {
+		return ContentType{}
+	})
+	query.Combine([]ContentType{}, []int{}, func(left ContentType, right int) ContentType {
+		return ContentType{}
+	})
 	query.Combine([]int{}, []User{}, func(left int, right User) User {
 		return User{}
 	})
