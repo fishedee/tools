@@ -1,65 +1,67 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"testing"
 	"time"
 
 	"github.com/fishedee/tools/assert"
+	gentestdata "github.com/fishedee/tools/cmd/gen/testdata"
 	"github.com/fishedee/tools/query"
 	"github.com/fishedee/tools/query/testdata"
 )
 
 func TestQueryGroup(t *testing.T) {
-	data := []User{
-		User{UserID: 3, Name: "a"},
-		User{UserID: 3, Name: "c"},
-		User{UserID: 23, Name: "d"},
-		User{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
-		User{UserID: 23, Name: "c", CreateTime: time.Unix(1, 0)},
-		User{UserID: 23, Name: "c", CreateTime: time.Unix(33, 0)},
-		User{UserID: 23, Name: "a"},
-		User{UserID: 1},
-		User{UserID: 1},
+	data := []gentestdata.User{
+		gentestdata.User{UserID: 3, Name: "a"},
+		gentestdata.User{UserID: 3, Name: "c"},
+		gentestdata.User{UserID: 23, Name: "d"},
+		gentestdata.User{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
+		gentestdata.User{UserID: 23, Name: "c", CreateTime: time.Unix(1, 0)},
+		gentestdata.User{UserID: 23, Name: "c", CreateTime: time.Unix(33, 0)},
+		gentestdata.User{UserID: 23, Name: "a"},
+		gentestdata.User{UserID: 1},
+		gentestdata.User{UserID: 1},
 	}
-	assert.Equal(t, query.Group(data, "UserID", func(users []User) Department {
-		return Department{
+	assert.Equal(t, query.Group(data, "UserID", func(users []gentestdata.User) gentestdata.Department {
+		return gentestdata.Department{
 			Employees: users,
 		}
-	}), []Department{
-		Department{Employees: []User{
-			User{UserID: 3, Name: "a"},
-			User{UserID: 3, Name: "c"},
+	}), []gentestdata.Department{
+		gentestdata.Department{Employees: []gentestdata.User{
+			gentestdata.User{UserID: 3, Name: "a"},
+			gentestdata.User{UserID: 3, Name: "c"},
 		}},
-		Department{Employees: []User{
-			User{UserID: 23, Name: "d"},
-			User{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
-			User{UserID: 23, Name: "c", CreateTime: time.Unix(1, 0)},
-			User{UserID: 23, Name: "c", CreateTime: time.Unix(33, 0)},
-			User{UserID: 23, Name: "a"},
+		gentestdata.Department{Employees: []gentestdata.User{
+			gentestdata.User{UserID: 23, Name: "d"},
+			gentestdata.User{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
+			gentestdata.User{UserID: 23, Name: "c", CreateTime: time.Unix(1, 0)},
+			gentestdata.User{UserID: 23, Name: "c", CreateTime: time.Unix(33, 0)},
+			gentestdata.User{UserID: 23, Name: "a"},
 		}},
-		Department{Employees: []User{
-			User{UserID: 1},
-			User{UserID: 1},
+		gentestdata.Department{Employees: []gentestdata.User{
+			gentestdata.User{UserID: 1},
+			gentestdata.User{UserID: 1},
 		}},
 	})
-	assert.Equal(t, query.Group([]int{1, 3, 4, 4, 3, 3}, ".", func(ids []int) Department {
-		users := query.Select(ids, func(id int) User {
-			return User{UserID: id}
-		}).([]User)
-		return Department{Employees: users}
-	}), []Department{
-		Department{Employees: []User{
-			User{UserID: 1},
+	assert.Equal(t, query.Group([]int{1, 3, 4, 4, 3, 3}, ".", func(ids []int) gentestdata.Department {
+		users := query.Select(ids, func(id int) gentestdata.User {
+			return gentestdata.User{UserID: id}
+		}).([]gentestdata.User)
+		return gentestdata.Department{Employees: users}
+	}), []gentestdata.Department{
+		gentestdata.Department{Employees: []gentestdata.User{
+			gentestdata.User{UserID: 1},
 		}},
-		Department{Employees: []User{
-			User{UserID: 3},
-			User{UserID: 3},
-			User{UserID: 3},
+		gentestdata.Department{Employees: []gentestdata.User{
+			gentestdata.User{UserID: 3},
+			gentestdata.User{UserID: 3},
+			gentestdata.User{UserID: 3},
 		}},
-		Department{Employees: []User{
-			User{UserID: 4},
-			User{UserID: 4},
+		gentestdata.Department{Employees: []gentestdata.User{
+			gentestdata.User{UserID: 4},
+			gentestdata.User{UserID: 4},
 		}},
 	})
 
@@ -67,6 +69,7 @@ func TestQueryGroup(t *testing.T) {
 	testCase := testdata.GetQueryGroupTestCase()
 
 	for singleTestCaseIndex, singleTestCase := range testCase {
+		fmt.Println(singleTestCaseIndex)
 
 		result := query.Group(singleTestCase.Data, singleTestCase.GroupType, singleTestCase.GroupFuctor)
 		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)

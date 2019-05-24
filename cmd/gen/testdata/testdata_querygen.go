@@ -157,6 +157,16 @@ func queryColumnV268d58dff08fb0947b9b47bcae328d584ec43d6c(data interface{}, colu
 	return result
 }
 
+func queryColumnV3465d8e8bd06530b67385225226c4b0bf84f1e19(data interface{}, column string) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	result := make([]int, len(dataIn), len(dataIn))
+
+	for i, single := range dataIn {
+		result[i] = single.Age
+	}
+	return result
+}
+
 func queryColumnV3923b792e276005e09637544ecb3aec8be870f41(data interface{}, column string) interface{} {
 	dataIn := data.([]string)
 	result := make([]string, len(dataIn), len(dataIn))
@@ -207,6 +217,16 @@ func queryColumnV91dacd60e87431951940b4b4c51428e7c1e5c1f2(data interface{}, colu
 	return result
 }
 
+func queryColumnVa101312acb15d8adcd8418ad608c0e7fcedba287(data interface{}, column string) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	result := make([]float32, len(dataIn), len(dataIn))
+
+	for i, single := range dataIn {
+		result[i] = single.Money
+	}
+	return result
+}
+
 func queryColumnVac46a6e2d4d6d4f163cc177eb335bc2bb166d92b(data interface{}, column string) interface{} {
 	dataIn := data.([]User)
 	result := make([]int, len(dataIn), len(dataIn))
@@ -237,12 +257,32 @@ func queryColumnVc6bebe695f9ff26a9409d88809a85fd9cceda86d(data interface{}, colu
 	return result
 }
 
+func queryColumnVe4faf04ecdc0c4866eb2ec31e4d6fe4610ea9cae(data interface{}, column string) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	result := make([]float64, len(dataIn), len(dataIn))
+
+	for i, single := range dataIn {
+		result[i] = single.CardMoney
+	}
+	return result
+}
+
 func queryColumnVe56b49b3fa0f6bf953dd89ffa8677a9ed1f2dfe3(data interface{}, column string) interface{} {
 	dataIn := data.([]testdata.ContentType)
 	result := make([]int, len(dataIn), len(dataIn))
 
 	for i, single := range dataIn {
 		result[i] = single.Age
+	}
+	return result
+}
+
+func queryColumnVfbe7749ddebdcadafcd40309aff9af0ae35a7707(data interface{}, column string) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	result := make([]float64, len(dataIn), len(dataIn))
+
+	for i, single := range dataIn {
+		result[i] = single.CardMoney
 	}
 	return result
 }
@@ -295,6 +335,90 @@ func queryCombineVdd9cf383efe9adb9dedf293cf43f875133066c23(leftData interface{},
 	return newData
 }
 
+func queryGroupV34b1efcd4a92cbf477c338aec5ef9e49e4e25774(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+	dataIn := data.([]string)
+	groupFunctorIn := groupFunctor.(func([]string) testdata.ContentType)
+	bufferData := make([]string, len(dataIn), len(dataIn))
+	mapData := make(map[string]int, len(dataIn))
+	result := make([]testdata.ContentType, 0, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i]
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+		single := groupFunctorIn(bufferData[kbegin:k])
+		result = append(result, single)
+	}
+
+	return result
+}
+
+func queryGroupV7959aac2ba701c92b02938af82c21599cbf58c3d(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+	dataIn := data.([]int)
+	groupFunctorIn := groupFunctor.(func([]int) int)
+	bufferData := make([]int, len(dataIn), len(dataIn))
+	mapData := make(map[int]int, len(dataIn))
+	result := make([]int, 0, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i]
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+		single := groupFunctorIn(bufferData[kbegin:k])
+		result = append(result, single)
+	}
+
+	return result
+}
+
 func queryGroupV7c15a02754e8e39a158cd3d3e8088258012c6f55(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]User)
 	groupFunctorIn := groupFunctor.(func([]User) Department)
@@ -306,6 +430,216 @@ func queryGroupV7c15a02754e8e39a158cd3d3e8088258012c6f55(data interface{}, group
 	nextData := make([]int, length, length)
 	for i := 0; i != length; i++ {
 		single := dataIn[i].UserID
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+		single := groupFunctorIn(bufferData[kbegin:k])
+		result = append(result, single)
+	}
+
+	return result
+}
+
+func queryGroupV7c2562e83d5d0523f97388581656549f827c5363(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	groupFunctorIn := groupFunctor.(func([]testdata.ContentType) []testdata.ContentType)
+	bufferData := make([]testdata.ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[string]int, len(dataIn))
+	result := make([][]testdata.ContentType, 0, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Name
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+		single := groupFunctorIn(bufferData[kbegin:k])
+		result = append(result, single)
+	}
+
+	return result
+}
+
+func queryGroupV7e426b5791161f51e11d28bc0feb633b08a92842(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	groupFunctorIn := groupFunctor.(func([]testdata.ContentType) []float64)
+	bufferData := make([]testdata.ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[int]int, len(dataIn))
+	result := make([][]float64, 0, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Age
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+		single := groupFunctorIn(bufferData[kbegin:k])
+		result = append(result, single)
+	}
+
+	return result
+}
+
+func queryGroupV8192c48029957133c04b253ae1641389b396caf8(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	groupFunctorIn := groupFunctor.(func([]testdata.ContentType) []testdata.ContentType)
+	bufferData := make([]testdata.ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[bool]int, len(dataIn))
+	result := make([][]testdata.ContentType, 0, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Ok
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+		single := groupFunctorIn(bufferData[kbegin:k])
+		result = append(result, single)
+	}
+
+	return result
+}
+
+func queryGroupV8738994dbfe455405a3c9c07003ed95fec1dde39(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	groupFunctorIn := groupFunctor.(func([]testdata.ContentType) int)
+	bufferData := make([]testdata.ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[time.Time]int, len(dataIn))
+	result := make([]int, 0, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Register
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+		single := groupFunctorIn(bufferData[kbegin:k])
+		result = append(result, single)
+	}
+
+	return result
+}
+
+func queryGroupV9f6a97dc8909e876536f87142b5f351e7c589297(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	groupFunctorIn := groupFunctor.(func([]testdata.ContentType) []testdata.ContentType)
+	bufferData := make([]testdata.ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[time.Time]int, len(dataIn))
+	result := make([][]testdata.ContentType, 0, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Register
 		lastIndex, isExist := mapData[single]
 		if isExist == true {
 			nextData[lastIndex] = i
@@ -379,6 +713,132 @@ func queryGroupVb6f1c2171838a5cc1ac9e63d0ecaada8ee2f1e41(data interface{}, group
 	return result
 }
 
+func queryGroupVc6ec01b1a8f68f11281a5667b88c5e1967c42c86(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	groupFunctorIn := groupFunctor.(func([]testdata.ContentType) []testdata.ContentType)
+	bufferData := make([]testdata.ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[int]int, len(dataIn))
+	result := make([][]testdata.ContentType, 0, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Age
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+		single := groupFunctorIn(bufferData[kbegin:k])
+		result = append(result, single)
+	}
+
+	return result
+}
+
+func queryGroupVca76f6ce6b260c880f4be68c0c6f72186fa635b5(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	groupFunctorIn := groupFunctor.(func([]testdata.ContentType) float32)
+	bufferData := make([]testdata.ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[string]int, len(dataIn))
+	result := make([]float32, 0, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Name
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+		single := groupFunctorIn(bufferData[kbegin:k])
+		result = append(result, single)
+	}
+
+	return result
+}
+
+func queryGroupVe2f66d8f0c3b0f6a3ae63ae50e57ab532ca4d858(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	groupFunctorIn := groupFunctor.(func([]testdata.ContentType) float64)
+	bufferData := make([]testdata.ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[int]int, len(dataIn))
+	result := make([]float64, 0, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Age
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+		single := groupFunctorIn(bufferData[kbegin:k])
+		result = append(result, single)
+	}
+
+	return result
+}
+
 func queryGroupVec4d3b2c280c9fc398a0f8a554bc1c2ec7010257(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]int)
 	groupFunctorIn := groupFunctor.(func([]int) Department)
@@ -390,6 +850,48 @@ func queryGroupVec4d3b2c280c9fc398a0f8a554bc1c2ec7010257(data interface{}, group
 	nextData := make([]int, length, length)
 	for i := 0; i != length; i++ {
 		single := dataIn[i]
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+		single := groupFunctorIn(bufferData[kbegin:k])
+		result = append(result, single)
+	}
+
+	return result
+}
+
+func queryGroupVff06256d82e26530e6c726fa09cb485f82fa3a55(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+	dataIn := data.([]testdata.ContentType)
+	groupFunctorIn := groupFunctor.(func([]testdata.ContentType) []testdata.ContentType)
+	bufferData := make([]testdata.ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[bool]int, len(dataIn))
+	result := make([][]testdata.ContentType, 0, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Ok
 		lastIndex, isExist := mapData[single]
 		if isExist == true {
 			nextData[lastIndex] = i
@@ -761,6 +1263,8 @@ func init() {
 
 	query.ColumnMacroRegister([]testdata.ContentType{}, "Ok        ", queryColumnV268d58dff08fb0947b9b47bcae328d584ec43d6c)
 
+	query.ColumnMacroRegister([]testdata.ContentType{}, "  Age  ", queryColumnV3465d8e8bd06530b67385225226c4b0bf84f1e19)
+
 	query.ColumnMacroRegister([]string{}, " . ", queryColumnV3923b792e276005e09637544ecb3aec8be870f41)
 
 	query.ColumnMacroRegister([]testdata.ContentType{}, "    Money  ", queryColumnV6b4a4fd9e192f5ca29db73c69b9472328b1d4cd7)
@@ -771,13 +1275,19 @@ func init() {
 
 	query.ColumnMacroRegister([]int{}, " . ", queryColumnV91dacd60e87431951940b4b4c51428e7c1e5c1f2)
 
+	query.ColumnMacroRegister([]testdata.ContentType{}, "  Money  ", queryColumnVa101312acb15d8adcd8418ad608c0e7fcedba287)
+
 	query.ColumnMacroRegister([]User{}, "UserID", queryColumnVac46a6e2d4d6d4f163cc177eb335bc2bb166d92b)
 
 	query.ColumnMacroRegister([]subtest.Address{}, "City", queryColumnVb6a4a6f17a7bc9f4857b953563c0a001e04b0df4)
 
 	query.ColumnMacroRegister([]User{}, ".", queryColumnVc6bebe695f9ff26a9409d88809a85fd9cceda86d)
 
+	query.ColumnMacroRegister([]testdata.ContentType{}, "  CardMoney  ", queryColumnVe4faf04ecdc0c4866eb2ec31e4d6fe4610ea9cae)
+
 	query.ColumnMacroRegister([]testdata.ContentType{}, "Age        ", queryColumnVe56b49b3fa0f6bf953dd89ffa8677a9ed1f2dfe3)
+
+	query.ColumnMacroRegister([]testdata.ContentType{}, "CardMoney  ", queryColumnVfbe7749ddebdcadafcd40309aff9af0ae35a7707)
 
 	query.CombineMacroRegister([]testdata.ContentType{}, []testdata.ContentType{}, (func(testdata.ContentType, testdata.ContentType) testdata.ContentType)(nil), queryCombineV09c7dc794885ed91aba0c8d6332ac0560ddd8c38)
 
@@ -787,11 +1297,33 @@ func init() {
 
 	query.CombineMacroRegister([]Admin{}, []User{}, (func(Admin, User) AdminUser)(nil), queryCombineVdd9cf383efe9adb9dedf293cf43f875133066c23)
 
+	query.GroupMacroRegister([]string{}, ".", (func([]string) testdata.ContentType)(nil), queryGroupV34b1efcd4a92cbf477c338aec5ef9e49e4e25774)
+
+	query.GroupMacroRegister([]int{}, ".", (func([]int) int)(nil), queryGroupV7959aac2ba701c92b02938af82c21599cbf58c3d)
+
 	query.GroupMacroRegister([]User{}, "UserID", (func([]User) Department)(nil), queryGroupV7c15a02754e8e39a158cd3d3e8088258012c6f55)
+
+	query.GroupMacroRegister([]testdata.ContentType{}, "Name", (func([]testdata.ContentType) []testdata.ContentType)(nil), queryGroupV7c2562e83d5d0523f97388581656549f827c5363)
+
+	query.GroupMacroRegister([]testdata.ContentType{}, " Age ", (func([]testdata.ContentType) []float64)(nil), queryGroupV7e426b5791161f51e11d28bc0feb633b08a92842)
+
+	query.GroupMacroRegister([]testdata.ContentType{}, " Ok ", (func([]testdata.ContentType) []testdata.ContentType)(nil), queryGroupV8192c48029957133c04b253ae1641389b396caf8)
+
+	query.GroupMacroRegister([]testdata.ContentType{}, "Register ", (func([]testdata.ContentType) int)(nil), queryGroupV8738994dbfe455405a3c9c07003ed95fec1dde39)
+
+	query.GroupMacroRegister([]testdata.ContentType{}, "Register ", (func([]testdata.ContentType) []testdata.ContentType)(nil), queryGroupV9f6a97dc8909e876536f87142b5f351e7c589297)
 
 	query.GroupMacroRegister([]User{}, "CreateTime", (func([]User) Department)(nil), queryGroupVb6f1c2171838a5cc1ac9e63d0ecaada8ee2f1e41)
 
+	query.GroupMacroRegister([]testdata.ContentType{}, " Age ", (func([]testdata.ContentType) []testdata.ContentType)(nil), queryGroupVc6ec01b1a8f68f11281a5667b88c5e1967c42c86)
+
+	query.GroupMacroRegister([]testdata.ContentType{}, "Name", (func([]testdata.ContentType) float32)(nil), queryGroupVca76f6ce6b260c880f4be68c0c6f72186fa635b5)
+
+	query.GroupMacroRegister([]testdata.ContentType{}, " Age ", (func([]testdata.ContentType) float64)(nil), queryGroupVe2f66d8f0c3b0f6a3ae63ae50e57ab532ca4d858)
+
 	query.GroupMacroRegister([]int{}, ".", (func([]int) Department)(nil), queryGroupVec4d3b2c280c9fc398a0f8a554bc1c2ec7010257)
+
+	query.GroupMacroRegister([]testdata.ContentType{}, "Ok", (func([]testdata.ContentType) []testdata.ContentType)(nil), queryGroupVff06256d82e26530e6c726fa09cb485f82fa3a55)
 
 	query.JoinMacroRegister([]Admin{}, []User{}, "left", "AdminID = UserID", (func(Admin, User) AdminUser)(nil), queryJoinV29a4e5efaa3321b67511a20dc57f29e0ec5aa0cf)
 

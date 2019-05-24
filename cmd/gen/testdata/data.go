@@ -101,6 +101,81 @@ func logic() {
 		}).([]User)
 		return Department{Employees: users}
 	})
+	query.Group([]int{}, ".", func(Data []int) int {
+		return len(Data)
+	})
+	query.Group([]ContentType{}, " Ok ", func(list []ContentType) []ContentType {
+		return []ContentType{}
+	})
+	query.Group([]string{"a", "a", "", "", "z"},
+		".",
+		func(list []string) ContentType {
+			return ContentType{
+				Name: list[0],
+				Age:  len(list),
+			}
+		})
+	query.Group([]ContentType{},
+		"Name",
+		func(list []ContentType) []ContentType {
+			sum := query.Sum(query.Column(list, "  Money  "))
+			list[0].Money = sum.(float32)
+			return []ContentType{list[0]}
+		})
+	query.Group([]ContentType{},
+		"Name",
+		func(list []ContentType) float32 {
+			sum := query.Sum(query.Column(list, "  Money  ")).(float32)
+			return sum
+		})
+	query.Group([]ContentType{},
+		"Ok",
+		func(list []ContentType) []ContentType {
+			sum := query.Sum(query.Column(list, "CardMoney  "))
+			list[0].CardMoney = sum.(float64)
+			return []ContentType{list[0]}
+		})
+	query.Group([]ContentType{},
+		" Age ",
+		func(list []ContentType) []ContentType {
+			sum := query.Sum(query.Column(list, "  CardMoney  "))
+			list[0].CardMoney = sum.(float64)
+			return []ContentType{list[0]}
+		})
+	query.Group([]ContentType{},
+		" Age ",
+		func(list []ContentType) float64 {
+			sum := query.Sum(query.Column(list, "  CardMoney  ")).(float64)
+			return sum
+
+		})
+	query.Group([]ContentType{},
+		" Age ",
+		func(list []ContentType) []float64 {
+			sum := query.Sum(query.Column(list, "  CardMoney  "))
+			return []float64{sum.(float64)}
+		})
+	query.Group([]ContentType{},
+		"Register ",
+		func(list []ContentType) int {
+			sum := query.Sum(query.Column(list, "  Age  "))
+			return sum.(int)
+
+		})
+	query.Group([]ContentType{},
+		"Register ",
+		func(list []ContentType) []ContentType {
+			sum := query.Sum(query.Column(list, "  Age  "))
+			list[0].Age = sum.(int)
+			return []ContentType{list[0]}
+		})
+	// query.Group([]QueryInnerStruct2{},
+	// 	"QueryInnerStruct.MM",
+	// 	func(list []QueryInnerStruct2) []QueryInnerStruct2 {
+	// 		sum := query.Sum(query.Column(list, "  MM  "))
+	// 		list[0].MM = sum.(int)
+	// 		return []QueryInnerStruct2{list[0]}
+	// 	})
 	query.LeftJoin([]Admin{}, []User{}, "AdminID = UserID", func(left Admin, right User) AdminUser {
 		return AdminUser{}
 	})
