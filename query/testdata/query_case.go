@@ -1,29 +1,17 @@
 package testdata
 
 import (
-	//"time"
+	"time"
 
 	"github.com/fishedee/tools/query"
 )
 
+// TestCase 测试用例
 type TestCase struct {
 	Handler func() interface{}
 	Target  interface{}
 }
 
-func GetQueryColumnTestCase() []TestCase {
-	testCase := []TestCase{
-		{
-			func() interface{} {
-				return query.Column([]int{}, " . ")
-			},
-			[]int{},
-		},
-	}
-	return testCase
-}
-
-/*
 // ContentType 测试类型 支持bool,int,float,string和time.Time
 type ContentType struct {
 	Name      string
@@ -34,6 +22,124 @@ type ContentType struct {
 	Register  time.Time
 }
 
+// QueryInnerStruct QueryInnerStruct
+type QueryInnerStruct struct {
+	MM int
+}
+
+// QueryInnerStruct2 QueryInnerStruct2
+type QueryInnerStruct2 struct {
+	QueryInnerStruct
+	MM int
+	DD float32
+}
+
+// GetQueryColumnTestCase GetQueryColumnTestCase
+func GetQueryColumnTestCase() []TestCase {
+	nowTime := time.Now()
+	oldTime := nowTime.AddDate(-1, 0, 1)
+	zeroTime := time.Time{}
+
+	testCase := []TestCase{
+		{
+			func() interface{} {
+				return query.Column([]int{}, " . ")
+			},
+			[]int{},
+		},
+		{
+			func() interface{} {
+				return query.Column([]string{"1", "7", "8"}, " . ")
+			},
+			[]string{"1", "7", "8"},
+		},
+		{
+			func() interface{} {
+				return query.Column([]ContentType{}, " Name ")
+			},
+			[]string{},
+		},
+		{
+			func() interface{} {
+				return query.Column([]ContentType{
+					ContentType{"a", 3, true, 0, 0, nowTime},
+					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+					ContentType{"-1", -2, false, 0, 0, zeroTime},
+					ContentType{"z", 3, true, 0, 0, nowTime},
+				}, "     Name         ")
+			},
+			[]string{"a", "0", "1", "-1", "z"},
+		},
+		{
+			func() interface{} {
+				return query.Column([]ContentType{
+					ContentType{"a", 3, true, 0, 0, nowTime},
+					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+					ContentType{"-1", -2, false, 0, 0, zeroTime},
+					ContentType{"z", 3, true, 0, 0, nowTime},
+				},
+					"Age        ")
+			},
+			[]int{3, -1, 10, -2, 3},
+		},
+		{
+			func() interface{} {
+				return query.Column([]ContentType{
+					ContentType{"a", 3, true, 0, 0, nowTime},
+					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+					ContentType{"-1", -2, false, 0, 0, zeroTime},
+					ContentType{"z", 3, true, 0, 0, nowTime},
+				},
+					"Ok        ")
+			},
+			[]bool{true, false, true, false, true},
+		},
+		{
+			func() interface{} {
+				return query.Column([]ContentType{
+					ContentType{"a", 3, true, 0, 0, nowTime},
+					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+					ContentType{"-1", -2, false, 0, 0, zeroTime},
+					ContentType{"z", 3, true, 0, 0, nowTime},
+				},
+					"    Money  ")
+			},
+			[]float32{0, 1.1, -2.2, 0, 0},
+		},
+		{
+			func() interface{} {
+				return query.Column([]ContentType{
+					ContentType{"a", 3, true, 0, 0, nowTime},
+					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+					ContentType{"-1", -2, false, 0, 0, zeroTime},
+					ContentType{"z", 3, true, 0, 0, nowTime},
+				},
+					"    CardMoney")
+			},
+			[]float64{0, 1.1, -1.2, 0, 0},
+		},
+		// FIXME:
+		// {
+		// 	func() interface{} {
+		// 		return query.Column([]QueryInnerStruct2{
+		// 			QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
+		// 			QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
+		// 			QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
+		// 		},
+		// 			"QueryInnerStruct.MM")
+		// 	},
+		// 	[]int{1, 2, 3},
+		// },
+	}
+	return testCase
+}
+
+/*
 // SelectCase 测试用例
 type SelectCase struct {
 	Origin   interface{}
@@ -284,18 +390,6 @@ func GetQueryReduceTestCase() []ReduceCase {
 	}
 
 	return testCase
-}
-
-// QueryInnerStruct QueryInnerStruct
-type QueryInnerStruct struct {
-	MM int
-}
-
-// QueryInnerStruct2 QueryInnerStruct2
-type QueryInnerStruct2 struct {
-	QueryInnerStruct
-	MM int
-	DD float32
 }
 
 // SortCase SortCase

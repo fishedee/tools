@@ -1,12 +1,12 @@
 package query_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/fishedee/tools/assert"
 	"github.com/fishedee/tools/query"
 	"github.com/fishedee/tools/query/testdata"
-	"os"
 )
 
 func TestQueryColumn(t *testing.T) {
