@@ -58,8 +58,7 @@ func TestQueryCombine(t *testing.T) {
 	testCase := testdata.GetQueryCombineTestCase()
 
 	for _, singleTestCase := range testCase {
-		result := query.Combine(singleTestCase.Origin, singleTestCase.Origin2, singleTestCase.Functor)
-		assert.Equal(t, result, singleTestCase.Target)
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
 	}
 }
 

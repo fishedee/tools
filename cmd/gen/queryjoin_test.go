@@ -68,8 +68,7 @@ func TestQueryJoin(t *testing.T) {
 
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
-		result := query.Join(singleTestCase.LeftData, singleTestCase.RightData, singleTestCase.JoinPlace, singleTestCase.JoinType, singleTestCase.JoinFuctor)
-		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
 
 	}
 }

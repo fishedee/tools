@@ -39,8 +39,7 @@ func TestQuerySelect(t *testing.T) {
 
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
-		result := query.Select(singleTestCase.Origin, singleTestCase.Function)
-		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
 
 	}
 }

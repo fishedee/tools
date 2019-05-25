@@ -41,8 +41,7 @@ func TestQuerySort(t *testing.T) {
 
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
-		result := query.Sort(singleTestCase.Origin, singleTestCase.SortName)
-		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
 
 	}
 }

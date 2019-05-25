@@ -71,8 +71,7 @@ func TestQueryGroup(t *testing.T) {
 	for singleTestCaseIndex, singleTestCase := range testCase {
 		fmt.Println(singleTestCaseIndex)
 
-		result := query.Group(singleTestCase.Data, singleTestCase.GroupType, singleTestCase.GroupFuctor)
-		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
 
 	}
 }

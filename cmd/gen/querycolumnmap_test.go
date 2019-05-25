@@ -33,8 +33,7 @@ func TestQueryColumnMap(t *testing.T) {
 
 	for singleTestCaseIndex, singleTestCase := range testCase {
 
-		result := query.ColumnMap(singleTestCase.Data, singleTestCase.Column)
-		assert.Equal(t, result, singleTestCase.Target, singleTestCaseIndex)
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
 
 	}
 }
