@@ -1,11 +1,29 @@
 package testdata
 
 import (
-	"time"
+	//"time"
 
 	"github.com/fishedee/tools/query"
 )
 
+type TestCase struct {
+	Handler func() interface{}
+	Target  interface{}
+}
+
+func GetQueryColumnTestCase() []TestCase {
+	testCase := []TestCase{
+		{
+			func() interface{} {
+				return query.Column([]int{}, " . ")
+			},
+			[]int{},
+		},
+	}
+	return testCase
+}
+
+/*
 // ContentType 测试类型 支持bool,int,float,string和time.Time
 type ContentType struct {
 	Name      string
@@ -1179,7 +1197,6 @@ func GetQueryGroupTestCase() []GroupCase {
 				ContentType{"", 0, true, -1.1, -1.1, oldTime},
 			},
 		},
-		/*DO NOT SUPPORT MULTIPLE COLUMN GROUP
 		{
 			[] ContentType{
 				 ContentType{"s", 1, true, 0, 0, nowTime},
@@ -1201,7 +1218,6 @@ func GetQueryGroupTestCase() []GroupCase {
 				 ContentType{"s", 2, true, 0, 0, nowTime},
 			},
 		},
-		*/
 		{
 			[]QueryInnerStruct2{
 				QueryInnerStruct2{QueryInnerStruct{3}, 4, 4.1},
@@ -1720,3 +1736,4 @@ func GetQueryDistinctTestCase() []DistinctCase {
 
 	return testCase
 }
+*/
