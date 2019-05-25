@@ -16,6 +16,107 @@ func TestQueryColumn(t *testing.T) {
 	}
 }
 
+func TestQuerySelect(t *testing.T) {
+	testCase := testdata.GetQuerySelectTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
+
+	}
+}
+
+func TestQueryWhere(t *testing.T) {
+	testCase := testdata.GetQueryWhereTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
+
+	}
+}
+
+func TestQueryReduce(t *testing.T) {
+	testCase := testdata.GetQueryReduceTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
+
+	}
+
+}
+
+func TestQuerySort(t *testing.T) {
+	testCase := testdata.GetQuerySortTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
+
+	}
+
+}
+
+func TestQueryJoin(t *testing.T) {
+	testCase := testdata.GetQueryJoinTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
+
+	}
+}
+
+func TestQueryGroup(t *testing.T) {
+	testCase := testdata.GetQueryGroupTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
+
+	}
+
+}
+
+func TestQueryColumnMap(t *testing.T) {
+	testCase := testdata.GetQueryColumnMapTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
+
+	}
+}
+
+func TestQueryReverse(t *testing.T) {
+	testCase := testdata.GetQueryReverseTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
+
+	}
+}
+
+func TestQueryCombine(t *testing.T) {
+	testCase := testdata.GetQueryCombineTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
+	}
+}
+
+func TestQueryDistinct(t *testing.T) {
+	testCase := testdata.GetQueryDistinctTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
+
+	}
+}
+
 func init() {
 	args := os.Args[len(os.Args)-1]
 	if args == "reflect" {
