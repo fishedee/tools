@@ -318,7 +318,7 @@ func queryGroupV7c2562e83d5d0523f97388581656549f827c5363(data interface{}, group
 	groupFunctorIn := groupFunctor.(func([]ContentType) []ContentType)
 	bufferData := make([]ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[string]int, len(dataIn))
-	result := make([][]ContentType, 0, len(dataIn))
+	result := make([]ContentType, 0, len(dataIn))
 
 	length := len(dataIn)
 	nextData := make([]int, length, length)
@@ -349,7 +349,7 @@ func queryGroupV7c2562e83d5d0523f97388581656549f827c5363(data interface{}, group
 		k++
 		nextData[j] = 0
 		single := groupFunctorIn(bufferData[kbegin:k])
-		result = append(result, single)
+		result = append(result, single...)
 	}
 
 	return result
@@ -360,7 +360,7 @@ func queryGroupV7e426b5791161f51e11d28bc0feb633b08a92842(data interface{}, group
 	groupFunctorIn := groupFunctor.(func([]ContentType) []float64)
 	bufferData := make([]ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[int]int, len(dataIn))
-	result := make([][]float64, 0, len(dataIn))
+	result := make([]float64, 0, len(dataIn))
 
 	length := len(dataIn)
 	nextData := make([]int, length, length)
@@ -391,7 +391,7 @@ func queryGroupV7e426b5791161f51e11d28bc0feb633b08a92842(data interface{}, group
 		k++
 		nextData[j] = 0
 		single := groupFunctorIn(bufferData[kbegin:k])
-		result = append(result, single)
+		result = append(result, single...)
 	}
 
 	return result
@@ -402,7 +402,7 @@ func queryGroupV8192c48029957133c04b253ae1641389b396caf8(data interface{}, group
 	groupFunctorIn := groupFunctor.(func([]ContentType) []ContentType)
 	bufferData := make([]ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[bool]int, len(dataIn))
-	result := make([][]ContentType, 0, len(dataIn))
+	result := make([]ContentType, 0, len(dataIn))
 
 	length := len(dataIn)
 	nextData := make([]int, length, length)
@@ -433,7 +433,7 @@ func queryGroupV8192c48029957133c04b253ae1641389b396caf8(data interface{}, group
 		k++
 		nextData[j] = 0
 		single := groupFunctorIn(bufferData[kbegin:k])
-		result = append(result, single)
+		result = append(result, single...)
 	}
 
 	return result
@@ -486,7 +486,7 @@ func queryGroupV9f6a97dc8909e876536f87142b5f351e7c589297(data interface{}, group
 	groupFunctorIn := groupFunctor.(func([]ContentType) []ContentType)
 	bufferData := make([]ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[time.Time]int, len(dataIn))
-	result := make([][]ContentType, 0, len(dataIn))
+	result := make([]ContentType, 0, len(dataIn))
 
 	length := len(dataIn)
 	nextData := make([]int, length, length)
@@ -517,7 +517,7 @@ func queryGroupV9f6a97dc8909e876536f87142b5f351e7c589297(data interface{}, group
 		k++
 		nextData[j] = 0
 		single := groupFunctorIn(bufferData[kbegin:k])
-		result = append(result, single)
+		result = append(result, single...)
 	}
 
 	return result
@@ -528,7 +528,7 @@ func queryGroupVc6ec01b1a8f68f11281a5667b88c5e1967c42c86(data interface{}, group
 	groupFunctorIn := groupFunctor.(func([]ContentType) []ContentType)
 	bufferData := make([]ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[int]int, len(dataIn))
-	result := make([][]ContentType, 0, len(dataIn))
+	result := make([]ContentType, 0, len(dataIn))
 
 	length := len(dataIn)
 	nextData := make([]int, length, length)
@@ -559,7 +559,7 @@ func queryGroupVc6ec01b1a8f68f11281a5667b88c5e1967c42c86(data interface{}, group
 		k++
 		nextData[j] = 0
 		single := groupFunctorIn(bufferData[kbegin:k])
-		result = append(result, single)
+		result = append(result, single...)
 	}
 
 	return result
@@ -654,7 +654,7 @@ func queryGroupVff06256d82e26530e6c726fa09cb485f82fa3a55(data interface{}, group
 	groupFunctorIn := groupFunctor.(func([]ContentType) []ContentType)
 	bufferData := make([]ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[bool]int, len(dataIn))
-	result := make([][]ContentType, 0, len(dataIn))
+	result := make([]ContentType, 0, len(dataIn))
 
 	length := len(dataIn)
 	nextData := make([]int, length, length)
@@ -685,7 +685,7 @@ func queryGroupVff06256d82e26530e6c726fa09cb485f82fa3a55(data interface{}, group
 		k++
 		nextData[j] = 0
 		single := groupFunctorIn(bufferData[kbegin:k])
-		result = append(result, single)
+		result = append(result, single...)
 	}
 
 	return result

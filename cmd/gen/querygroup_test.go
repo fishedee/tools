@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 	"testing"
 	"time"
@@ -69,7 +68,6 @@ func TestQueryGroup(t *testing.T) {
 	testCase := testdata.GetQueryGroupTestCase()
 
 	for singleTestCaseIndex, singleTestCase := range testCase {
-		fmt.Println(singleTestCaseIndex)
 
 		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
 
