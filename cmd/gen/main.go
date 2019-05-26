@@ -184,5 +184,8 @@ func run() {
 func main() {
 	log.SetFlags(0)
 	log.SetPrefix("querygen fail: ")
+	defer exception.CatchCrash(func(e exception.Exception) {
+		log.Fatal(e.GetMessage())
+	})
 	run()
 }
