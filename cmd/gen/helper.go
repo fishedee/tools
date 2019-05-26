@@ -321,13 +321,22 @@ func getLessCompareCode(line string, name1 string, extractFieldName1 string, nam
 		lessTrueCode = "1"
 		lessFalseCode = "-1"
 	}
-	_, isBasic := sortFieldType.(*types.Basic)
+	tBasic, isBasic := sortFieldType.(*types.Basic)
 	if isBasic {
-		return "if " + name1 + extractFieldName1 + "<" + name2 + extractFieldName2 + "{\n" +
-			"return " + lessTrueCode + "\n" +
-			"} else if " + name1 + extractFieldName1 + ">" + name2 + extractFieldName2 + "{\n" +
-			"return " + lessFalseCode + "\n" +
-			"}\n"
+		if tBasic.Kind() == types.Bool {
+			return "if " + name1 + extractFieldName1 + "== false && " + name2 + extractFieldName2 + "== true {\n" +
+				"return " + lessTrueCode + "\n" +
+				"} else if " + name1 + extractFieldName1 + "== true && " + name2 + extractFieldName2 + "== false {\n" +
+				"return " + lessFalseCode + "\n" +
+				"}\n"
+		} else {
+			return "if " + name1 + extractFieldName1 + "<" + name2 + extractFieldName2 + "{\n" +
+				"return " + lessTrueCode + "\n" +
+				"} else if " + name1 + extractFieldName1 + ">" + name2 + extractFieldName2 + "{\n" +
+				"return " + lessFalseCode + "\n" +
+				"}\n"
+		}
+
 	}
 
 	tNamed, isNamed := sortFieldType.(*types.Named)

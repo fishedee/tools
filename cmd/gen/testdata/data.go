@@ -26,6 +26,7 @@ type User struct {
 type Admin struct {
 	AdminID int
 	Level   int
+	IsMale  bool
 }
 
 // AdminUser AdminUser
@@ -77,6 +78,7 @@ func logic() {
 	query.Sort([]User{}, "UserID desc,Name asc,CreateTime asc")
 	query.Sort([]User{}, "UserID asc")
 	query.Sort([]int{}, ". desc")
+	query.Sort([]Admin{}, "IsMale asc")
 	query.ColumnMap([]User{}, "UserID")
 	query.ColumnMap([]User{}, "Age")
 	query.ColumnMap([]int{}, ".")

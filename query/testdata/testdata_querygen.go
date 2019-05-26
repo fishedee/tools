@@ -1572,9 +1572,9 @@ func querySortV40a4020cd2e40cf9f18c9e1f6ab38b3954c42a18(data interface{}, sortTy
 			return -1
 		}
 
-		if newData[i].Ok < newData[j].Ok {
+		if newData[i].Ok == false && newData[j].Ok == true {
 			return 1
-		} else if newData[i].Ok > newData[j].Ok {
+		} else if newData[i].Ok == true && newData[j].Ok == false {
 			return -1
 		}
 
@@ -1748,9 +1748,9 @@ func querySortVd0f5de5ff928ef2468012b8408e5088feb13e615(data interface{}, sortTy
 	copy(newData, dataIn)
 
 	query.SortInternal(len(newData), func(i int, j int) int {
-		if newData[i].Ok < newData[j].Ok {
+		if newData[i].Ok == false && newData[j].Ok == true {
 			return 1
-		} else if newData[i].Ok > newData[j].Ok {
+		} else if newData[i].Ok == true && newData[j].Ok == false {
 			return -1
 		}
 
