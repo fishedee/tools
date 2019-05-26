@@ -1,35 +1,20 @@
 package main
 
-import "time"
+import (
+	gentestdata "github.com/fishedee/tools/cmd/gen/testdata"
+)
 
 // User User
-type User struct {
-	UserID     int
-	Age        int
-	Name       string
-	CreateTime time.Time
-}
+type User = gentestdata.User
 
 // Admin Admin
-type Admin struct {
-	AdminID int
-	Level   int
-}
+type Admin = gentestdata.Admin
 
 // AdminUser AdminUser
-type AdminUser struct {
-	AdminID    int
-	Level      int
-	Name       string
-	CreateTime time.Time
-}
+type AdminUser = gentestdata.AdminUser
 
 // Department Department
-type Department struct {
-	Employees []User
-}
+type Department = gentestdata.Department
 
 // Sex Sex
-type Sex struct {
-	IsMale bool
-}
+type Sex = gentestdata.Sex

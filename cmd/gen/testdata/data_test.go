@@ -44,10 +44,10 @@ func BenchmarkQueryColumnHandMany(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
 		newData := make([]int, len(data), len(data))
-		newDataAge := make([]int, len(data), len(data))
+		newDataName := make([]string, len(data), len(data))
 		for i, single := range data {
 			newData[i] = single.UserID
-			newDataAge[i] = single.Age
+			newDataName[i] = single.Name
 		}
 	}
 }
@@ -58,7 +58,7 @@ func BenchmarkQueryColumnMacroMany(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
 		query.Column(data, "UserID")
-		query.Column(data, "Age")
+		query.Column(data, "Name")
 	}
 }
 
@@ -98,10 +98,10 @@ func BenchmarkQueryColumnMapHandMany(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
 		newData := make(map[int]User, len(data))
-		newDataAge := make(map[int]User, len(data))
+		newDataName := make(map[int]User, len(data))
 		for _, single := range data {
 			newData[single.UserID] = single
-			newDataAge[single.Age] = single
+			newDataName[single.Age] = single
 		}
 	}
 }
@@ -112,7 +112,7 @@ func BenchmarkQueryColumnMapMacroMany(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
 		query.ColumnMap(data, "UserID")
-		query.ColumnMap(data, "Age")
+		query.ColumnMap(data, "Name")
 	}
 }
 

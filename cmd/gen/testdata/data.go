@@ -54,14 +54,14 @@ type QueryInnerStruct2 = testdata.QueryInnerStruct2
 
 func logic() {
 	query.Column([]User{}, "UserID")
-	query.Column([]User{}, "Age")
+	query.Column([]User{}, "Name")
 	query.Column([]ContentType{}, " Name ")
 	query.Column([]ContentType{}, "     Name         ")
 	query.Column([]ContentType{}, "Age        ")
 	query.Column([]ContentType{}, "Ok        ")
 	query.Column([]ContentType{}, "    Money  ")
 	query.Column([]ContentType{}, "    CardMoney")
-	// query.Column([]QueryInnerStruct2{}, "QueryInnerStruct.MM")
+	query.Column([]QueryInnerStruct2{}, "QueryInnerStruct.MM")
 	query.Column([]User{}, ".")
 	query.Column([]int{}, ".")
 	query.Column([]int{}, " . ")
@@ -80,7 +80,7 @@ func logic() {
 	query.Sort([]int{}, ". desc")
 	query.Sort([]Admin{}, "IsMale asc")
 	query.ColumnMap([]User{}, "UserID")
-	query.ColumnMap([]User{}, "Age")
+	query.ColumnMap([]User{}, "Name")
 	query.ColumnMap([]int{}, ".")
 	query.ColumnMap([]int{}, " . ")
 	query.ColumnMap([]string{}, " . ")
@@ -90,7 +90,7 @@ func logic() {
 	query.ColumnMap([]ContentType{}, "Ok        ")
 	query.ColumnMap([]ContentType{}, "    Money  ")
 	query.ColumnMap([]ContentType{}, "    CardMoney")
-	// query.ColumnMap([]ContentType{}, "QueryInnerStruct.MM")
+	query.ColumnMap([]QueryInnerStruct2{}, "QueryInnerStruct.MM")
 	query.Group([]User{}, "UserID", func(user []User) Department {
 		return Department{}
 	})
@@ -174,13 +174,13 @@ func logic() {
 			list[0].Age = sum.(int)
 			return []ContentType{list[0]}
 		})
-	// query.Group([]QueryInnerStruct2{},
-	// 	"QueryInnerStruct.MM",
-	// 	func(list []QueryInnerStruct2) []QueryInnerStruct2 {
-	// 		sum := query.Sum(query.Column(list, "  MM  "))
-	// 		list[0].MM = sum.(int)
-	// 		return []QueryInnerStruct2{list[0]}
-	// 	})
+	query.Group([]QueryInnerStruct2{},
+		"QueryInnerStruct.MM",
+		func(list []QueryInnerStruct2) []QueryInnerStruct2 {
+			sum := query.Sum(query.Column(list, "  MM  "))
+			list[0].MM = sum.(int)
+			return []QueryInnerStruct2{list[0]}
+		})
 	query.LeftJoin([]Admin{}, []User{}, "AdminID = UserID", func(left Admin, right User) AdminUser {
 		return AdminUser{}
 	})

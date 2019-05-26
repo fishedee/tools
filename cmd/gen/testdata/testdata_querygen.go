@@ -17,12 +17,12 @@ func queryColumnMapV0210877b9f45b0e2d7c760cad71c8d1aa3e70a6f(data interface{}, c
 	return result
 }
 
-func queryColumnMapV15a424b34f5f3186a14908971a35c49d4f52436d(data interface{}, column string) interface{} {
-	dataIn := data.([]User)
-	result := make(map[int]User, len(dataIn))
+func queryColumnMapV0278bd21d25efe9d7f53cc03a127d039c73e98a2(data interface{}, column string) interface{} {
+	dataIn := data.([]testdata.QueryInnerStruct2)
+	result := make(map[int]testdata.QueryInnerStruct2, len(dataIn))
 
 	for i := len(dataIn) - 1; i >= 0; i-- {
-		result[dataIn[i].Age] = dataIn[i]
+		result[dataIn[i].QueryInnerStruct.MM] = dataIn[i]
 	}
 	return result
 }
@@ -63,6 +63,16 @@ func queryColumnMapV6b4a4fd9e192f5ca29db73c69b9472328b1d4cd7(data interface{}, c
 
 	for i := len(dataIn) - 1; i >= 0; i-- {
 		result[dataIn[i].Money] = dataIn[i]
+	}
+	return result
+}
+
+func queryColumnMapV74382f13397675a69df627f3964ab4362f62b343(data interface{}, column string) interface{} {
+	dataIn := data.([]User)
+	result := make(map[string]User, len(dataIn))
+
+	for i := len(dataIn) - 1; i >= 0; i-- {
+		result[dataIn[i].Name] = dataIn[i]
 	}
 	return result
 }
@@ -127,12 +137,12 @@ func queryColumnV0210877b9f45b0e2d7c760cad71c8d1aa3e70a6f(data interface{}, colu
 	return result
 }
 
-func queryColumnV15a424b34f5f3186a14908971a35c49d4f52436d(data interface{}, column string) interface{} {
-	dataIn := data.([]User)
+func queryColumnV0278bd21d25efe9d7f53cc03a127d039c73e98a2(data interface{}, column string) interface{} {
+	dataIn := data.([]testdata.QueryInnerStruct2)
 	result := make([]int, len(dataIn), len(dataIn))
 
 	for i, single := range dataIn {
-		result[i] = single.Age
+		result[i] = single.QueryInnerStruct.MM
 	}
 	return result
 }
@@ -187,6 +197,16 @@ func queryColumnV6b4a4fd9e192f5ca29db73c69b9472328b1d4cd7(data interface{}, colu
 	return result
 }
 
+func queryColumnV74382f13397675a69df627f3964ab4362f62b343(data interface{}, column string) interface{} {
+	dataIn := data.([]User)
+	result := make([]string, len(dataIn), len(dataIn))
+
+	for i, single := range dataIn {
+		result[i] = single.Name
+	}
+	return result
+}
+
 func queryColumnV904b262f8e2329ec73c320ca0e5ca82f14165586(data interface{}, column string) interface{} {
 	dataIn := data.([]int)
 	result := make([]int, len(dataIn), len(dataIn))
@@ -203,6 +223,16 @@ func queryColumnV904f7e5061ea0a11202b104fcb01960d528c1ccd(data interface{}, colu
 
 	for i, single := range dataIn {
 		result[i] = single.CardMoney
+	}
+	return result
+}
+
+func queryColumnV90d8f7e69601fe716207d104d716fb6ca0fbfbb9(data interface{}, column string) interface{} {
+	dataIn := data.([]testdata.QueryInnerStruct2)
+	result := make([]int, len(dataIn), len(dataIn))
+
+	for i, single := range dataIn {
+		result[i] = single.MM
 	}
 	return result
 }
@@ -333,6 +363,48 @@ func queryCombineVdd9cf383efe9adb9dedf293cf43f875133066c23(leftData interface{},
 		newData[i] = combineFunctorIn(leftDataIn[i], rightDataIn[i])
 	}
 	return newData
+}
+
+func queryGroupV09895bd703c01101d7fdf582f1cc06b6b3ac6c3f(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+	dataIn := data.([]testdata.QueryInnerStruct2)
+	groupFunctorIn := groupFunctor.(func([]testdata.QueryInnerStruct2) []testdata.QueryInnerStruct2)
+	bufferData := make([]testdata.QueryInnerStruct2, len(dataIn), len(dataIn))
+	mapData := make(map[int]int, len(dataIn))
+	result := make([]testdata.QueryInnerStruct2, 0, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].QueryInnerStruct.MM
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+		single := groupFunctorIn(bufferData[kbegin:k])
+		result = append(result, single...)
+	}
+
+	return result
 }
 
 func queryGroupV34b1efcd4a92cbf477c338aec5ef9e49e4e25774(data interface{}, groupType string, groupFunctor interface{}) interface{} {
@@ -1296,7 +1368,7 @@ func init() {
 
 	query.ColumnMapMacroRegister([]testdata.ContentType{}, "     Name         ", queryColumnMapV0210877b9f45b0e2d7c760cad71c8d1aa3e70a6f)
 
-	query.ColumnMapMacroRegister([]User{}, "Age", queryColumnMapV15a424b34f5f3186a14908971a35c49d4f52436d)
+	query.ColumnMapMacroRegister([]testdata.QueryInnerStruct2{}, "QueryInnerStruct.MM", queryColumnMapV0278bd21d25efe9d7f53cc03a127d039c73e98a2)
 
 	query.ColumnMapMacroRegister([]testdata.ContentType{}, " Name ", queryColumnMapV1a5b7250371597524e364f0c816390c77a8b3331)
 
@@ -1305,6 +1377,8 @@ func init() {
 	query.ColumnMapMacroRegister([]string{}, " . ", queryColumnMapV3923b792e276005e09637544ecb3aec8be870f41)
 
 	query.ColumnMapMacroRegister([]testdata.ContentType{}, "    Money  ", queryColumnMapV6b4a4fd9e192f5ca29db73c69b9472328b1d4cd7)
+
+	query.ColumnMapMacroRegister([]User{}, "Name", queryColumnMapV74382f13397675a69df627f3964ab4362f62b343)
 
 	query.ColumnMapMacroRegister([]int{}, ".", queryColumnMapV904b262f8e2329ec73c320ca0e5ca82f14165586)
 
@@ -1318,7 +1392,7 @@ func init() {
 
 	query.ColumnMacroRegister([]testdata.ContentType{}, "     Name         ", queryColumnV0210877b9f45b0e2d7c760cad71c8d1aa3e70a6f)
 
-	query.ColumnMacroRegister([]User{}, "Age", queryColumnV15a424b34f5f3186a14908971a35c49d4f52436d)
+	query.ColumnMacroRegister([]testdata.QueryInnerStruct2{}, "QueryInnerStruct.MM", queryColumnV0278bd21d25efe9d7f53cc03a127d039c73e98a2)
 
 	query.ColumnMacroRegister([]testdata.ContentType{}, " Name ", queryColumnV1a5b7250371597524e364f0c816390c77a8b3331)
 
@@ -1330,9 +1404,13 @@ func init() {
 
 	query.ColumnMacroRegister([]testdata.ContentType{}, "    Money  ", queryColumnV6b4a4fd9e192f5ca29db73c69b9472328b1d4cd7)
 
+	query.ColumnMacroRegister([]User{}, "Name", queryColumnV74382f13397675a69df627f3964ab4362f62b343)
+
 	query.ColumnMacroRegister([]int{}, ".", queryColumnV904b262f8e2329ec73c320ca0e5ca82f14165586)
 
 	query.ColumnMacroRegister([]testdata.ContentType{}, "    CardMoney", queryColumnV904f7e5061ea0a11202b104fcb01960d528c1ccd)
+
+	query.ColumnMacroRegister([]testdata.QueryInnerStruct2{}, "  MM  ", queryColumnV90d8f7e69601fe716207d104d716fb6ca0fbfbb9)
 
 	query.ColumnMacroRegister([]int{}, " . ", queryColumnV91dacd60e87431951940b4b4c51428e7c1e5c1f2)
 
@@ -1357,6 +1435,8 @@ func init() {
 	query.CombineMacroRegister([]int{}, []User{}, (func(int, User) User)(nil), queryCombineV38f41d1ea9151d195cb01ed01c28e94b7fbd938b)
 
 	query.CombineMacroRegister([]Admin{}, []User{}, (func(Admin, User) AdminUser)(nil), queryCombineVdd9cf383efe9adb9dedf293cf43f875133066c23)
+
+	query.GroupMacroRegister([]testdata.QueryInnerStruct2{}, "QueryInnerStruct.MM", (func([]testdata.QueryInnerStruct2) []testdata.QueryInnerStruct2)(nil), queryGroupV09895bd703c01101d7fdf582f1cc06b6b3ac6c3f)
 
 	query.GroupMacroRegister([]string{}, ".", (func([]string) testdata.ContentType)(nil), queryGroupV34b1efcd4a92cbf477c338aec5ef9e49e4e25774)
 
