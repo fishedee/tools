@@ -15,6 +15,16 @@ func queryColumnMapV0210877b9f45b0e2d7c760cad71c8d1aa3e70a6f(data interface{}, c
 	return result
 }
 
+func queryColumnMapV0278bd21d25efe9d7f53cc03a127d039c73e98a2(data interface{}, column string) interface{} {
+	dataIn := data.([]QueryInnerStruct2)
+	result := make(map[int]QueryInnerStruct2, len(dataIn))
+
+	for i := len(dataIn) - 1; i >= 0; i-- {
+		result[dataIn[i].QueryInnerStruct.MM] = dataIn[i]
+	}
+	return result
+}
+
 func queryColumnMapV1a5b7250371597524e364f0c816390c77a8b3331(data interface{}, column string) interface{} {
 	dataIn := data.([]ContentType)
 	result := make(map[string]ContentType, len(dataIn))
@@ -95,6 +105,16 @@ func queryColumnV0210877b9f45b0e2d7c760cad71c8d1aa3e70a6f(data interface{}, colu
 	return result
 }
 
+func queryColumnV0278bd21d25efe9d7f53cc03a127d039c73e98a2(data interface{}, column string) interface{} {
+	dataIn := data.([]QueryInnerStruct2)
+	result := make([]int, len(dataIn), len(dataIn))
+
+	for i, single := range dataIn {
+		result[i] = single.QueryInnerStruct.MM
+	}
+	return result
+}
+
 func queryColumnV1a5b7250371597524e364f0c816390c77a8b3331(data interface{}, column string) interface{} {
 	dataIn := data.([]ContentType)
 	result := make([]string, len(dataIn), len(dataIn))
@@ -151,6 +171,16 @@ func queryColumnV904f7e5061ea0a11202b104fcb01960d528c1ccd(data interface{}, colu
 
 	for i, single := range dataIn {
 		result[i] = single.CardMoney
+	}
+	return result
+}
+
+func queryColumnV90d8f7e69601fe716207d104d716fb6ca0fbfbb9(data interface{}, column string) interface{} {
+	dataIn := data.([]QueryInnerStruct2)
+	result := make([]int, len(dataIn), len(dataIn))
+
+	for i, single := range dataIn {
+		result[i] = single.MM
 	}
 	return result
 }
@@ -227,6 +257,48 @@ func queryCombineV228612e67e8c710669fd5517896357f50582a609(leftData interface{},
 		newData[i] = combineFunctorIn(leftDataIn[i], rightDataIn[i])
 	}
 	return newData
+}
+
+func queryGroupV09895bd703c01101d7fdf582f1cc06b6b3ac6c3f(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+	dataIn := data.([]QueryInnerStruct2)
+	groupFunctorIn := groupFunctor.(func([]QueryInnerStruct2) []QueryInnerStruct2)
+	bufferData := make([]QueryInnerStruct2, len(dataIn), len(dataIn))
+	mapData := make(map[int]int, len(dataIn))
+	result := make([]QueryInnerStruct2, 0, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].QueryInnerStruct.MM
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+		single := groupFunctorIn(bufferData[kbegin:k])
+		result = append(result, single...)
+	}
+
+	return result
 }
 
 func queryGroupV34b1efcd4a92cbf477c338aec5ef9e49e4e25774(data interface{}, groupType string, groupFunctor interface{}) interface{} {
@@ -754,6 +826,69 @@ func queryJoinV05e7a66203c74f236e031eb75f8bb81cd62b4c5c(leftData interface{}, ri
 	return result
 }
 
+func queryJoinV08b9b412b182e58d7cb037d1d6d1f99b67ac3fb4(leftData interface{}, rightData interface{}, joinPlace string, joinType string, joinFunctor interface{}) interface{} {
+	leftDataIn := leftData.([]ExtendType)
+	rightDataIn := rightData.([]ExtendType)
+	joinFunctorIn := joinFunctor.(func(ExtendType, ExtendType) ExtendType)
+	result := make([]ExtendType, 0, len(leftDataIn))
+
+	emptyLeftData := ExtendType{}
+	emptyRightData := ExtendType{}
+	joinPlace = "left"
+
+	nextData := make([]int, len(rightDataIn), len(rightDataIn))
+	mapDataNext := make(map[int]int, len(rightDataIn))
+	mapDataFirst := make(map[int]int, len(rightDataIn))
+
+	for i := 0; i != len(rightDataIn); i++ {
+		fieldValue := rightDataIn[i].ContentID
+		lastIndex, isExist := mapDataNext[fieldValue]
+		if isExist {
+			nextData[lastIndex] = i
+		} else {
+			mapDataFirst[fieldValue] = i
+		}
+		nextData[i] = -1
+		mapDataNext[fieldValue] = i
+	}
+
+	rightHaveJoin := make([]bool, len(rightDataIn), len(rightDataIn))
+	for i := 0; i != len(leftDataIn); i++ {
+		leftValue := leftDataIn[i]
+		fieldValue := leftValue.ContentID
+		rightIndex, isExist := mapDataFirst[fieldValue]
+		if isExist {
+			//找到右值
+			j := rightIndex
+			for nextData[j] != -1 {
+				singleResult := joinFunctorIn(leftValue, rightDataIn[j])
+				result = append(result, singleResult)
+				rightHaveJoin[j] = true
+				j = nextData[j]
+			}
+			singleResult := joinFunctorIn(leftValue, rightDataIn[j])
+			result = append(result, singleResult)
+			rightHaveJoin[j] = true
+		} else {
+			//找不到右值
+			if joinPlace == "left" || joinPlace == "outer" {
+				singleResult := joinFunctorIn(leftValue, emptyRightData)
+				result = append(result, singleResult)
+			}
+		}
+	}
+	if joinPlace == "right" || joinPlace == "outer" {
+		for j := 0; j != len(rightDataIn); j++ {
+			if rightHaveJoin[j] {
+				continue
+			}
+			singleResult := joinFunctorIn(emptyLeftData, rightDataIn[j])
+			result = append(result, singleResult)
+		}
+	}
+	return result
+}
+
 func queryJoinV278136fb3d4e24cb55e3c1a341f21de90dd0c0ef(leftData interface{}, rightData interface{}, joinPlace string, joinType string, joinFunctor interface{}) interface{} {
 	leftDataIn := leftData.([]UserType)
 	rightDataIn := rightData.([]UserType)
@@ -847,6 +982,69 @@ func queryJoinV2d5a6b539e97379decf26a5f6440a1e2b1244f31(leftData interface{}, ri
 	for i := 0; i != len(leftDataIn); i++ {
 		leftValue := leftDataIn[i]
 		fieldValue := leftValue.Money
+		rightIndex, isExist := mapDataFirst[fieldValue]
+		if isExist {
+			//找到右值
+			j := rightIndex
+			for nextData[j] != -1 {
+				singleResult := joinFunctorIn(leftValue, rightDataIn[j])
+				result = append(result, singleResult)
+				rightHaveJoin[j] = true
+				j = nextData[j]
+			}
+			singleResult := joinFunctorIn(leftValue, rightDataIn[j])
+			result = append(result, singleResult)
+			rightHaveJoin[j] = true
+		} else {
+			//找不到右值
+			if joinPlace == "left" || joinPlace == "outer" {
+				singleResult := joinFunctorIn(leftValue, emptyRightData)
+				result = append(result, singleResult)
+			}
+		}
+	}
+	if joinPlace == "right" || joinPlace == "outer" {
+		for j := 0; j != len(rightDataIn); j++ {
+			if rightHaveJoin[j] {
+				continue
+			}
+			singleResult := joinFunctorIn(emptyLeftData, rightDataIn[j])
+			result = append(result, singleResult)
+		}
+	}
+	return result
+}
+
+func queryJoinV508eea3c4554a4c20c036f8c7a315b6cd3e24c93(leftData interface{}, rightData interface{}, joinPlace string, joinType string, joinFunctor interface{}) interface{} {
+	leftDataIn := leftData.([]QueryInnerStruct2)
+	rightDataIn := rightData.([]QueryInnerStruct2)
+	joinFunctorIn := joinFunctor.(func(QueryInnerStruct2, QueryInnerStruct2) QueryInnerStruct2)
+	result := make([]QueryInnerStruct2, 0, len(leftDataIn))
+
+	emptyLeftData := QueryInnerStruct2{}
+	emptyRightData := QueryInnerStruct2{}
+	joinPlace = "left"
+
+	nextData := make([]int, len(rightDataIn), len(rightDataIn))
+	mapDataNext := make(map[int]int, len(rightDataIn))
+	mapDataFirst := make(map[int]int, len(rightDataIn))
+
+	for i := 0; i != len(rightDataIn); i++ {
+		fieldValue := rightDataIn[i].QueryInnerStruct.MM
+		lastIndex, isExist := mapDataNext[fieldValue]
+		if isExist {
+			nextData[lastIndex] = i
+		} else {
+			mapDataFirst[fieldValue] = i
+		}
+		nextData[i] = -1
+		mapDataNext[fieldValue] = i
+	}
+
+	rightHaveJoin := make([]bool, len(rightDataIn), len(rightDataIn))
+	for i := 0; i != len(leftDataIn); i++ {
+		leftValue := leftDataIn[i]
+		fieldValue := leftValue.QueryInnerStruct.MM
 		rightIndex, isExist := mapDataFirst[fieldValue]
 		if isExist {
 			//找到右值
@@ -1148,6 +1346,69 @@ func queryJoinV7bc11e07d61cd1ea2fa514ade01c0b8704e26bd4(leftData interface{}, ri
 
 	for i := 0; i != len(rightDataIn); i++ {
 		fieldValue := rightDataIn[i].UserName
+		lastIndex, isExist := mapDataNext[fieldValue]
+		if isExist {
+			nextData[lastIndex] = i
+		} else {
+			mapDataFirst[fieldValue] = i
+		}
+		nextData[i] = -1
+		mapDataNext[fieldValue] = i
+	}
+
+	rightHaveJoin := make([]bool, len(rightDataIn), len(rightDataIn))
+	for i := 0; i != len(leftDataIn); i++ {
+		leftValue := leftDataIn[i]
+		fieldValue := leftValue
+		rightIndex, isExist := mapDataFirst[fieldValue]
+		if isExist {
+			//找到右值
+			j := rightIndex
+			for nextData[j] != -1 {
+				singleResult := joinFunctorIn(leftValue, rightDataIn[j])
+				result = append(result, singleResult)
+				rightHaveJoin[j] = true
+				j = nextData[j]
+			}
+			singleResult := joinFunctorIn(leftValue, rightDataIn[j])
+			result = append(result, singleResult)
+			rightHaveJoin[j] = true
+		} else {
+			//找不到右值
+			if joinPlace == "left" || joinPlace == "outer" {
+				singleResult := joinFunctorIn(leftValue, emptyRightData)
+				result = append(result, singleResult)
+			}
+		}
+	}
+	if joinPlace == "right" || joinPlace == "outer" {
+		for j := 0; j != len(rightDataIn); j++ {
+			if rightHaveJoin[j] {
+				continue
+			}
+			singleResult := joinFunctorIn(emptyLeftData, rightDataIn[j])
+			result = append(result, singleResult)
+		}
+	}
+	return result
+}
+
+func queryJoinV9104135ab4a479b58f4a50073f976f6a15d024fa(leftData interface{}, rightData interface{}, joinPlace string, joinType string, joinFunctor interface{}) interface{} {
+	leftDataIn := leftData.([]int)
+	rightDataIn := rightData.([]ExtendType)
+	joinFunctorIn := joinFunctor.(func(int, ExtendType) ExtendType)
+	result := make([]ExtendType, 0, len(leftDataIn))
+
+	emptyLeftData := 0
+	emptyRightData := ExtendType{}
+	joinPlace = "left"
+
+	nextData := make([]int, len(rightDataIn), len(rightDataIn))
+	mapDataNext := make(map[int]int, len(rightDataIn))
+	mapDataFirst := make(map[int]int, len(rightDataIn))
+
+	for i := 0; i != len(rightDataIn); i++ {
+		fieldValue := rightDataIn[i].ContentID
 		lastIndex, isExist := mapDataNext[fieldValue]
 		if isExist {
 			nextData[lastIndex] = i
@@ -1585,6 +1846,25 @@ func querySortV40a4020cd2e40cf9f18c9e1f6ab38b3954c42a18(data interface{}, sortTy
 	return newData
 }
 
+func querySortV5e13934e9680f58a706f924b047dfc37769781eb(data interface{}, sortType string) interface{} {
+	dataIn := data.([]QueryInnerStruct2)
+	newData := make([]QueryInnerStruct2, len(dataIn), len(dataIn))
+	copy(newData, dataIn)
+
+	query.SortInternal(len(newData), func(i int, j int) int {
+		if newData[i].QueryInnerStruct.MM < newData[j].QueryInnerStruct.MM {
+			return -1
+		} else if newData[i].QueryInnerStruct.MM > newData[j].QueryInnerStruct.MM {
+			return 1
+		}
+
+		return 0
+	}, func(i int, j int) {
+		newData[j], newData[i] = newData[i], newData[j]
+	})
+	return newData
+}
+
 func querySortV621ff803aedd0b5249ba4dfb7425b4776188e65f(data interface{}, sortType string) interface{} {
 	dataIn := data.([]ContentType)
 	newData := make([]ContentType, len(dataIn), len(dataIn))
@@ -1767,6 +2047,25 @@ func querySortVd0f5de5ff928ef2468012b8408e5088feb13e615(data interface{}, sortTy
 	return newData
 }
 
+func querySortVf3b60733ee4dac7fe58f243fbe26fd5df8bd74e2(data interface{}, sortType string) interface{} {
+	dataIn := data.([]QueryInnerStruct2)
+	newData := make([]QueryInnerStruct2, len(dataIn), len(dataIn))
+	copy(newData, dataIn)
+
+	query.SortInternal(len(newData), func(i int, j int) int {
+		if newData[i].MM < newData[j].MM {
+			return 1
+		} else if newData[i].MM > newData[j].MM {
+			return -1
+		}
+
+		return 0
+	}, func(i int, j int) {
+		newData[j], newData[i] = newData[i], newData[j]
+	})
+	return newData
+}
+
 func queryWhereV03b12a1acb9918d749bfa5c88ad41af5d11af1be(data interface{}, whereFunctor interface{}) interface{} {
 	dataIn := data.([]ContentType)
 	whereFunctorIn := whereFunctor.(func(ContentType) bool)
@@ -1785,6 +2084,8 @@ func init() {
 
 	query.ColumnMapMacroRegister([]ContentType{}, "     Name         ", queryColumnMapV0210877b9f45b0e2d7c760cad71c8d1aa3e70a6f)
 
+	query.ColumnMapMacroRegister([]QueryInnerStruct2{}, "QueryInnerStruct.MM", queryColumnMapV0278bd21d25efe9d7f53cc03a127d039c73e98a2)
+
 	query.ColumnMapMacroRegister([]ContentType{}, " Name ", queryColumnMapV1a5b7250371597524e364f0c816390c77a8b3331)
 
 	query.ColumnMapMacroRegister([]ContentType{}, "Ok        ", queryColumnMapV268d58dff08fb0947b9b47bcae328d584ec43d6c)
@@ -1801,6 +2102,8 @@ func init() {
 
 	query.ColumnMacroRegister([]ContentType{}, "     Name         ", queryColumnV0210877b9f45b0e2d7c760cad71c8d1aa3e70a6f)
 
+	query.ColumnMacroRegister([]QueryInnerStruct2{}, "QueryInnerStruct.MM", queryColumnV0278bd21d25efe9d7f53cc03a127d039c73e98a2)
+
 	query.ColumnMacroRegister([]ContentType{}, " Name ", queryColumnV1a5b7250371597524e364f0c816390c77a8b3331)
 
 	query.ColumnMacroRegister([]ContentType{}, "Ok        ", queryColumnV268d58dff08fb0947b9b47bcae328d584ec43d6c)
@@ -1812,6 +2115,8 @@ func init() {
 	query.ColumnMacroRegister([]ContentType{}, "    Money  ", queryColumnV6b4a4fd9e192f5ca29db73c69b9472328b1d4cd7)
 
 	query.ColumnMacroRegister([]ContentType{}, "    CardMoney", queryColumnV904f7e5061ea0a11202b104fcb01960d528c1ccd)
+
+	query.ColumnMacroRegister([]QueryInnerStruct2{}, "  MM  ", queryColumnV90d8f7e69601fe716207d104d716fb6ca0fbfbb9)
 
 	query.ColumnMacroRegister([]int{}, " . ", queryColumnV91dacd60e87431951940b4b4c51428e7c1e5c1f2)
 
@@ -1826,6 +2131,8 @@ func init() {
 	query.CombineMacroRegister([]ContentType{}, []ContentType{}, (func(ContentType, ContentType) ContentType)(nil), queryCombineV09c7dc794885ed91aba0c8d6332ac0560ddd8c38)
 
 	query.CombineMacroRegister([]ContentType{}, []int{}, (func(ContentType, int) ContentType)(nil), queryCombineV228612e67e8c710669fd5517896357f50582a609)
+
+	query.GroupMacroRegister([]QueryInnerStruct2{}, "QueryInnerStruct.MM", (func([]QueryInnerStruct2) []QueryInnerStruct2)(nil), queryGroupV09895bd703c01101d7fdf582f1cc06b6b3ac6c3f)
 
 	query.GroupMacroRegister([]string{}, ".", (func([]string) ContentType)(nil), queryGroupV34b1efcd4a92cbf477c338aec5ef9e49e4e25774)
 
@@ -1851,9 +2158,13 @@ func init() {
 
 	query.JoinMacroRegister([]UserType{}, []ContentType2{}, "inner", "  Name  =  UserName ", (func(UserType, ContentType2) resultType)(nil), queryJoinV05e7a66203c74f236e031eb75f8bb81cd62b4c5c)
 
+	query.JoinMacroRegister([]ExtendType{}, []ExtendType{}, " left ", "  ContentID  =  ContentID ", (func(ExtendType, ExtendType) ExtendType)(nil), queryJoinV08b9b412b182e58d7cb037d1d6d1f99b67ac3fb4)
+
 	query.JoinMacroRegister([]UserType{}, []UserType{}, " left ", "  Name  =  Name ", (func(UserType, UserType) UserType)(nil), queryJoinV278136fb3d4e24cb55e3c1a341f21de90dd0c0ef)
 
 	query.JoinMacroRegister([]UserType{}, []UserType{}, "left", " Money=Money ", (func(UserType, UserType) UserType)(nil), queryJoinV2d5a6b539e97379decf26a5f6440a1e2b1244f31)
+
+	query.JoinMacroRegister([]QueryInnerStruct2{}, []QueryInnerStruct2{}, "left", "QueryInnerStruct.MM = QueryInnerStruct.MM", (func(QueryInnerStruct2, QueryInnerStruct2) QueryInnerStruct2)(nil), queryJoinV508eea3c4554a4c20c036f8c7a315b6cd3e24c93)
 
 	query.JoinMacroRegister([]UserType{}, []ContentType2{}, "right", "  Name  =  UserName ", (func(UserType, ContentType2) resultType)(nil), queryJoinV5307fcc7a488d36862795265fa06bdf9b785df46)
 
@@ -1864,6 +2175,8 @@ func init() {
 	query.JoinMacroRegister([]UserType{}, []UserType{}, "left", "Ok  =  Ok", (func(UserType, UserType) UserType)(nil), queryJoinV7abc7f400d9daa08a82df0f80c5a1ff2961f607b)
 
 	query.JoinMacroRegister([]string{}, []ContentType2{}, "left", "  .  =  UserName ", (func(string, ContentType2) ContentType2)(nil), queryJoinV7bc11e07d61cd1ea2fa514ade01c0b8704e26bd4)
+
+	query.JoinMacroRegister([]int{}, []ExtendType{}, " left ", "  .  =  ContentID ", (func(int, ExtendType) ExtendType)(nil), queryJoinV9104135ab4a479b58f4a50073f976f6a15d024fa)
 
 	query.JoinMacroRegister([]UserType{}, []UserType{}, "right", "Age=Age", (func(UserType, UserType) UserType)(nil), queryJoinVa1a3a9e9a8824a018e089e1dd8166ad273eb2929)
 
@@ -1893,6 +2206,8 @@ func init() {
 
 	query.SortMacroRegister([]ContentType{}, "Age desc,Ok desc", querySortV40a4020cd2e40cf9f18c9e1f6ab38b3954c42a18)
 
+	query.SortMacroRegister([]QueryInnerStruct2{}, "QueryInnerStruct.MM asc", querySortV5e13934e9680f58a706f924b047dfc37769781eb)
+
 	query.SortMacroRegister([]ContentType{}, "Name desc", querySortV621ff803aedd0b5249ba4dfb7425b4776188e65f)
 
 	query.SortMacroRegister([]int{}, ". asc", querySortV74654e8b45593005ef783b89255269f7c6ecc39b)
@@ -1908,6 +2223,8 @@ func init() {
 	query.SortMacroRegister([]ContentType{}, "Money,Register desc", querySortVc176fe16e99109d1f300a4845f4b46844243aa9b)
 
 	query.SortMacroRegister([]ContentType{}, "Ok desc,Name", querySortVd0f5de5ff928ef2468012b8408e5088feb13e615)
+
+	query.SortMacroRegister([]QueryInnerStruct2{}, "MM desc", querySortVf3b60733ee4dac7fe58f243fbe26fd5df8bd74e2)
 
 	query.WhereMacroRegister([]ContentType{}, (func(ContentType) bool)(nil), queryWhereV03b12a1acb9918d749bfa5c88ad41af5d11af1be)
 

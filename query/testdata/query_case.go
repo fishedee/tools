@@ -123,18 +123,17 @@ func GetQueryColumnTestCase() []TestCase {
 			},
 			[]float64{0, 1.1, -1.2, 0, 0},
 		},
-		// FIXME:
-		// {
-		// 	func() interface{} {
-		// 		return query.Column([]QueryInnerStruct2{
-		// 			QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
-		// 			QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
-		// 			QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
-		// 		},
-		// 			"QueryInnerStruct.MM")
-		// 	},
-		// 	[]int{1, 2, 3},
-		// },
+		{
+			func() interface{} {
+				return query.Column([]QueryInnerStruct2{
+					QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
+					QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
+					QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
+				},
+					"QueryInnerStruct.MM")
+			},
+			[]int{1, 2, 3},
+		},
 	}
 	return testCase
 }
@@ -604,38 +603,38 @@ func GetQuerySortTestCase() []TestCase {
 				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
 			},
 		},
-		// {
-		// 	func() interface{} {
-		// 		return query.Sort(
-		// 			[]QueryInnerStruct2{
-		// 				QueryInnerStruct2{QueryInnerStruct{3}, 4, 3.1},
-		// 				QueryInnerStruct2{QueryInnerStruct{2}, 2, 1.1},
-		// 				QueryInnerStruct2{QueryInnerStruct{1}, 5, 2.1},
-		// 			},
-		// 			"MM desc")
-		// 	},
-		// 	[]QueryInnerStruct2{
-		// 		QueryInnerStruct2{QueryInnerStruct{1}, 5, 2.1},
-		// 		QueryInnerStruct2{QueryInnerStruct{3}, 4, 3.1},
-		// 		QueryInnerStruct2{QueryInnerStruct{2}, 2, 1.1},
-		// 	},
-		// },
-		// {
-		// 	func() interface{} {
-		// 		return query.Sort(
-		// 			[]QueryInnerStruct2{
-		// 				QueryInnerStruct2{QueryInnerStruct{3}, 4, 3.1},
-		// 				QueryInnerStruct2{QueryInnerStruct{2}, 2, 1.1},
-		// 				QueryInnerStruct2{QueryInnerStruct{1}, 5, 2.1},
-		// 			},
-		// 			"QueryInnerStruct.MM asc")
-		// 	},
-		// 	[]QueryInnerStruct2{
-		// 		QueryInnerStruct2{QueryInnerStruct{1}, 5, 2.1},
-		// 		QueryInnerStruct2{QueryInnerStruct{2}, 2, 1.1},
-		// 		QueryInnerStruct2{QueryInnerStruct{3}, 4, 3.1},
-		// 	},
-		// },
+		{
+			func() interface{} {
+				return query.Sort(
+					[]QueryInnerStruct2{
+						QueryInnerStruct2{QueryInnerStruct{3}, 4, 3.1},
+						QueryInnerStruct2{QueryInnerStruct{2}, 2, 1.1},
+						QueryInnerStruct2{QueryInnerStruct{1}, 5, 2.1},
+					},
+					"MM desc")
+			},
+			[]QueryInnerStruct2{
+				QueryInnerStruct2{QueryInnerStruct{1}, 5, 2.1},
+				QueryInnerStruct2{QueryInnerStruct{3}, 4, 3.1},
+				QueryInnerStruct2{QueryInnerStruct{2}, 2, 1.1},
+			},
+		},
+		{
+			func() interface{} {
+				return query.Sort(
+					[]QueryInnerStruct2{
+						QueryInnerStruct2{QueryInnerStruct{3}, 4, 3.1},
+						QueryInnerStruct2{QueryInnerStruct{2}, 2, 1.1},
+						QueryInnerStruct2{QueryInnerStruct{1}, 5, 2.1},
+					},
+					"QueryInnerStruct.MM asc")
+			},
+			[]QueryInnerStruct2{
+				QueryInnerStruct2{QueryInnerStruct{1}, 5, 2.1},
+				QueryInnerStruct2{QueryInnerStruct{2}, 2, 1.1},
+				QueryInnerStruct2{QueryInnerStruct{3}, 4, 3.1},
+			},
+		},
 		{
 			func() interface{} {
 				return query.Sort(
@@ -710,7 +709,8 @@ type BaseType struct {
 // ExtendType ExtendType
 type ExtendType struct {
 	BaseType
-	Title string
+	Title     string
+	ContentID int
 }
 
 // resultType resultType
@@ -746,19 +746,19 @@ func GetQueryJoinTestCase() []TestCase {
 			},
 			[]UserType{},
 		},
-		// {
-		// 	func() interface{} {
-		// 		return query.Join(
-		// 			[]int{},
-		// 			[]ExtendType{},
-		// 			" left ",
-		// 			"  .  =  ContentID ",
-		// 			func(left int, right ExtendType) ExtendType {
-		// 				return ExtendType{}
-		// 			})
-		// 	},
-		// 	[]ExtendType{},
-		// },
+		{
+			func() interface{} {
+				return query.Join(
+					[]int{},
+					[]ExtendType{},
+					" left ",
+					"  .  =  ContentID ",
+					func(left int, right ExtendType) ExtendType {
+						return ExtendType{}
+					})
+			},
+			[]ExtendType{},
+		},
 		{
 			func() interface{} {
 				return query.Join(
@@ -772,19 +772,19 @@ func GetQueryJoinTestCase() []TestCase {
 			},
 			[]UserType{},
 		},
-		// {
-		// 	func() interface{} {
-		// 		return query.Join(
-		// 			[]ExtendType{},
-		// 			[]ExtendType{},
-		// 			" left ",
-		// 			"  ContentID  =  ContentID ",
-		// 			func(left ExtendType, right ExtendType) ExtendType {
-		// 				return ExtendType{}
-		// 			})
-		// 	},
-		// 	[]ExtendType{},
-		// },
+		{
+			func() interface{} {
+				return query.Join(
+					[]ExtendType{},
+					[]ExtendType{},
+					" left ",
+					"  ContentID  =  ContentID ",
+					func(left ExtendType, right ExtendType) ExtendType {
+						return ExtendType{}
+					})
+			},
+			[]ExtendType{},
+		},
 		{
 			func() interface{} {
 				return query.Join(
@@ -1174,35 +1174,35 @@ func GetQueryJoinTestCase() []TestCase {
 				UserType{"", 0, false, 0, 1.1, zeroTime},
 			},
 		},
-		// {
-		// 	func() interface{} {
-		// 		return query.Join(
-		// 			[]QueryInnerStruct2{
-		// 				QueryInnerStruct2{QueryInnerStruct{3}, 1, 1.1},
-		// 				QueryInnerStruct2{QueryInnerStruct{2}, 2, 2.1},
-		// 				QueryInnerStruct2{QueryInnerStruct{1}, 3, 3.1},
-		// 			},
-		// 			[]QueryInnerStruct2{
-		// 				QueryInnerStruct2{QueryInnerStruct{3}, 4, 4.1},
-		// 				QueryInnerStruct2{QueryInnerStruct{2}, 5, 5.1},
-		// 				QueryInnerStruct2{QueryInnerStruct{1}, 6, 6.1},
-		// 			},
-		// 			"left",
-		// 			"QueryInnerStruct.MM = QueryInnerStruct.MM",
-		// 			func(left QueryInnerStruct2, right QueryInnerStruct2) QueryInnerStruct2 {
-		// 				return QueryInnerStruct2{
-		// 					left.QueryInnerStruct,
-		// 					right.MM,
-		// 					left.DD,
-		// 				}
-		// 			})
-		// 	},
-		// 	[]QueryInnerStruct2{
-		// 		QueryInnerStruct2{QueryInnerStruct{3}, 4, 1.1},
-		// 		QueryInnerStruct2{QueryInnerStruct{2}, 5, 2.1},
-		// 		QueryInnerStruct2{QueryInnerStruct{1}, 6, 3.1},
-		// 	},
-		// },
+		{
+			func() interface{} {
+				return query.Join(
+					[]QueryInnerStruct2{
+						QueryInnerStruct2{QueryInnerStruct{3}, 1, 1.1},
+						QueryInnerStruct2{QueryInnerStruct{2}, 2, 2.1},
+						QueryInnerStruct2{QueryInnerStruct{1}, 3, 3.1},
+					},
+					[]QueryInnerStruct2{
+						QueryInnerStruct2{QueryInnerStruct{3}, 4, 4.1},
+						QueryInnerStruct2{QueryInnerStruct{2}, 5, 5.1},
+						QueryInnerStruct2{QueryInnerStruct{1}, 6, 6.1},
+					},
+					"left",
+					"QueryInnerStruct.MM = QueryInnerStruct.MM",
+					func(left QueryInnerStruct2, right QueryInnerStruct2) QueryInnerStruct2 {
+						return QueryInnerStruct2{
+							left.QueryInnerStruct,
+							right.MM,
+							left.DD,
+						}
+					})
+			},
+			[]QueryInnerStruct2{
+				QueryInnerStruct2{QueryInnerStruct{3}, 4, 1.1},
+				QueryInnerStruct2{QueryInnerStruct{2}, 5, 2.1},
+				QueryInnerStruct2{QueryInnerStruct{1}, 6, 3.1},
+			},
+		},
 	}
 
 	return testCase
@@ -1421,52 +1421,54 @@ func GetQueryGroupTestCase() []TestCase {
 				ContentType{"", 0, true, -1.1, -1.1, oldTime},
 			},
 		},
-		// {
-		// 	func() interface{} {
-		// 		return query.Group(
-		// 			[]ContentType{
-		// 				ContentType{"s", 1, true, 0, 0, nowTime},
-		// 				ContentType{"s", 1, true, 6.6, 6.6, nowTime},
-		// 				ContentType{"", 0, true, -5.1, -5.1, oldTime},
-		// 				ContentType{"", 0, true, 2.1, 2.1, oldTime},
-		// 				ContentType{"", -1, false, -3.3, -3.3, zeroTime},
-		// 				ContentType{"", -1, false, 4.3, 4.3, zeroTime},
-		// 			},
-		// 			" Name , Ok ",
-		// 			func(list []ContentType) []ContentType {
-		// 				sum := query.Sum(query.Column(list, "  Age  "))
-		// 				list[0].Age = sum.(int)
-		// 				return []ContentType{list[0]}
-		// 			})
-		// 	},
-		// 	[]ContentType{
-		// 		ContentType{"", -2, false, -3.3, -3.3, zeroTime},
-		// 		ContentType{"", 0, true, -5.1, -5.1, oldTime},
-		// 		ContentType{"s", 2, true, 0, 0, nowTime},
-		// 	},
-		// },
-		// {
-		// 	func() interface{} {
-		// 		return query.Group(
-		// 			[]QueryInnerStruct2{
-		// 				QueryInnerStruct2{QueryInnerStruct{3}, 4, 4.1},
-		// 				QueryInnerStruct2{QueryInnerStruct{2}, 5, 5.1},
-		// 				QueryInnerStruct2{QueryInnerStruct{1}, 6, 6.1},
-		// 				QueryInnerStruct2{QueryInnerStruct{2}, 6, 6.1},
-		// 			},
-		// 			"QueryInnerStruct.MM",
-		// 			func(list []QueryInnerStruct2) []QueryInnerStruct2 {
-		// 				sum := query.Sum(query.Column(list, "  MM  "))
-		// 				list[0].MM = sum.(int)
-		// 				return []QueryInnerStruct2{list[0]}
-		// 			})
-		// 	},
-		// 	[]QueryInnerStruct2{
-		// 		QueryInnerStruct2{QueryInnerStruct{3}, 4, 4.1},
-		// 		QueryInnerStruct2{QueryInnerStruct{2}, 11, 5.1},
-		// 		QueryInnerStruct2{QueryInnerStruct{1}, 6, 6.1},
-		// 	},
-		// },
+		/*DO NOT SUPPORT MULTIPLE COLUMN GROUP
+		{
+			func() interface{} {
+				return query.Group(
+					[]ContentType{
+						ContentType{"s", 1, true, 0, 0, nowTime},
+						ContentType{"s", 1, true, 6.6, 6.6, nowTime},
+						ContentType{"", 0, true, -5.1, -5.1, oldTime},
+						ContentType{"", 0, true, 2.1, 2.1, oldTime},
+						ContentType{"", -1, false, -3.3, -3.3, zeroTime},
+						ContentType{"", -1, false, 4.3, 4.3, zeroTime},
+					},
+					" Name , Ok ",
+					func(list []ContentType) []ContentType {
+						sum := query.Sum(query.Column(list, "  Age  "))
+						list[0].Age = sum.(int)
+						return []ContentType{list[0]}
+					})
+			},
+			[]ContentType{
+				ContentType{"", -2, false, -3.3, -3.3, zeroTime},
+				ContentType{"", 0, true, -5.1, -5.1, oldTime},
+				ContentType{"s", 2, true, 0, 0, nowTime},
+			},
+		},
+		*/
+		{
+			func() interface{} {
+				return query.Group(
+					[]QueryInnerStruct2{
+						QueryInnerStruct2{QueryInnerStruct{3}, 4, 4.1},
+						QueryInnerStruct2{QueryInnerStruct{2}, 5, 5.1},
+						QueryInnerStruct2{QueryInnerStruct{1}, 6, 6.1},
+						QueryInnerStruct2{QueryInnerStruct{2}, 6, 6.1},
+					},
+					"QueryInnerStruct.MM",
+					func(list []QueryInnerStruct2) []QueryInnerStruct2 {
+						sum := query.Sum(query.Column(list, "  MM  "))
+						list[0].MM = sum.(int)
+						return []QueryInnerStruct2{list[0]}
+					})
+			},
+			[]QueryInnerStruct2{
+				QueryInnerStruct2{QueryInnerStruct{3}, 4, 4.1},
+				QueryInnerStruct2{QueryInnerStruct{2}, 11, 5.1},
+				QueryInnerStruct2{QueryInnerStruct{1}, 6, 6.1},
+			},
+		},
 	}
 
 	return testCase
@@ -1595,22 +1597,22 @@ func GetQueryColumnMapTestCase() []TestCase {
 				-1.2: ContentType{"1", 10, true, -2.2, -1.2, oldTime},
 			},
 		},
-		// {
-		// 	func() interface{} {
-		// 		return query.ColumnMap(
-		// 			[]QueryInnerStruct2{
-		// 				QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
-		// 				QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
-		// 				QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
-		// 			},
-		// 			"QueryInnerStruct.MM")
-		// 	},
-		// 	map[int]QueryInnerStruct2{
-		// 		1: QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
-		// 		2: QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
-		// 		3: QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
-		// 	},
-		// },
+		{
+			func() interface{} {
+				return query.ColumnMap(
+					[]QueryInnerStruct2{
+						QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
+						QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
+						QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
+					},
+					"QueryInnerStruct.MM")
+			},
+			map[int]QueryInnerStruct2{
+				1: QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
+				2: QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
+				3: QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
+			},
+		},
 	}
 
 	return testCase
@@ -1914,24 +1916,24 @@ func GetQueryDistinctTestCase() []TestCase {
 				ContentType{"a", 15, true, 1.1, 1.1, zeroTime},
 			},
 		},
-		// {
-		// 	func() interface{} {
-		// 		return query.Distinct(
-		// 			[]QueryInnerStruct2{
-		// 				QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
-		// 				QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
-		// 				QueryInnerStruct2{QueryInnerStruct{2}, 5, 4.1},
-		// 				QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
-		// 			},
-		// 			"QueryInnerStruct.MM",
-		// 		)
-		// 	},
-		// 	[]QueryInnerStruct2{
-		// 		QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
-		// 		QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
-		// 		QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
-		// 	},
-		// },
+		{
+			func() interface{} {
+				return query.Distinct(
+					[]QueryInnerStruct2{
+						QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
+						QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
+						QueryInnerStruct2{QueryInnerStruct{2}, 5, 4.1},
+						QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
+					},
+					"QueryInnerStruct.MM",
+				)
+			},
+			[]QueryInnerStruct2{
+				QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
+				QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
+				QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
+			},
+		},
 	}
 
 	return testCase

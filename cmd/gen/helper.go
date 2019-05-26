@@ -118,23 +118,34 @@ func getExtendFieldType(line string, t types.Type, column string) (string, types
 	if column == "." {
 		return "", t
 	}
+	columnList := plode.Explode(column, ".")
 
-	tNamed, isNamed := t.(*types.Named)
-	if isNamed == false {
-		Throw(1, "%v:should be named type!because column is not comma :%v,%v", line, t, column)
-	}
-	tStruct, isStruct := tNamed.Underlying().(*types.Struct)
-	if isStruct == false {
-		Throw(1, "%v:should be struct type!because column is not comma :%v,%v", line, t, column)
-	}
-	for i := 0; i != tStruct.NumFields(); i++ {
-		field := tStruct.Field(i)
-		if field.Name() == column {
-			return "." + column, field.Type()
+	columnExact := ""
+	columnType := t
+	for _, singleColumn := range columnList {
+		tNamed, isNamed := columnType.(*types.Named)
+		if isNamed == false {
+			Throw(1, "%v:should be named type!because column is not comma :%v,%v", line, t, singleColumn)
+		}
+		tStruct, isStruct := tNamed.Underlying().(*types.Struct)
+		if isStruct == false {
+			Throw(1, "%v:should be struct type!because column is not comma :%v,%v", line, t, singleColumn)
+		}
+		i := 0
+		for ; i != tStruct.NumFields(); i++ {
+			field := tStruct.Field(i)
+			if field.Name() == singleColumn {
+				columnExact = columnExact + "." + singleColumn
+				columnType = field.Type()
+				break
+			}
+		}
+		if i == tStruct.NumFields() {
+			Throw(1, "%v:%v has not found column %v", line, tStruct, singleColumn)
 		}
 	}
-	Throw(1, "%v:%v has not found column %v", line, tStruct, column)
-	return "", nil
+
+	return columnExact, columnType
 }
 
 func getTypeDeclareCode(line string, t types.Type) string {
