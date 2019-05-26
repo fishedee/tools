@@ -2,6 +2,8 @@ package main
 
 import (
 	"html/template"
+
+	"github.com/fishedee/tools/exception"
 )
 
 // QueryWhereGen QueryWhereGen
@@ -18,18 +20,18 @@ func QueryWhereGen(request QueryGenRequest) *QueryGenResponse {
 	secondArgFuncArguments := getArgumentType(line, secondArgFunc)
 	secondArgFuncResults := getReturnType(line, secondArgFunc)
 	if len(secondArgFuncArguments) != 1 {
-		Throw(1, "%v:selector should be single argument")
+		exception.Throw(1, "%v:selector should be single argument")
 	}
 	if len(secondArgFuncResults) != 1 {
-		Throw(1, "%v:selector should be single return")
+		exception.Throw(1, "%v:selector should be single return")
 	}
 	secondArgFuncArgument := secondArgFuncArguments[0]
 	secondArgFuncResult := secondArgFuncResults[0]
 	if firstArgElem.String() != secondArgFuncArgument.String() {
-		Throw(1, "%v:second selector argument should be equal with first argument")
+		exception.Throw(1, "%v:second selector argument should be equal with first argument")
 	}
 	if secondArgFuncResult.String() != "bool" {
-		Throw(1, "%v:second selector return should be bool type")
+		exception.Throw(1, "%v:second selector return should be bool type")
 	}
 
 	//生成函数

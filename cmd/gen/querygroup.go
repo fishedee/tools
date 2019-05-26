@@ -4,6 +4,8 @@ import (
 	"go/types"
 	"html/template"
 	"strings"
+
+	"github.com/fishedee/tools/exception"
 )
 
 // QueryGroupGen QueryGroupGen
@@ -25,13 +27,13 @@ func QueryGroupGen(request QueryGenRequest) *QueryGenResponse {
 	thirdArgFuncArgument := getArgumentType(line, thirdArgFunc)
 	thirdArgFuncReturn := getReturnType(line, thirdArgFunc)
 	if len(thirdArgFuncArgument) != 1 {
-		Throw(1, "%v:should be one argument", line)
+		exception.Throw(1, "%v:should be one argument", line)
 	}
 	if len(thirdArgFuncReturn) != 1 {
-		Throw(1, "%v:should be one return", line)
+		exception.Throw(1, "%v:should be one return", line)
 	}
 	if thirdArgFuncArgument[0].String() != firstArgSlice.String() {
-		Throw(1, "%v:groupFunctor argument should be equal with first argument %v!=%v", line, thirdArgFuncArgument[0], firstArgSliceElem)
+		exception.Throw(1, "%v:groupFunctor argument should be equal with first argument %v!=%v", line, thirdArgFuncArgument[0], firstArgSliceElem)
 	}
 
 	//生成函数

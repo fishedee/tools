@@ -5,12 +5,14 @@ import (
 	"go/types"
 	"html/template"
 	"strings"
+
+	"github.com/fishedee/tools/exception"
 )
 
 func analyseJoin(line string, joinType string) (string, string) {
 	joinTypeArray := strings.Split(joinType, "=")
 	if len(joinTypeArray) != 2 {
-		Throw(1, "%v:join type should be two argument with equal operator", line)
+		exception.Throw(1, "%v:join type should be two argument with equal operator", line)
 	}
 	leftJoinType := strings.Trim(joinTypeArray[0], " ")
 	rightJoinType := strings.Trim(joinTypeArray[1], " ")
@@ -35,7 +37,7 @@ func QueryJoinGen(request QueryGenRequest) *QueryGenResponse {
 	joinPlace := strings.Trim(strings.ToLower(thirdArgJoinPlace), " ")
 	if joinPlace != "left" && joinPlace != "right" &&
 		joinPlace != "inner" && joinPlace != "outer" {
-		Throw(1, "%v:invalid join place %v", line, joinPlace)
+		exception.Throw(1, "%v:invalid join place %v", line, joinPlace)
 	}
 
 	//解析第四个参数
@@ -44,7 +46,7 @@ func QueryJoinGen(request QueryGenRequest) *QueryGenResponse {
 	leftFieldExtract, leftFieldType := getExtendFieldType(line, firstArgElem, leftJoinColumn)
 	rightFieldExtract, rightFieldType := getExtendFieldType(line, secondArgElem, rightJoinColumn)
 	if leftFieldType.String() != rightFieldType.String() {
-		Throw(1, "%v:left join type should be equal to right join type %v!=%v", line, leftFieldType.String(), rightFieldType.String())
+		exception.Throw(1, "%v:left join type should be equal to right join type %v!=%v", line, leftFieldType.String(), rightFieldType.String())
 	}
 
 	//解析第五个参数
@@ -52,16 +54,16 @@ func QueryJoinGen(request QueryGenRequest) *QueryGenResponse {
 	fifthArgFuncArgument := getArgumentType(line, fifthArgFunc)
 	fifthArgFuncReturn := getReturnType(line, fifthArgFunc)
 	if len(fifthArgFuncArgument) != 2 {
-		Throw(1, "%v:should be two argument", line)
+		exception.Throw(1, "%v:should be two argument", line)
 	}
 	if len(fifthArgFuncReturn) != 1 {
-		Throw(1, "%v:should be one return", line)
+		exception.Throw(1, "%v:should be one return", line)
 	}
 	if fifthArgFuncArgument[0].String() != firstArgElem.String() {
-		Throw(1, "%v:joinFuctor first argument should be equal with first argument %v!=%v", line, fifthArgFuncArgument[0], firstArgElem)
+		exception.Throw(1, "%v:joinFuctor first argument should be equal with first argument %v!=%v", line, fifthArgFuncArgument[0], firstArgElem)
 	}
 	if fifthArgFuncArgument[1].String() != secondArgElem.String() {
-		Throw(1, "%v:joinFuctor second argument should be equal with second argument %v!=%v", line, fifthArgFuncArgument[1], secondArgElem)
+		exception.Throw(1, "%v:joinFuctor second argument should be equal with second argument %v!=%v", line, fifthArgFuncArgument[1], secondArgElem)
 	}
 
 	//生成函数

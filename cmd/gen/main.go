@@ -13,6 +13,7 @@ import (
 	"os"
 	"sort"
 
+	"github.com/fishedee/tools/exception"
 	"github.com/fishedee/tools/macro"
 	"github.com/fishedee/tools/plode"
 )
@@ -71,7 +72,7 @@ func registerQueryGen(name string, handler queryGenHandler) {
 func formatSource(data string) []byte {
 	result, err := format.Source([]byte(data))
 	if err != nil {
-		Throw(1, "format source fail!%v,%v", err, data)
+		exception.Throw(1, "format source fail!%v,%v", err, data)
 	}
 	return result
 }

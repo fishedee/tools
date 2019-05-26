@@ -2,6 +2,8 @@ package main
 
 import (
 	"html/template"
+
+	"github.com/fishedee/tools/exception"
 )
 
 // QueryCombineGen QueryCombineGen
@@ -22,16 +24,16 @@ func QueryCombineGen(request QueryGenRequest) *QueryGenResponse {
 	thirdArgFuncArgument := getArgumentType(line, thirdArgFunc)
 	thirdArgFuncReturn := getReturnType(line, thirdArgFunc)
 	if len(thirdArgFuncArgument) != 2 {
-		Throw(1, "%v:should be two argument", line)
+		exception.Throw(1, "%v:should be two argument", line)
 	}
 	if len(thirdArgFuncReturn) != 1 {
-		Throw(1, "%v:should be one return", line)
+		exception.Throw(1, "%v:should be one return", line)
 	}
 	if thirdArgFuncArgument[0].String() != firstArgElem.String() {
-		Throw(1, "%v:groupFunctor first argument should be equal with first argument %v!=%v", line, thirdArgFuncArgument[0], firstArgElem)
+		exception.Throw(1, "%v:groupFunctor first argument should be equal with first argument %v!=%v", line, thirdArgFuncArgument[0], firstArgElem)
 	}
 	if thirdArgFuncArgument[1].String() != secondArgElem.String() {
-		Throw(1, "%v:groupFunctor second argument should be equal with second argument %v!=%v", line, thirdArgFuncArgument[1], secondArgElem)
+		exception.Throw(1, "%v:groupFunctor second argument should be equal with second argument %v!=%v", line, thirdArgFuncArgument[1], secondArgElem)
 	}
 
 	//生成函数

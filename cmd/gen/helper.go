@@ -7,17 +7,11 @@ import (
 	"go/constant"
 	"go/types"
 	"html/template"
-	"log"
-	"strconv"
 	"strings"
 
+	"github.com/fishedee/tools/exception"
 	"github.com/fishedee/tools/plode"
 )
-
-// Throw 临时使用
-func Throw(code int, format string, args ...interface{}) {
-	log.Printf("code: "+strconv.Itoa(code)+", "+format, args...)
-}
 
 func getFunctionSignature(line string, arguments []types.TypeAndValue, isConstant []bool) string {
 	var buffer bytes.Buffer
@@ -39,7 +33,7 @@ func getFunctionSignature(line string, arguments []types.TypeAndValue, isConstan
 
 func getContantStringValue(line string, value constant.Value) string {
 	if value == nil {
-		Throw(1, "%v:should be constant!%v", line, value)
+		exception.Throw(1, "%v:should be constant!%v", line, value)
 	}
 	return constant.StringVal(value)
 }
@@ -47,7 +41,7 @@ func getContantStringValue(line string, value constant.Value) string {
 func getNamedType(line string, t types.Type) *types.Named {
 	t1, isNamed := t.(*types.Named)
 	if isNamed == false {
-		Throw(1, "%v:should be named type!%v", line, t)
+		exception.Throw(1, "%v:should be named type!%v", line, t)
 	}
 	return t1
 }
@@ -55,13 +49,13 @@ func getNamedType(line string, t types.Type) *types.Named {
 func getFunctionType(line string, t types.Type) *types.Signature {
 	t1, isFunc := t.(*types.Signature)
 	if isFunc == false {
-		Throw(1, "%v:should be function type!%v", line, t)
+		exception.Throw(1, "%v:should be function type!%v", line, t)
 	}
 	if t1.Recv() != nil {
-		Throw(1, "%v:should be pure function", line)
+		exception.Throw(1, "%v:should be pure function", line)
 	}
 	if t1.Variadic() == true {
-		Throw(1, "%v:should not variadic function")
+		exception.Throw(1, "%v:should not variadic function")
 	}
 	return t1
 }
@@ -89,7 +83,7 @@ func getReturnType(line string, t *types.Signature) []types.Type {
 func getSliceType(line string, t types.Type) *types.Slice {
 	t1, isSlice := t.(*types.Slice)
 	if isSlice == false {
-		Throw(1, "%v:should be slice type!%v", line, t)
+		exception.Throw(1, "%v:should be slice type!%v", line, t)
 	}
 	return t1
 }
@@ -97,7 +91,7 @@ func getSliceType(line string, t types.Type) *types.Slice {
 func getStructType(line string, t types.Type) *types.Struct {
 	t1, isStruct := t.(*types.Struct)
 	if isStruct == false {
-		Throw(1, "%v:should be struct type!%v", line, t)
+		exception.Throw(1, "%v:should be struct type!%v", line, t)
 	}
 	return t1
 }
@@ -109,7 +103,7 @@ func getFieldType(line string, tStruct *types.Struct, column string) types.Type 
 			return field.Type()
 		}
 	}
-	Throw(1, "%v:%v has not found column %v", line, tStruct, column)
+	exception.Throw(1, "%v:%v has not found column %v", line, tStruct, column)
 	return nil
 }
 
@@ -125,11 +119,11 @@ func getExtendFieldType(line string, t types.Type, column string) (string, types
 	for _, singleColumn := range columnList {
 		tNamed, isNamed := columnType.(*types.Named)
 		if isNamed == false {
-			Throw(1, "%v:should be named type!because column is not comma :%v,%v", line, t, singleColumn)
+			exception.Throw(1, "%v:should be named type!because column is not comma :%v,%v", line, t, singleColumn)
 		}
 		tStruct, isStruct := tNamed.Underlying().(*types.Struct)
 		if isStruct == false {
-			Throw(1, "%v:should be struct type!because column is not comma :%v,%v", line, t, singleColumn)
+			exception.Throw(1, "%v:should be struct type!because column is not comma :%v,%v", line, t, singleColumn)
 		}
 		i := 0
 		for ; i != tStruct.NumFields(); i++ {
@@ -141,7 +135,7 @@ func getExtendFieldType(line string, t types.Type, column string) (string, types
 			}
 		}
 		if i == tStruct.NumFields() {
-			Throw(1, "%v:%v has not found column %v", line, tStruct, singleColumn)
+			exception.Throw(1, "%v:%v has not found column %v", line, tStruct, singleColumn)
 		}
 	}
 
@@ -162,7 +156,7 @@ func getTypeDeclareCode(line string, t types.Type) string {
 		case types.Float64:
 			return "float64"
 		default:
-			Throw(1, "%v:unknown basic type %v", line, t.String())
+			exception.Throw(1, "%v:unknown basic type %v", line, t.String())
 			return ""
 		}
 	} else if tSlice, ok := t.(*types.Slice); ok {
@@ -200,7 +194,7 @@ func getTypeDeclareCode(line string, t types.Type) string {
 		}
 		return obj.Pkg().Name() + "." + obj.Name()
 	} else {
-		Throw(1, "%v:unknown type to declare: %v", line, t.String())
+		exception.Throw(1, "%v:unknown type to declare: %v", line, t.String())
 		return ""
 	}
 
@@ -216,7 +210,7 @@ func getTypeDefineCode(line string, t types.Type) string {
 		case types.String:
 			return "\"\""
 		default:
-			Throw(1, "%v:unknown basic type %v", line, t.String())
+			exception.Throw(1, "%v:unknown basic type %v", line, t.String())
 			return ""
 		}
 	} else if tSlice, ok := t.(*types.Slice); ok {
@@ -245,7 +239,7 @@ func getTypeDefineCode(line string, t types.Type) string {
 
 		return obj.Pkg().Name() + "." + obj.Name() + "(" + underTypeDefine + ")"
 	} else {
-		Throw(1, "%v:unknown type to define %v", line, t.String())
+		exception.Throw(1, "%v:unknown type to define %v", line, t.String())
 		return ""
 	}
 }
@@ -266,7 +260,7 @@ func setImportPackage(line string, t types.Type, importPkg map[string]bool) {
 		pkg := obj.Pkg()
 		importPkg[pkg.Path()] = true
 	} else {
-		Throw(1, "%v:unknown type to define %v", line, t.String())
+		exception.Throw(1, "%v:unknown type to define %v", line, t.String())
 	}
 }
 
@@ -290,7 +284,7 @@ func excuteTemplate(tmpl *template.Template, data map[string]string) string {
 	var buffer bytes.Buffer
 	err := tmpl.Execute(&buffer, newData)
 	if err != nil {
-		Throw(1, "execute fail %v", err)
+		exception.Throw(1, "execute fail %v", err)
 	}
 	return buffer.String()
 }
@@ -358,7 +352,7 @@ func getLessCompareCode(line string, name1 string, extractFieldName1 string, nam
 			"}\n"
 	}
 
-	Throw(1, "line:unknown how to sort type : %v", line, sortFieldType.String)
+	exception.Throw(1, "line:unknown how to sort type : %v", line, sortFieldType.String)
 	return ""
 }
 
