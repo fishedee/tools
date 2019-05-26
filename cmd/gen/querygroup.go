@@ -1,6 +1,7 @@
 package main
 
 import (
+	"go/types"
 	"html/template"
 	"strings"
 )
@@ -38,19 +39,30 @@ func QueryGroupGen(request QueryGenRequest) *QueryGenResponse {
 	if hasQueryGroupGenerate[signature] == true {
 		return nil
 	}
+	isSliceReturn := ""
+	var returnElemType types.Type
+	returnSliceType, isSlice := thirdArgFuncReturn[0].(*types.Slice)
+	if isSlice {
+		isSliceReturn = "..."
+		returnElemType = returnSliceType.Elem()
+	} else {
+		isSliceReturn = ""
+		returnElemType = thirdArgFuncReturn[0]
+	}
 	hasQueryGroupGenerate[signature] = true
 	importPackage := map[string]bool{}
 	setImportPackage(line, firstArgSliceElem, importPackage)
-	setImportPackage(line, thirdArgFuncReturn[0], importPackage)
+	setImportPackage(line, returnElemType, importPackage)
 	setImportPackage(line, groupFieldType, importPackage)
 	argumentDefine := getFunctionArgumentCode(line, args, []bool{false, true, false})
 	funcBody := excuteTemplate(queryGroupFuncTmpl, map[string]string{
 		"signature":          signature,
 		"firstArgElemType":   getTypeDeclareCode(line, firstArgSliceElem),
 		"thirdArgType":       getTypeDeclareCode(line, thirdArgFunc),
-		"thirdArgReturnType": getTypeDeclareCode(line, thirdArgFuncReturn[0]),
+		"thirdArgReturnType": getTypeDeclareCode(line, returnElemType),
 		"columnType":         getTypeDeclareCode(line, groupFieldType),
 		"columnExtract":      groupFieldExtract,
+		"isSliceReturn":      isSliceReturn,
 	})
 	initBody := excuteTemplate(queryGroupInitTmpl, map[string]string{
 		"signature":      signature,
@@ -113,7 +125,7 @@ func init() {
 			k++
 			nextData[j] = 0
 			single := groupFunctorIn(bufferData[kbegin:k])
-			result = append(result,single)
+			result = append(result,single{{ .isSliceReturn }})
 		}
 
 		return result

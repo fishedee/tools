@@ -97,6 +97,9 @@ func logic() {
 	query.Group([]User{}, "CreateTime", func(user []User) Department {
 		return Department{}
 	})
+	query.Group([]User{}, "CreateTime", func(user []User) []Department {
+		return []Department{}
+	})
 	query.Group([]int{}, ".", func(ids []int) Department {
 		users := query.Select(ids, func(id int) User {
 			return User{UserID: id}

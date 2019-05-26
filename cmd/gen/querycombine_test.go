@@ -57,7 +57,7 @@ func TestQueryCombine(t *testing.T) {
 	// 测试
 	testCase := testdata.GetQueryCombineTestCase()
 
-	for _, singleTestCase := range testCase {
+	for singleTestCaseIndex, singleTestCase := range testCase {
 		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
 	}
 }

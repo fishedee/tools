@@ -466,7 +466,7 @@ func queryGroupV7c2562e83d5d0523f97388581656549f827c5363(data interface{}, group
 	groupFunctorIn := groupFunctor.(func([]testdata.ContentType) []testdata.ContentType)
 	bufferData := make([]testdata.ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[string]int, len(dataIn))
-	result := make([][]testdata.ContentType, 0, len(dataIn))
+	result := make([]testdata.ContentType, 0, len(dataIn))
 
 	length := len(dataIn)
 	nextData := make([]int, length, length)
@@ -497,7 +497,7 @@ func queryGroupV7c2562e83d5d0523f97388581656549f827c5363(data interface{}, group
 		k++
 		nextData[j] = 0
 		single := groupFunctorIn(bufferData[kbegin:k])
-		result = append(result, single)
+		result = append(result, single...)
 	}
 
 	return result
@@ -508,7 +508,7 @@ func queryGroupV7e426b5791161f51e11d28bc0feb633b08a92842(data interface{}, group
 	groupFunctorIn := groupFunctor.(func([]testdata.ContentType) []float64)
 	bufferData := make([]testdata.ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[int]int, len(dataIn))
-	result := make([][]float64, 0, len(dataIn))
+	result := make([]float64, 0, len(dataIn))
 
 	length := len(dataIn)
 	nextData := make([]int, length, length)
@@ -539,7 +539,7 @@ func queryGroupV7e426b5791161f51e11d28bc0feb633b08a92842(data interface{}, group
 		k++
 		nextData[j] = 0
 		single := groupFunctorIn(bufferData[kbegin:k])
-		result = append(result, single)
+		result = append(result, single...)
 	}
 
 	return result
@@ -550,7 +550,7 @@ func queryGroupV8192c48029957133c04b253ae1641389b396caf8(data interface{}, group
 	groupFunctorIn := groupFunctor.(func([]testdata.ContentType) []testdata.ContentType)
 	bufferData := make([]testdata.ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[bool]int, len(dataIn))
-	result := make([][]testdata.ContentType, 0, len(dataIn))
+	result := make([]testdata.ContentType, 0, len(dataIn))
 
 	length := len(dataIn)
 	nextData := make([]int, length, length)
@@ -581,7 +581,7 @@ func queryGroupV8192c48029957133c04b253ae1641389b396caf8(data interface{}, group
 		k++
 		nextData[j] = 0
 		single := groupFunctorIn(bufferData[kbegin:k])
-		result = append(result, single)
+		result = append(result, single...)
 	}
 
 	return result
@@ -634,7 +634,7 @@ func queryGroupV9f6a97dc8909e876536f87142b5f351e7c589297(data interface{}, group
 	groupFunctorIn := groupFunctor.(func([]testdata.ContentType) []testdata.ContentType)
 	bufferData := make([]testdata.ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[time.Time]int, len(dataIn))
-	result := make([][]testdata.ContentType, 0, len(dataIn))
+	result := make([]testdata.ContentType, 0, len(dataIn))
 
 	length := len(dataIn)
 	nextData := make([]int, length, length)
@@ -665,7 +665,7 @@ func queryGroupV9f6a97dc8909e876536f87142b5f351e7c589297(data interface{}, group
 		k++
 		nextData[j] = 0
 		single := groupFunctorIn(bufferData[kbegin:k])
-		result = append(result, single)
+		result = append(result, single...)
 	}
 
 	return result
@@ -718,7 +718,7 @@ func queryGroupVc6ec01b1a8f68f11281a5667b88c5e1967c42c86(data interface{}, group
 	groupFunctorIn := groupFunctor.(func([]testdata.ContentType) []testdata.ContentType)
 	bufferData := make([]testdata.ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[int]int, len(dataIn))
-	result := make([][]testdata.ContentType, 0, len(dataIn))
+	result := make([]testdata.ContentType, 0, len(dataIn))
 
 	length := len(dataIn)
 	nextData := make([]int, length, length)
@@ -749,7 +749,7 @@ func queryGroupVc6ec01b1a8f68f11281a5667b88c5e1967c42c86(data interface{}, group
 		k++
 		nextData[j] = 0
 		single := groupFunctorIn(bufferData[kbegin:k])
-		result = append(result, single)
+		result = append(result, single...)
 	}
 
 	return result
@@ -839,6 +839,48 @@ func queryGroupVe2f66d8f0c3b0f6a3ae63ae50e57ab532ca4d858(data interface{}, group
 	return result
 }
 
+func queryGroupVe7d5282fd7785eff7f4ab513493be85a01ef834b(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+	dataIn := data.([]User)
+	groupFunctorIn := groupFunctor.(func([]User) []Department)
+	bufferData := make([]User, len(dataIn), len(dataIn))
+	mapData := make(map[time.Time]int, len(dataIn))
+	result := make([]Department, 0, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].CreateTime
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+		single := groupFunctorIn(bufferData[kbegin:k])
+		result = append(result, single...)
+	}
+
+	return result
+}
+
 func queryGroupVec4d3b2c280c9fc398a0f8a554bc1c2ec7010257(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]int)
 	groupFunctorIn := groupFunctor.(func([]int) Department)
@@ -886,7 +928,7 @@ func queryGroupVff06256d82e26530e6c726fa09cb485f82fa3a55(data interface{}, group
 	groupFunctorIn := groupFunctor.(func([]testdata.ContentType) []testdata.ContentType)
 	bufferData := make([]testdata.ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[bool]int, len(dataIn))
-	result := make([][]testdata.ContentType, 0, len(dataIn))
+	result := make([]testdata.ContentType, 0, len(dataIn))
 
 	length := len(dataIn)
 	nextData := make([]int, length, length)
@@ -917,7 +959,7 @@ func queryGroupVff06256d82e26530e6c726fa09cb485f82fa3a55(data interface{}, group
 		k++
 		nextData[j] = 0
 		single := groupFunctorIn(bufferData[kbegin:k])
-		result = append(result, single)
+		result = append(result, single...)
 	}
 
 	return result
@@ -1339,6 +1381,8 @@ func init() {
 	query.GroupMacroRegister([]testdata.ContentType{}, "Name", (func([]testdata.ContentType) float32)(nil), queryGroupVca76f6ce6b260c880f4be68c0c6f72186fa635b5)
 
 	query.GroupMacroRegister([]testdata.ContentType{}, " Age ", (func([]testdata.ContentType) float64)(nil), queryGroupVe2f66d8f0c3b0f6a3ae63ae50e57ab532ca4d858)
+
+	query.GroupMacroRegister([]User{}, "CreateTime", (func([]User) []Department)(nil), queryGroupVe7d5282fd7785eff7f4ab513493be85a01ef834b)
 
 	query.GroupMacroRegister([]int{}, ".", (func([]int) Department)(nil), queryGroupVec4d3b2c280c9fc398a0f8a554bc1c2ec7010257)
 
