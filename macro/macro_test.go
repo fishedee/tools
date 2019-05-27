@@ -2,7 +2,6 @@ package macro
 
 import (
 	"bytes"
-	"fmt"
 	"go/ast"
 	"go/format"
 	"go/token"
@@ -20,7 +19,7 @@ func nodeString(fset *token.FileSet, n ast.Node) string {
 
 func TestFuncCallInspect(t *testing.T) {
 	macro := NewMacro()
-	err := macro.ImportRecursive("github.com/fishedee/tools/query")
+	err := macro.ImportRecursive("github.com/fishedee/tools/macro")
 	assert.Equal(t, err, nil)
 
 	err = macro.Walk(func(pkg Package) {
@@ -29,10 +28,9 @@ func TestFuncCallInspect(t *testing.T) {
 			if packag == nil {
 				return
 			}
-			if packag.Path() != "github.com/fishedee/tools/query" {
+			if packag.Path() != "github.com/fishedee/tools/macro" {
 				return
 			}
-			fmt.Printf("%v:%v\n", pkg.FileSet().Position(expr.Pos()), nodeString(pkg.FileSet(), expr))
 		})
 		pkg.Inspect()
 	})
@@ -45,5 +43,16 @@ func TestFormatSource(t *testing.T) {
 	import ("fmt")
 	func main(){fmt.Println("123")}
 	`
-	fmt.Println(NewMacro().FormatSource(s))
+	src, err := NewMacro().FormatSource(s)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.Equal(t, src, `package main
+
+import (
+	"fmt"
+)
+
+func main() { fmt.Println("123") }
+`)
 }
