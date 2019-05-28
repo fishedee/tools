@@ -1,5 +1,6 @@
 # tools
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/fishedee/tools)](https://goreportcard.com/report/github.com/fishedee/tools)
 [![GoDoc](https://godoc.org/github.com/fishedee/tools?status.svg)](https://godoc.org/github.com/fishedee/tools)
 
 Efficient and convenient func for data processing.
