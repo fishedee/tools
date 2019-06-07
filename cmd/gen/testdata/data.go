@@ -81,6 +81,7 @@ func logic() {
 	query.Sort([]Admin{}, "IsMale asc")
 	query.ColumnMap([]User{}, "UserID")
 	query.ColumnMap([]User{}, "Name")
+	query.ColumnMap([]User{}, "[]UserID")
 	query.ColumnMap([]int{}, ".")
 	query.ColumnMap([]int{}, " . ")
 	query.ColumnMap([]string{}, " . ")

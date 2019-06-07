@@ -25,6 +25,48 @@ func queryColumnMapV0278bd21d25efe9d7f53cc03a127d039c73e98a2(data interface{}, c
 	return result
 }
 
+func queryColumnMapV04e41874d6143b9eadb627e2212c332ae9861667(data interface{}, column string) interface{} {
+	dataIn := data.([]QueryInnerStruct2)
+	bufferData := make([]QueryInnerStruct2, len(dataIn), len(dataIn))
+	mapData := make(map[int]int, len(dataIn))
+	result := make(map[int][]QueryInnerStruct2, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].QueryInnerStruct.MM
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+
+		result[bufferData[kbegin].QueryInnerStruct.MM] = bufferData[kbegin:k]
+
+	}
+
+	return result
+}
+
 func queryColumnMapV1a5b7250371597524e364f0c816390c77a8b3331(data interface{}, column string) interface{} {
 	dataIn := data.([]ContentType)
 	result := make(map[string]ContentType, len(dataIn))
@@ -65,6 +107,90 @@ func queryColumnMapV6b4a4fd9e192f5ca29db73c69b9472328b1d4cd7(data interface{}, c
 	return result
 }
 
+func queryColumnMapV6bc3b019234065876072b5c68e11d084d30424f0(data interface{}, column string) interface{} {
+	dataIn := data.([]ContentType)
+	bufferData := make([]ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[string]int, len(dataIn))
+	result := make(map[string][]ContentType, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Name
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+
+		result[bufferData[kbegin].Name] = bufferData[kbegin:k]
+
+	}
+
+	return result
+}
+
+func queryColumnMapV6dbac8216ccd107970f2866aef8448c6fba60ba8(data interface{}, column string) interface{} {
+	dataIn := data.([]ContentType)
+	bufferData := make([]ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[float64]int, len(dataIn))
+	result := make(map[float64][]ContentType, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].CardMoney
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+
+		result[bufferData[kbegin].CardMoney] = bufferData[kbegin:k]
+
+	}
+
+	return result
+}
+
 func queryColumnMapV904f7e5061ea0a11202b104fcb01960d528c1ccd(data interface{}, column string) interface{} {
 	dataIn := data.([]ContentType)
 	result := make(map[float64]ContentType, len(dataIn))
@@ -85,6 +211,90 @@ func queryColumnMapV91dacd60e87431951940b4b4c51428e7c1e5c1f2(data interface{}, c
 	return result
 }
 
+func queryColumnMapVc9eed46ff7935792c4adc9845876d35aad7935c6(data interface{}, column string) interface{} {
+	dataIn := data.([]ContentType)
+	bufferData := make([]ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[bool]int, len(dataIn))
+	result := make(map[bool][]ContentType, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Ok
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+
+		result[bufferData[kbegin].Ok] = bufferData[kbegin:k]
+
+	}
+
+	return result
+}
+
+func queryColumnMapVd97e430c3742cb4e374052968e6e74fab94f8a8e(data interface{}, column string) interface{} {
+	dataIn := data.([]ContentType)
+	bufferData := make([]ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[float32]int, len(dataIn))
+	result := make(map[float32][]ContentType, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Money
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+
+		result[bufferData[kbegin].Money] = bufferData[kbegin:k]
+
+	}
+
+	return result
+}
+
 func queryColumnMapVe56b49b3fa0f6bf953dd89ffa8677a9ed1f2dfe3(data interface{}, column string) interface{} {
 	dataIn := data.([]ContentType)
 	result := make(map[int]ContentType, len(dataIn))
@@ -92,6 +302,90 @@ func queryColumnMapVe56b49b3fa0f6bf953dd89ffa8677a9ed1f2dfe3(data interface{}, c
 	for i := len(dataIn) - 1; i >= 0; i-- {
 		result[dataIn[i].Age] = dataIn[i]
 	}
+	return result
+}
+
+func queryColumnMapVf2e4f415e750c8a0b5d1664ff8328b44ec10c372(data interface{}, column string) interface{} {
+	dataIn := data.([]ContentType)
+	bufferData := make([]ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[int]int, len(dataIn))
+	result := make(map[int][]ContentType, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Age
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+
+		result[bufferData[kbegin].Age] = bufferData[kbegin:k]
+
+	}
+
+	return result
+}
+
+func queryColumnMapVfec525f218873041e66fa0162e7b95abf7547a84(data interface{}, column string) interface{} {
+	dataIn := data.([]ContentType)
+	bufferData := make([]ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[string]int, len(dataIn))
+	result := make(map[string][]ContentType, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Name
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+
+		result[bufferData[kbegin].Name] = bufferData[kbegin:k]
+
+	}
+
 	return result
 }
 
@@ -261,9 +555,9 @@ func queryCombineV228612e67e8c710669fd5517896357f50582a609(leftData interface{},
 
 func queryGroupV09895bd703c01101d7fdf582f1cc06b6b3ac6c3f(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]QueryInnerStruct2)
-	groupFunctorIn := groupFunctor.(func([]QueryInnerStruct2) []QueryInnerStruct2)
 	bufferData := make([]QueryInnerStruct2, len(dataIn), len(dataIn))
 	mapData := make(map[int]int, len(dataIn))
+	groupFunctorIn := groupFunctor.(func([]QueryInnerStruct2) []QueryInnerStruct2)
 	result := make([]QueryInnerStruct2, 0, len(dataIn))
 
 	length := len(dataIn)
@@ -294,8 +588,10 @@ func queryGroupV09895bd703c01101d7fdf582f1cc06b6b3ac6c3f(data interface{}, group
 		bufferData[k] = dataIn[j]
 		k++
 		nextData[j] = 0
+
 		single := groupFunctorIn(bufferData[kbegin:k])
 		result = append(result, single...)
+
 	}
 
 	return result
@@ -303,9 +599,9 @@ func queryGroupV09895bd703c01101d7fdf582f1cc06b6b3ac6c3f(data interface{}, group
 
 func queryGroupV34b1efcd4a92cbf477c338aec5ef9e49e4e25774(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]string)
-	groupFunctorIn := groupFunctor.(func([]string) ContentType)
 	bufferData := make([]string, len(dataIn), len(dataIn))
 	mapData := make(map[string]int, len(dataIn))
+	groupFunctorIn := groupFunctor.(func([]string) ContentType)
 	result := make([]ContentType, 0, len(dataIn))
 
 	length := len(dataIn)
@@ -336,8 +632,10 @@ func queryGroupV34b1efcd4a92cbf477c338aec5ef9e49e4e25774(data interface{}, group
 		bufferData[k] = dataIn[j]
 		k++
 		nextData[j] = 0
+
 		single := groupFunctorIn(bufferData[kbegin:k])
 		result = append(result, single)
+
 	}
 
 	return result
@@ -345,9 +643,9 @@ func queryGroupV34b1efcd4a92cbf477c338aec5ef9e49e4e25774(data interface{}, group
 
 func queryGroupV7959aac2ba701c92b02938af82c21599cbf58c3d(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]int)
-	groupFunctorIn := groupFunctor.(func([]int) int)
 	bufferData := make([]int, len(dataIn), len(dataIn))
 	mapData := make(map[int]int, len(dataIn))
+	groupFunctorIn := groupFunctor.(func([]int) int)
 	result := make([]int, 0, len(dataIn))
 
 	length := len(dataIn)
@@ -378,8 +676,10 @@ func queryGroupV7959aac2ba701c92b02938af82c21599cbf58c3d(data interface{}, group
 		bufferData[k] = dataIn[j]
 		k++
 		nextData[j] = 0
+
 		single := groupFunctorIn(bufferData[kbegin:k])
 		result = append(result, single)
+
 	}
 
 	return result
@@ -387,9 +687,9 @@ func queryGroupV7959aac2ba701c92b02938af82c21599cbf58c3d(data interface{}, group
 
 func queryGroupV7c2562e83d5d0523f97388581656549f827c5363(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]ContentType)
-	groupFunctorIn := groupFunctor.(func([]ContentType) []ContentType)
 	bufferData := make([]ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[string]int, len(dataIn))
+	groupFunctorIn := groupFunctor.(func([]ContentType) []ContentType)
 	result := make([]ContentType, 0, len(dataIn))
 
 	length := len(dataIn)
@@ -420,8 +720,10 @@ func queryGroupV7c2562e83d5d0523f97388581656549f827c5363(data interface{}, group
 		bufferData[k] = dataIn[j]
 		k++
 		nextData[j] = 0
+
 		single := groupFunctorIn(bufferData[kbegin:k])
 		result = append(result, single...)
+
 	}
 
 	return result
@@ -429,9 +731,9 @@ func queryGroupV7c2562e83d5d0523f97388581656549f827c5363(data interface{}, group
 
 func queryGroupV7e426b5791161f51e11d28bc0feb633b08a92842(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]ContentType)
-	groupFunctorIn := groupFunctor.(func([]ContentType) []float64)
 	bufferData := make([]ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[int]int, len(dataIn))
+	groupFunctorIn := groupFunctor.(func([]ContentType) []float64)
 	result := make([]float64, 0, len(dataIn))
 
 	length := len(dataIn)
@@ -462,8 +764,10 @@ func queryGroupV7e426b5791161f51e11d28bc0feb633b08a92842(data interface{}, group
 		bufferData[k] = dataIn[j]
 		k++
 		nextData[j] = 0
+
 		single := groupFunctorIn(bufferData[kbegin:k])
 		result = append(result, single...)
+
 	}
 
 	return result
@@ -471,9 +775,9 @@ func queryGroupV7e426b5791161f51e11d28bc0feb633b08a92842(data interface{}, group
 
 func queryGroupV8192c48029957133c04b253ae1641389b396caf8(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]ContentType)
-	groupFunctorIn := groupFunctor.(func([]ContentType) []ContentType)
 	bufferData := make([]ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[bool]int, len(dataIn))
+	groupFunctorIn := groupFunctor.(func([]ContentType) []ContentType)
 	result := make([]ContentType, 0, len(dataIn))
 
 	length := len(dataIn)
@@ -504,8 +808,10 @@ func queryGroupV8192c48029957133c04b253ae1641389b396caf8(data interface{}, group
 		bufferData[k] = dataIn[j]
 		k++
 		nextData[j] = 0
+
 		single := groupFunctorIn(bufferData[kbegin:k])
 		result = append(result, single...)
+
 	}
 
 	return result
@@ -513,9 +819,9 @@ func queryGroupV8192c48029957133c04b253ae1641389b396caf8(data interface{}, group
 
 func queryGroupV8738994dbfe455405a3c9c07003ed95fec1dde39(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]ContentType)
-	groupFunctorIn := groupFunctor.(func([]ContentType) int)
 	bufferData := make([]ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[time.Time]int, len(dataIn))
+	groupFunctorIn := groupFunctor.(func([]ContentType) int)
 	result := make([]int, 0, len(dataIn))
 
 	length := len(dataIn)
@@ -546,8 +852,10 @@ func queryGroupV8738994dbfe455405a3c9c07003ed95fec1dde39(data interface{}, group
 		bufferData[k] = dataIn[j]
 		k++
 		nextData[j] = 0
+
 		single := groupFunctorIn(bufferData[kbegin:k])
 		result = append(result, single)
+
 	}
 
 	return result
@@ -555,9 +863,9 @@ func queryGroupV8738994dbfe455405a3c9c07003ed95fec1dde39(data interface{}, group
 
 func queryGroupV9f6a97dc8909e876536f87142b5f351e7c589297(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]ContentType)
-	groupFunctorIn := groupFunctor.(func([]ContentType) []ContentType)
 	bufferData := make([]ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[time.Time]int, len(dataIn))
+	groupFunctorIn := groupFunctor.(func([]ContentType) []ContentType)
 	result := make([]ContentType, 0, len(dataIn))
 
 	length := len(dataIn)
@@ -588,8 +896,10 @@ func queryGroupV9f6a97dc8909e876536f87142b5f351e7c589297(data interface{}, group
 		bufferData[k] = dataIn[j]
 		k++
 		nextData[j] = 0
+
 		single := groupFunctorIn(bufferData[kbegin:k])
 		result = append(result, single...)
+
 	}
 
 	return result
@@ -597,9 +907,9 @@ func queryGroupV9f6a97dc8909e876536f87142b5f351e7c589297(data interface{}, group
 
 func queryGroupVc6ec01b1a8f68f11281a5667b88c5e1967c42c86(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]ContentType)
-	groupFunctorIn := groupFunctor.(func([]ContentType) []ContentType)
 	bufferData := make([]ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[int]int, len(dataIn))
+	groupFunctorIn := groupFunctor.(func([]ContentType) []ContentType)
 	result := make([]ContentType, 0, len(dataIn))
 
 	length := len(dataIn)
@@ -630,8 +940,10 @@ func queryGroupVc6ec01b1a8f68f11281a5667b88c5e1967c42c86(data interface{}, group
 		bufferData[k] = dataIn[j]
 		k++
 		nextData[j] = 0
+
 		single := groupFunctorIn(bufferData[kbegin:k])
 		result = append(result, single...)
+
 	}
 
 	return result
@@ -639,9 +951,9 @@ func queryGroupVc6ec01b1a8f68f11281a5667b88c5e1967c42c86(data interface{}, group
 
 func queryGroupVca76f6ce6b260c880f4be68c0c6f72186fa635b5(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]ContentType)
-	groupFunctorIn := groupFunctor.(func([]ContentType) float32)
 	bufferData := make([]ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[string]int, len(dataIn))
+	groupFunctorIn := groupFunctor.(func([]ContentType) float32)
 	result := make([]float32, 0, len(dataIn))
 
 	length := len(dataIn)
@@ -672,8 +984,10 @@ func queryGroupVca76f6ce6b260c880f4be68c0c6f72186fa635b5(data interface{}, group
 		bufferData[k] = dataIn[j]
 		k++
 		nextData[j] = 0
+
 		single := groupFunctorIn(bufferData[kbegin:k])
 		result = append(result, single)
+
 	}
 
 	return result
@@ -681,9 +995,9 @@ func queryGroupVca76f6ce6b260c880f4be68c0c6f72186fa635b5(data interface{}, group
 
 func queryGroupVe2f66d8f0c3b0f6a3ae63ae50e57ab532ca4d858(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]ContentType)
-	groupFunctorIn := groupFunctor.(func([]ContentType) float64)
 	bufferData := make([]ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[int]int, len(dataIn))
+	groupFunctorIn := groupFunctor.(func([]ContentType) float64)
 	result := make([]float64, 0, len(dataIn))
 
 	length := len(dataIn)
@@ -714,8 +1028,10 @@ func queryGroupVe2f66d8f0c3b0f6a3ae63ae50e57ab532ca4d858(data interface{}, group
 		bufferData[k] = dataIn[j]
 		k++
 		nextData[j] = 0
+
 		single := groupFunctorIn(bufferData[kbegin:k])
 		result = append(result, single)
+
 	}
 
 	return result
@@ -723,9 +1039,9 @@ func queryGroupVe2f66d8f0c3b0f6a3ae63ae50e57ab532ca4d858(data interface{}, group
 
 func queryGroupVff06256d82e26530e6c726fa09cb485f82fa3a55(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	dataIn := data.([]ContentType)
-	groupFunctorIn := groupFunctor.(func([]ContentType) []ContentType)
 	bufferData := make([]ContentType, len(dataIn), len(dataIn))
 	mapData := make(map[bool]int, len(dataIn))
+	groupFunctorIn := groupFunctor.(func([]ContentType) []ContentType)
 	result := make([]ContentType, 0, len(dataIn))
 
 	length := len(dataIn)
@@ -756,8 +1072,10 @@ func queryGroupVff06256d82e26530e6c726fa09cb485f82fa3a55(data interface{}, group
 		bufferData[k] = dataIn[j]
 		k++
 		nextData[j] = 0
+
 		single := groupFunctorIn(bufferData[kbegin:k])
 		result = append(result, single...)
+
 	}
 
 	return result
@@ -2086,6 +2404,8 @@ func init() {
 
 	query.ColumnMapMacroRegister([]QueryInnerStruct2{}, "QueryInnerStruct.MM", queryColumnMapV0278bd21d25efe9d7f53cc03a127d039c73e98a2)
 
+	query.ColumnMapMacroRegister([]QueryInnerStruct2{}, "[]QueryInnerStruct.MM", queryColumnMapV04e41874d6143b9eadb627e2212c332ae9861667)
+
 	query.ColumnMapMacroRegister([]ContentType{}, " Name ", queryColumnMapV1a5b7250371597524e364f0c816390c77a8b3331)
 
 	query.ColumnMapMacroRegister([]ContentType{}, "Ok        ", queryColumnMapV268d58dff08fb0947b9b47bcae328d584ec43d6c)
@@ -2094,11 +2414,23 @@ func init() {
 
 	query.ColumnMapMacroRegister([]ContentType{}, "    Money  ", queryColumnMapV6b4a4fd9e192f5ca29db73c69b9472328b1d4cd7)
 
+	query.ColumnMapMacroRegister([]ContentType{}, "     [] Name         ", queryColumnMapV6bc3b019234065876072b5c68e11d084d30424f0)
+
+	query.ColumnMapMacroRegister([]ContentType{}, "    []CardMoney", queryColumnMapV6dbac8216ccd107970f2866aef8448c6fba60ba8)
+
 	query.ColumnMapMacroRegister([]ContentType{}, "    CardMoney", queryColumnMapV904f7e5061ea0a11202b104fcb01960d528c1ccd)
 
 	query.ColumnMapMacroRegister([]int{}, " . ", queryColumnMapV91dacd60e87431951940b4b4c51428e7c1e5c1f2)
 
+	query.ColumnMapMacroRegister([]ContentType{}, "[]Ok        ", queryColumnMapVc9eed46ff7935792c4adc9845876d35aad7935c6)
+
+	query.ColumnMapMacroRegister([]ContentType{}, "    []Money  ", queryColumnMapVd97e430c3742cb4e374052968e6e74fab94f8a8e)
+
 	query.ColumnMapMacroRegister([]ContentType{}, "Age        ", queryColumnMapVe56b49b3fa0f6bf953dd89ffa8677a9ed1f2dfe3)
+
+	query.ColumnMapMacroRegister([]ContentType{}, "[]Age        ", queryColumnMapVf2e4f415e750c8a0b5d1664ff8328b44ec10c372)
+
+	query.ColumnMapMacroRegister([]ContentType{}, " []Name ", queryColumnMapVfec525f218873041e66fa0162e7b95abf7547a84)
 
 	query.ColumnMacroRegister([]ContentType{}, "     Name         ", queryColumnV0210877b9f45b0e2d7c760cad71c8d1aa3e70a6f)
 

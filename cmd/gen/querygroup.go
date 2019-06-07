@@ -59,6 +59,7 @@ func QueryGroupGen(request QueryGenRequest) *QueryGenResponse {
 	argumentDefine := getFunctionArgumentCode(line, args, []bool{false, true, false})
 	funcBody := excuteTemplate(queryGroupFuncTmpl, map[string]string{
 		"signature":          signature,
+		"isFunctorGroup":     "true",
 		"firstArgElemType":   getTypeDeclareCode(line, firstArgSliceElem),
 		"thirdArgType":       getTypeDeclareCode(line, thirdArgFunc),
 		"thirdArgReturnType": getTypeDeclareCode(line, returnElemType),
@@ -91,12 +92,17 @@ var (
 func init() {
 	var err error
 	queryGroupFuncTmpl, err = template.New("name").Parse(`
-	func ` + groupFuncPrefix + `{{ .signature }}(data interface{},groupType string,groupFunctor interface{})interface{}{
-		dataIn := data.([]{{ .firstArgElemType }})
-		groupFunctorIn := groupFunctor.({{ .thirdArgType }})
+	 {{if eq .isFunctorGroup "true"}}` +
+		`func ` + groupFuncPrefix + "{{ .signature }}(data interface{},groupType string,groupFunctor interface{})interface{}{\n" +
+		`{{else}}` +
+		`func ` + columnMapFuncPrefix + "{{ .signature }}(data interface{},column string)interface{}{\n" +
+		`{{end}}dataIn := data.([]{{ .firstArgElemType }})
 		bufferData := make([]{{ .firstArgElemType }},len(dataIn),len(dataIn))
 		mapData := make(map[{{ .columnType }}]int,len(dataIn))
+		{{if eq .isFunctorGroup "true"}}groupFunctorIn := groupFunctor.({{ .thirdArgType }})
 		result := make([]{{ .thirdArgReturnType}},0,len(dataIn))
+		{{else}}result := make(map[{{ .columnType }}][]{{ .firstArgElemType}},len(dataIn))
+		{{end}}
 
 		length := len(dataIn)
 		nextData := make([]int, length, length)
@@ -126,8 +132,12 @@ func init() {
 			bufferData[k] = dataIn[j]
 			k++
 			nextData[j] = 0
+			{{if eq .isFunctorGroup "true"}}
 			single := groupFunctorIn(bufferData[kbegin:k])
 			result = append(result,single{{ .isSliceReturn }})
+			{{else}}
+			result[bufferData[kbegin]{{ .columnExtract }}] = bufferData[kbegin:k]
+			{{end}}
 		}
 
 		return result

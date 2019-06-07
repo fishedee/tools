@@ -292,24 +292,14 @@ func GroupMacroRegister(data interface{}, groupType string, groupFunctor interfa
 	groupMacroMapper[id] = handler
 }
 
-// GroupReflect 反射
-func GroupReflect(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+type groupWalkHandler func(data reflect.Value)
+
+func groupWalkReflect(data interface{}, groupType string, groupWalkHandler groupWalkHandler) {
 	//解析输入数据
 	dataValue := reflect.ValueOf(data)
 	dataType := dataValue.Type()
 	dataElemType := dataType.Elem()
 	dataValueLen := dataValue.Len()
-	groupFuctorValue := reflect.ValueOf(groupFunctor)
-	groupFuctorType := groupFuctorValue.Type()
-
-	//计算最终数据
-	var resultValue reflect.Value
-	resultType := groupFuctorType.Out(0)
-	if resultType.Kind() == reflect.Slice {
-		resultValue = reflect.MakeSlice(resultType, 0, dataValueLen)
-	} else {
-		resultValue = reflect.MakeSlice(reflect.SliceOf(resultType), 0, dataValueLen)
-	}
 
 	//分组操作
 	groupType = strings.Trim(groupType, " ")
@@ -346,13 +336,37 @@ func GroupReflect(data interface{}, groupType string, groupFunctor interface{}) 
 		bufferData.Index(k).Set(dataValue.Index(j))
 		k++
 		nextData[j] = 0
-		singleResult := groupFuctorValue.Call([]reflect.Value{bufferData.Slice(kbegin, k)})[0]
+		groupWalkHandler(bufferData.Slice(kbegin, k))
+	}
+}
+
+// GroupReflect 反射
+func GroupReflect(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+	groupFuctorValue := reflect.ValueOf(groupFunctor)
+	groupFuctorType := groupFuctorValue.Type()
+
+	//解析输入数据
+	dataValueLen := reflect.ValueOf(data).Len()
+
+	//计算最终数据
+	var resultValue reflect.Value
+	resultType := groupFuctorType.Out(0)
+	if resultType.Kind() == reflect.Slice {
+		resultValue = reflect.MakeSlice(resultType, 0, dataValueLen)
+	} else {
+		resultValue = reflect.MakeSlice(reflect.SliceOf(resultType), 0, dataValueLen)
+	}
+
+	//执行分组操作
+	groupWalkReflect(data, groupType, func(data reflect.Value) {
+		singleResult := groupFuctorValue.Call([]reflect.Value{data})[0]
 		if singleResult.Kind() == reflect.Slice {
 			resultValue = reflect.AppendSlice(resultValue, singleResult)
 		} else {
 			resultValue = reflect.Append(resultValue, singleResult)
 		}
-	}
+	})
+
 	return resultValue.Interface()
 }
 
@@ -602,13 +616,40 @@ func ColumnMapMacroRegister(data interface{}, column string, handler ColumnMapMa
 
 // ColumnMapReflect 反射
 func ColumnMapReflect(data interface{}, column string) interface{} {
+	column = strings.Trim(column, " ")
+	if len(column) >= 2 && column[0:2] == "[]" {
+		column = column[2:]
+		return columnMapReflectSlice(data, column)
+	} else {
+		return columnMapReflectSingle(data, column)
+	}
+}
+
+func columnMapReflectSlice(data interface{}, column string) interface{} {
+	dataValue := reflect.ValueOf(data)
+	dataValueType := dataValue.Type()
+	dataType := dataValue.Type().Elem()
+	dataLen := dataValue.Len()
+	column = strings.Trim(column, " ")
+	dataFieldType, dataFieldExtract := getQueryExtract(dataType, column)
+
+	resultValue := reflect.MakeMapWithSize(reflect.MapOf(dataFieldType, dataValueType), dataLen)
+
+	groupWalkReflect(data, column, func(group reflect.Value) {
+		singleResultValue := dataFieldExtract(group.Index(0))
+		resultValue.SetMapIndex(singleResultValue, group)
+	})
+	return resultValue.Interface()
+}
+
+func columnMapReflectSingle(data interface{}, column string) interface{} {
 	dataValue := reflect.ValueOf(data)
 	dataType := dataValue.Type().Elem()
 	dataLen := dataValue.Len()
 	column = strings.Trim(column, " ")
 	dataFieldType, dataFieldExtract := getQueryExtract(dataType, column)
 
-	resultValue := reflect.MakeMap(reflect.MapOf(dataFieldType, dataType))
+	resultValue := reflect.MakeMapWithSize(reflect.MapOf(dataFieldType, dataType), dataLen)
 	for i := dataLen - 1; i >= 0; i-- {
 		singleDataValue := dataValue.Index(i)
 		singleResultValue := dataFieldExtract(singleDataValue)

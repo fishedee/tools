@@ -76,3 +76,35 @@ func BenchmarkQueryColumnMapReflect(b *testing.B) {
 		query.ColumnMap(data, "Age")
 	}
 }
+
+func BenchmarkQueryColumnMapSliceHand(b *testing.B) {
+	data := initQueryColumnMapData()
+
+	b.ResetTimer()
+	for i := 0; i != b.N; i++ {
+		newData := make(map[int][]gentestdata.User, len(data))
+		for _, single := range data {
+			temp := newData[single.UserID]
+			temp = append(temp, single)
+			newData[single.UserID] = temp
+		}
+	}
+}
+
+func BenchmarkQueryColumnMapSliceMacro(b *testing.B) {
+	data := initQueryColumnMapData()
+
+	b.ResetTimer()
+	for i := 0; i != b.N; i++ {
+		query.ColumnMap(data, "[]UserID")
+	}
+}
+
+func BenchmarkQueryColumnMapSliceReflect(b *testing.B) {
+	data := initQueryColumnMapData()
+
+	b.ResetTimer()
+	for i := 0; i != b.N; i++ {
+		query.ColumnMap(data, "[]Age")
+	}
+}
