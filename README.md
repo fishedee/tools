@@ -7,7 +7,7 @@ Efficient and convenient func for golang data processing.All original code comes
 
 Chinese read [这里](README_zhCN.md)
 
-## 原理
+## Why
 
 ```golang
 sort.Slice(people, func(i, j int) bool {
