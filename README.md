@@ -3,7 +3,9 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/fishedee/tools)](https://goreportcard.com/report/github.com/fishedee/tools)
 [![GoDoc](https://godoc.org/github.com/fishedee/tools?status.svg)](https://godoc.org/github.com/fishedee/tools)
 
-高性能便利的golang数据操作库，原始代码来源于这里[here](https://github.com/fishedee/fishgo/tree/master/src/github.com/fishedee/language).
+Efficient and convenient func for golang data processing.All original code comes from [here](https://github.com/fishedee/fishgo/tree/master/src/github.com/fishedee/language).
+
+Chinese read [这里](README_zhCN.md)
 
 ## 原理
 
@@ -13,13 +15,13 @@ sort.Slice(people, func(i, j int) bool {
 })
 ```
 
-因为写后台服务时，经常是从数据库中取出数据，然后我们时常需要对多个表的数据在golang业务层进行group,join,sort等操作。这些操作大同小异，写得多了就感觉重复繁琐，容易出错。
+When we write backend code,we often extract data from database.and next step ,we need to group,join and sort multiple table data to generate result in golang service.The code like this is always repeat again and again, The code we write more,The boring we feel more.
 
 ```golang
 pepole2 := query.Sort(people,"Age asc").([]People)
 ```
 
-所以我们的想法是模拟数据库的sql操作，在golang上用统一的API来执行group,join,sort等操作。当然，由于golang的强类型特性，我们只能用interface{}来处理不同类型的输入，然后用reflect来实现算法。有了这个工具以后，我们在写业务代码时爽了很多，代码更简洁，更清晰。但是，我们随后发现了这样做对于超大数据量（10w行以上数据）时，会造成比较严重的性能问题。原因很简单，因为操作数据的算法都是用reflect来实现，有大量的时间浪费在reflect的类型解析和校验上了，而且，golang编译器无法像手工写代码一样能在编译时根据不同的代码执行最好的优化。
+so we have an idea!we use a unify API to finish group,join and sort.but because of strong typed in golang,we only use interface{} to handle different type input data,and use reflect to achieve the algorithm. as we finish this tool , it is a new world for me,the code more short,more easy and more beautiful.And after a period of time, we find a new problem,when we handle one million rows in this API,it will slow.This is a simple reason,because all algorithm is achieved by reflect, not by hand.Compiler can not optimize the code by different type.The other reason is there are much time wasted in reflect package by type get and type check.
 
 ```golang
 func querySortV10a439a196b4cc9dca0592a40a23aba8392203e4(data interface{}, sortType string) interface{} {
@@ -42,20 +44,22 @@ func querySortV10a439a196b4cc9dca0592a40a23aba8392203e4(data interface{}, sortTy
 }
 ```
 
-便利性解决了，我们就进一步解决性能问题。我们的想法是，在编译时通过分析ast树，查找出所有调用query.Sort的地方，提取出它的调用类型，和字符串常数，然后根据不同的类型和常数自动生成出具体类型的sort代码，然后将这部分自动生成的代码也一起编译进可执行文件里面。当运行时，执行query.Sort时，我们根据对应类型和字符串常数，来跳转到具体的不同的自动生成的query.Sort函数体内部去执行。于是，我们既实现了便利性，也实现了高性能。
+so we have further idea, to slove why we slow.We build a new tool,when in compile time,we get the AST tree and find all the code where call query.Sort function.And we auto generate the "concrete sort code" by differnt type and different const string in sortType.The last step is we compile the "concrete sort code" to our executable file.
+
+So when we run query.Sort(xxxx),query.Sort will find the "concrete sort code" by differnt type and different const string in sortType.It just work!It is even faster than hand code
 
 
 ```sh
 gen -r packageName
 ```
 
-而这一切，我们需要做的，仅仅就是在编译前，执行一行命令而已。
+all of this ,we only need to run this command before we compile.That is all.
 
 
-## 例子
+## Sample
 
 ```golang
-// User结构体
+// User struct
 type User struct {
     UserID     int
     Age        int
@@ -63,13 +67,13 @@ type User struct {
     CreateTime time.Time
 }
 
-// Admin结构体
+// Admin struct
 type Admin struct {
     AdminID int
     Level   int
 }
 
-// AdminUser结构体
+// AdminUser struct
 type AdminUser struct {
     AdminID    int
     Level      int
@@ -78,14 +82,14 @@ type AdminUser struct {
     CreateTime time.Time
 }
 
-// Department结构体
+// Department struct
 type Department struct {
     DepartmentID int
     Name         string
     Employees    []User
 }
 
-// Sex结构体
+// Sex struct
 type Sex struct {
     IsMale bool
 }
@@ -93,21 +97,21 @@ type Sex struct {
 var users = make([]User, 1000, 1000)
 var admins = make([]Admin, 1000, 1000)
 
-// 获取指定列
-// * 第一个参数为表格
-// * 第二个参数为列名
+// extract column from table
+// * First Argument:table
+// * Second Argument:column name
 result := query.Column(users, "UserID")
 userIDs := result.([]int)
 
-// 以某列的值生成映射
-// * 第一个参数为表格
-// * 第二个参数为列名
+// generate a map from table,key is column value and value is it's row
+// * First Argument:table
+// * Second Argument:column name
 result = query.ColumnMap(users, "UserID")
 userMap := result.(map[int]User)
 
-// 表格转换或提取操作
-// * 第一个参数为表格
-// * 第二个参数为转换规则
+// select data from table
+// * First Argument:table
+// * Second Argument:select rule
 result = query.Select(users, func(a User) Sex {
     if len(a.Name) >= 3 && a.Name[0:3] == "Man" {
         return Sex{IsMale: true}
@@ -116,9 +120,9 @@ result = query.Select(users, func(a User) Sex {
 })
 sel := result.([]Sex)
 
-// 表格筛选操作
-// * 第一个参数为表格
-// * 第二个参数为筛选规则
+// filter data from table
+// * First Argument:table
+// * Second Argument:filter rule
 result = query.Where(users, func(a User) bool {
     if len(a.Name) >= 3 && a.Name[0:3] == "Man" {
         return true
@@ -127,10 +131,10 @@ result = query.Where(users, func(a User) bool {
 })
 where := result.([]User)
 
-// 两个表一对一合并
-// * 第一个参数为左表
-// * 第二个参数为右表
-// * 第三个参数为合并规则
+// combine data from two table , one by one
+// * First Argument:left table
+// * Second Argument:right table
+// * Third Argument:combine rule
 result = query.Combine(admins, users, func(admin Admin, user User) AdminUser {
     return AdminUser{
         AdminID:    admin.AdminID,
@@ -141,10 +145,10 @@ result = query.Combine(admins, users, func(admin Admin, user User) AdminUser {
 })
 combine := result.([]AdminUser)
 
-// 表根据某列进行分组操作
-// * 第一个参数为表格
-// * 第二个参数为列名
-// * 第三个参数为分组规则
+// group data from table
+// * First Argument: left table
+// * Second Argument: group column name
+// * Third Argument: group rule
 result = query.Group(users, "UserID", func(users []User) Department {
     return Department{
         Employees: users,
@@ -152,11 +156,11 @@ result = query.Group(users, "UserID", func(users []User) Department {
 })
 group := result.([]Department)
 
-// 两个表进行连接操作，支持LeftJoin,RightJoin,InnerJoin和OuterJoin
-// * 第一个参数为左表
-// * 第二个参数为右表
-// * 第三个参数为连接操作的条件
-// * 第四个参数为连接规则
+// join data from two table，support LeftJoin,RightJoin,InnerJoin和OuterJoin
+// * First Argument: left table
+// * Second Argument: right table
+// * Third Argument: join condition
+// * Forth Argument: join rule
 result = query.LeftJoin(admins, users, "AdminID = UserID", func(admin Admin, user User) AdminUser {
     return AdminUser{
         AdminID:    admin.AdminID,
@@ -167,26 +171,28 @@ result = query.LeftJoin(admins, users, "AdminID = UserID", func(admin Admin, use
 })
 join := result.([]AdminUser)
 
-// 表格排序操作，支持多列排序，如UserId desc,Age asc
-// * 第一个参数为表格
-// * 第二个参数为排序规则
+// sort data from table,support multiple column,for Example: UserId desc,Age asc
+// * First Argument:table
+// * Second Argument:sort condition
 result = query.Sort(users, "UserID asc")
 sort := result.([]User)
 ```
 
-就以上这几个API，没有其他的了，参数一目了然。
+This is All API , easy and less
 
-## Gen工具
+## Gen tool
 
 ```shell
-安装：
+Install：
 go install github.com/fishedee/tools/cmd/gen
 
-使用:
-gen -r 包名
+Use:
+gen -r PackageName
 ```
 
-gen工具是性能提速的核心，使用方法很简单，gen加包名就可以了，如果加-r参数，其会递归查找包下的所有子包的源码。gen读取源码以后，其会自动分析调用query.XXXX的地方，然后就会生成一个xxxx_querygen.go代码来代替reflect的实现。最后，你就能如平常一样编译代码就可以了，就能享受到超便利和高性能的好处了。但要注意的是，当包下面的源代码发生改变后，你要重新执行gen来生成代码。
+gen is the core of hight performance, it is easy to use , gen and packageName. If you add -r argument , it will read all code in children package(include children of children package, and so on).when gen tool read all code ,it will analyse where call query.XXXXX, and it will auto generate a file named xxxx_querygen.go in the same package.At last, compile all the code just as common and it work!
+
+NOTICE,if you change the code in package , you should run gen tool again.
 
 ```
 BenchmarkQueryColumnHand-8                200000 	5297 ns/op     8192 B/op          1 allocs/op
@@ -224,8 +230,8 @@ PASS
 ok      github.com/fishedee/tools/cmd/gen       43.099s
 ```
 
-我们从性能测试的结果可以看出，自动生成的代码至少和手工写的代码一样优化，在一些特定的场景下（group,join,sort），自动生成的代码由于高度优化的算法实现，和仔细的内存分配，它甚至比手工写的代码要快1倍。想知道为什么，可以看一下自动生成的[代码](https://github.com/fishedee/tools/blob/master/query/testdata/testdata_querygen.go)
+In Benchmark case , auto generate code is fast as same as hand code. In some specify scence(group,join,sort),auto generate code is two times faster than hand code, because of very optimized algorithm and very careful memory allocate.If you want to know why,you should see the auto generate [code](https://github.com/fishedee/tools/blob/master/query/testdata/testdata_querygen.go)
 
-## 协议
+## License
 
-看[这里](LICENSE).
+See[this](LICENSE).
