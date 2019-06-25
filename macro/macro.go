@@ -137,10 +137,19 @@ func (m *Macro) getAllDir(baseDir string, pkgName string) ([]string, error) {
 
 // ImportRecursive ImportRecursive
 func (m *Macro) ImportRecursive(pkg string) error {
-	gopath, _ := os.LookupEnv("GOPATH")
-	allPackage, err := m.getAllDir(gopath+"/src", pkg)
-	if err != nil {
-		return err
+	allPackage := []string{}
+	var err error
+	if pkg[0] != '.' {
+		gopath, _ := os.LookupEnv("GOPATH")
+		allPackage, err = m.getAllDir(gopath+"/src", pkg)
+		if err != nil {
+			return err
+		}
+	} else {
+		allPackage, err = m.getAllDir(".", pkg)
+		if err != nil {
+			return err
+		}
 	}
 	for _, packageSingle := range allPackage {
 		m.packages[packageSingle] = true

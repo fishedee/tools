@@ -78,12 +78,13 @@ func formatSource(data string) []byte {
 }
 
 func generate(packageName string, packagePath string, packages []QueryGenResponse) {
-	var fileDir string
-	gopath, _ := os.LookupEnv("GOPATH")
-	fileDir = gopath + "/src/" + packagePath
-	fileSegment := plode.Explode(fileDir, "/")
-	filePath := fileDir + "/" + fileSegment[len(fileSegment)-1] + "_querygen.go"
-
+	var filePath string
+	if packagePath[0] == '.' {
+		filePath = packagePath + "/" + packageName + "_querygen.go"
+	} else {
+		gopath, _ := os.LookupEnv("GOPATH")
+		filePath = gopath + "/src/" + packagePath + "/" + packageName + "_querygen.go"
+	}
 	//处理导入包
 	importPackageMap := map[string]bool{}
 	for _, singlePackage := range packages {
