@@ -149,6 +149,12 @@ func getTypeDeclareCode(line string, t types.Type) string {
 			return "bool"
 		case types.Int:
 			return "int"
+		case types.Uint:
+			return "uint"
+		case types.Int64:
+			return "int64"
+		case types.Uint64:
+			return "uint64"
 		case types.String:
 			return "string"
 		case types.Float32:
@@ -206,6 +212,12 @@ func getTypeDefineCode(line string, t types.Type) string {
 		case types.Bool:
 			return "false"
 		case types.Int:
+			return "0"
+		case types.Uint:
+			return "0"
+		case types.Int64:
+			return "0"
+		case types.Uint64:
 			return "0"
 		case types.String:
 			return "\"\""
