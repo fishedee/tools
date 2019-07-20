@@ -130,6 +130,28 @@ func generate(packageName string, packagePath string, packages []QueryGenRespons
 	}
 }
 
+func isInVendorPath(path string) bool {
+	pathInfo := plode.Explode(path, "/")
+	for i := 0; i != len(pathInfo); i++ {
+		if pathInfo[i] == "vendor" {
+			return true
+		}
+	}
+	return false
+}
+
+func getRealFullName(callerFullName string) string {
+	fullNameInfo := plode.Explode(callerFullName, "/")
+	i := len(fullNameInfo) - 1
+	for ; i >= 0; i-- {
+		if fullNameInfo[i] == "vendor" {
+			break
+		}
+	}
+	realFullName := plode.Implode(fullNameInfo[i+1:], "/")
+	return realFullName
+}
+
 func run() {
 	flag.Usage = usage
 	flag.Parse()
@@ -159,8 +181,12 @@ func run() {
 		if pkg.Package().Path() == args[0] {
 			initPackageName = pkg.Package().Name()
 		}
+		if isInVendorPath(pkg.Package().Path()) == true {
+			continue
+		}
 		pkg.OnFuncCall(func(expr *ast.CallExpr, caller *types.Func, args []types.TypeAndValue) {
 			callerFullName := caller.FullName()
+			callerFullName = getRealFullName(callerFullName)
 			request := QueryGenRequest{
 				pkg:    pkg,
 				expr:   expr,
