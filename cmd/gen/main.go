@@ -182,7 +182,7 @@ func run() {
 			initPackageName = pkg.Package().Name()
 		}
 		if isInVendorPath(pkg.Package().Path()) == true {
-			continue
+			return
 		}
 		pkg.OnFuncCall(func(expr *ast.CallExpr, caller *types.Func, args []types.TypeAndValue) {
 			callerFullName := caller.FullName()
