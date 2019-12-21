@@ -4,11 +4,12 @@ import (
 	"errors"
 	"fmt"
 	"go/ast"
+	"go/build"
 	"go/format"
 	"go/token"
 	"go/types"
 	"io/ioutil"
-	"os"
+	"strings"
 
 	"golang.org/x/tools/go/loader"
 )
@@ -137,8 +138,12 @@ func (m *Macro) getAllDir(baseDir string, pkgName string) ([]string, error) {
 
 // ImportRecursive ImportRecursive
 func (m *Macro) ImportRecursive(pkg string) error {
-	gopath, _ := os.LookupEnv("GOPATH")
-	allPackage, err := m.getAllDir(gopath+"/src", pkg)
+	baseDir, err := m.getPkgBaseDir(pkg)
+	if err != nil {
+		return err
+	}
+
+	allPackage, err := m.getAllDir(baseDir, pkg)
 	if err != nil {
 		return err
 	}
@@ -146,6 +151,25 @@ func (m *Macro) ImportRecursive(pkg string) error {
 		m.packages[packageSingle] = true
 	}
 	return nil
+}
+
+func (m *Macro) getPkgBaseDir(pkg string) (string, error) {
+	buildPkg, err := build.Import(pkg, "", build.ImportComment)
+	if err != nil {
+		return "", err
+	}
+	dir := buildPkg.Dir
+
+	index := strings.LastIndex(dir, pkg)
+	if index == -1 {
+		return "", fmt.Errorf("路径中找不到包: %s, %s", dir, pkg)
+	}
+	if index == 0 {
+		return "", fmt.Errorf("路径与包相同: %s, %s", dir, pkg)
+	}
+	baseDir := dir[:index-1]
+
+	return baseDir, nil
 }
 
 // Walk Walk

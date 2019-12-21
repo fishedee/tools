@@ -56,3 +56,20 @@ import (
 func main() { fmt.Println("123") }
 `)
 }
+
+func TestPkgDir(t *testing.T) {
+	m := &Macro{}
+	for _, cas := range []struct {
+		pkg string
+	}{
+		{"github.com/fishedee/tools/macro"},
+		{"database/sql"},
+	} {
+
+		r, err := m.getPkgBaseDir(cas.pkg)
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Logf("%s\n", r)
+	}
+}
