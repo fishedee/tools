@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"go/ast"
+	"go/build"
 	"go/format"
 	"go/token"
 	"go/types"
@@ -79,8 +80,12 @@ func formatSource(data string) []byte {
 
 func generate(packageName string, packagePath string, packages []QueryGenResponse) {
 	var fileDir string
-	gopath, _ := os.LookupEnv("GOPATH")
-	fileDir = gopath + "/src/" + packagePath
+	buildPkg, err := build.Import(packagePath, "", build.ImportComment)
+	if err != nil {
+		panic(err)
+	}
+	fileDir = buildPkg.Dir
+
 	fileSegment := plode.Explode(fileDir, "/")
 	filePath := fileDir + "/" + fileSegment[len(fileSegment)-1] + "_querygen.go"
 
@@ -120,11 +125,14 @@ func generate(packageName string, packagePath string, packages []QueryGenRespons
 		"func init(){\n" +
 		initBody.String() + "\n" +
 		"}\n"
-	oldData, _ := ioutil.ReadFile(filePath)
+	oldData, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		panic(err)
+	}
 	if string(oldData) == result {
 		return
 	}
-	err := ioutil.WriteFile(filePath, formatSource(result), 0644)
+	err = ioutil.WriteFile(filePath, formatSource(result), 0644)
 	if err != nil {
 		panic(err)
 	}
