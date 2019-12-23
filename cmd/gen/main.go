@@ -126,7 +126,7 @@ func generate(packageName string, packagePath string, packages []QueryGenRespons
 		initBody.String() + "\n" +
 		"}\n"
 	oldData, err := ioutil.ReadFile(filePath)
-	if err != nil {
+	if err != nil && !os.IsNotExist(err) {
 		panic(err)
 	}
 	if string(oldData) == result {
