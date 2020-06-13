@@ -45,7 +45,16 @@ func SelectReflect(data interface{}, selectFuctor interface{}) interface{} {
 	return resultValue.Interface()
 }
 
-// Select 选择
+// Select select data from table
+// * First Argument:table
+// * Second Argument:select rule
+// result = query.Select(users, func(a User) Sex {
+//     if len(a.Name) >= 3 && a.Name[0:3] == "Man" {
+//         return Sex{IsMale: true}
+//     }
+//     return Sex{IsMale: false}
+// })
+// sel := result.([]Sex)
 func Select(data interface{}, selectFunctor interface{}) interface{} {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), reflect.TypeOf(selectFunctor).String()})
 	handler, isExist := selectMacroMapper[id]
@@ -86,7 +95,16 @@ func WhereReflect(data interface{}, whereFuctor interface{}) interface{} {
 	return resultValue.Interface()
 }
 
-// Where 条件
+// Where filter data from table
+// * First Argument:table
+// * Second Argument:filter rule
+// result = query.Where(users, func(a User) bool {
+//     if len(a.Name) >= 3 && a.Name[0:3] == "Man" {
+//         return true
+//     }
+//     return false
+// })
+// where := result.([]User)
 func Where(data interface{}, whereFuctor interface{}) interface{} {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), reflect.TypeOf(whereFuctor).String()})
 	handler, isExist := whereMacroMapper[id]
@@ -169,7 +187,11 @@ func SortReflect(data interface{}, sortType string) interface{} {
 	return result
 }
 
-// Sort 排序
+// Sort sort data from table,support multiple column,for Example: UserID desc,Age asc
+// * First Argument:table
+// * Second Argument:sort condition
+// result = query.Sort(users, "UserID asc")
+// sort := result.([]User)
 func Sort(data interface{}, sortType string) interface{} {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), sortType})
 	handler, isExist := sortMacroMapper[id]
@@ -271,7 +293,7 @@ func JoinReflect(leftData interface{}, rightData interface{}, joinPlace string, 
 	return resultValue.Interface()
 }
 
-// Join 联表
+// Join see LeftJoin
 func Join(leftData interface{}, rightData interface{}, joinPlace string, joinType string, joinFuctor interface{}) interface{} {
 	id := getQueryTypeID([]string{reflect.TypeOf(leftData).String(), reflect.TypeOf(rightData).String(), joinPlace, joinType, reflect.TypeOf(joinFuctor).String()})
 	handler, isExist := joinMacroMapper[id]
@@ -370,7 +392,16 @@ func GroupReflect(data interface{}, groupType string, groupFunctor interface{}) 
 	return resultValue.Interface()
 }
 
-// Group 分组
+// Group group data from table
+// * First Argument: left table
+// * Second Argument: group column name
+// * Third Argument: group rule
+// result = query.Group(users, "UserID", func(users []User) Department {
+//     return Department{
+//         Employees: users,
+//     }
+// })
+// group := result.([]Department)
 func Group(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), groupType, reflect.TypeOf(groupFunctor).String()})
 	handler, isExist := groupMacroMapper[id]
@@ -593,7 +624,11 @@ func ColumnReflect(data interface{}, column string) interface{} {
 	return resultValue.Interface()
 }
 
-// Column 列
+// Column extract column from table
+// * First Argument:table
+// * Second Argument:column name
+// result := query.Column(users, "UserID")
+// userIDs := result.([]int)
 func Column(data interface{}, column string) interface{} {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), column})
 	handler, isExist := columnMacroMapper[id]
@@ -658,7 +693,11 @@ func columnMapReflectSingle(data interface{}, column string) interface{} {
 	return resultValue.Interface()
 }
 
-// ColumnMap 映射
+// ColumnMap generate a map from table,key is column value and value is it's row
+// * First Argument:table
+// * Second Argument:column name
+// result = query.ColumnMap(users, "UserID")
+// userMap := result.(map[int]User)
 func ColumnMap(data interface{}, column string) interface{} {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), column})
 	handler, isExist := columnMapMacroMapper[id]
@@ -670,22 +709,35 @@ func ColumnMap(data interface{}, column string) interface{} {
 	return ColumnMapReflect(data, column)
 }
 
-// LeftJoin 扩展类函数
+// LeftJoin join data from two table，support LeftJoin,RightJoin,InnerJoin和OuterJoin
+// * First Argument: left table
+// * Second Argument: right table
+// * Third Argument: join condition
+// * Forth Argument: join rule
+// result = query.LeftJoin(admins, users, "AdminID = UserID", func(admin Admin, user User) AdminUser {
+//     return AdminUser{
+//         AdminID:    admin.AdminID,
+//         Level:      admin.Level,
+//         Name:       user.Name,
+//         CreateTime: user.CreateTime,
+//     }
+// })
+// join := result.([]AdminUser)
 func LeftJoin(leftData interface{}, rightData interface{}, joinType string, joinFuctor interface{}) interface{} {
 	return Join(leftData, rightData, "left", joinType, joinFuctor)
 }
 
-// RightJoin 右
+// RightJoin see LeftJoin
 func RightJoin(leftData interface{}, rightData interface{}, joinType string, joinFuctor interface{}) interface{} {
 	return Join(leftData, rightData, "right", joinType, joinFuctor)
 }
 
-// InnerJoin 内
+// InnerJoin see LeftJoin
 func InnerJoin(leftData interface{}, rightData interface{}, joinType string, joinFuctor interface{}) interface{} {
 	return Join(leftData, rightData, "inner", joinType, joinFuctor)
 }
 
-// OuterJoin 外
+// OuterJoin see LeftJoin
 func OuterJoin(leftData interface{}, rightData interface{}, joinType string, joinFuctor interface{}) interface{} {
 	return Join(leftData, rightData, "outer", joinType, joinFuctor)
 }
@@ -717,7 +769,19 @@ func CombineReflect(leftData interface{}, rightData interface{}, combineFuctor i
 	return result.Interface()
 }
 
-// Combine 联合
+// Combine combine data from two table , one by one
+// * First Argument:left table
+// * Second Argument:right table
+// * Third Argument:combine rule
+// result = query.Combine(admins, users, func(admin Admin, user User) AdminUser {
+//     return AdminUser{
+//         AdminID:    admin.AdminID,
+//         Level:      admin.Level,
+//         Name:       user.Name,
+//         CreateTime: user.CreateTime,
+//     }
+// })
+// combine := result.([]AdminUser)
 func Combine(leftData interface{}, rightData interface{}, combineFuctor interface{}) interface{} {
 	id := getQueryTypeID([]string{reflect.TypeOf(leftData).String(), reflect.TypeOf(rightData).String(), reflect.TypeOf(combineFuctor).String()})
 	handler, isExist := combineMacroMapper[id]
@@ -729,7 +793,10 @@ func Combine(leftData interface{}, rightData interface{}, combineFuctor interfac
 	return CombineReflect(leftData, rightData, combineFuctor)
 }
 
-// Reduce 减少
+// Reduce 降维
+// query.Reduce([]User{}, func(sum int, singleData User) int {
+// 	return 1
+// }, 0)
 func Reduce(data interface{}, reduceFuctor interface{}, resultReduce interface{}) interface{} {
 	dataValue := reflect.ValueOf(data)
 	dataLen := dataValue.Len()
@@ -750,7 +817,8 @@ func Reduce(data interface{}, reduceFuctor interface{}, resultReduce interface{}
 	return resultReduceValue.Interface()
 }
 
-// Sum 求和
+// Sum get the sum of data
+// only support int, float32, float64 type
 func Sum(data interface{}) interface{} {
 	dataType := reflect.TypeOf(data).Elem()
 	if dataType.Kind() == reflect.Int {
@@ -770,7 +838,8 @@ func Sum(data interface{}) interface{} {
 	}
 }
 
-// Max 最大值
+// Max get max value from table
+// only support int, float32, float64 type
 func Max(data interface{}) interface{} {
 	dataType := reflect.TypeOf(data).Elem()
 	if dataType.Kind() == reflect.Int {
@@ -799,7 +868,8 @@ func Max(data interface{}) interface{} {
 	}
 }
 
-// Min 最小值
+// Min get min value from table
+// only support int, float32, float64 type
 func Min(data interface{}) interface{} {
 	dataType := reflect.TypeOf(data).Elem()
 	if dataType.Kind() == reflect.Int {
@@ -828,7 +898,10 @@ func Min(data interface{}) interface{} {
 	}
 }
 
-// Reverse 反转
+// Reverse reverse data in table
+// query.Reverse(
+// 	[]User{},
+// )
 func Reverse(data interface{}) interface{} {
 	dataValue := reflect.ValueOf(data)
 	dataType := dataValue.Type()
@@ -842,6 +915,8 @@ func Reverse(data interface{}) interface{} {
 }
 
 // Distinct 唯一
+// result := query.Distinct([]User{}, "Name")
+// dis := result.([]User{})
 func Distinct(data interface{}, columnNames string) interface{} {
 	//提取信息
 	name := plode.Explode(columnNames, ",")
