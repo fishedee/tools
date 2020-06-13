@@ -1,18 +1,14 @@
 package query
 
 import (
-	"fmt"
 	"log"
 	"math"
 	"reflect"
 	"runtime"
 	"sort"
-	"strings"
-	"time"
 
-	"github.com/fishedee/tools/decimal"
-	"github.com/fishedee/tools/kind"
 	"github.com/fishedee/tools/plode"
+	"github.com/fishedee/tools/query/internal/query"
 )
 
 // SelectMacroHandler 基础类函数QuerySelect
@@ -22,27 +18,6 @@ type SelectMacroHandler func(data interface{}, selectFunctor interface{}) interf
 func SelectMacroRegister(data interface{}, selectFunctor interface{}, handler SelectMacroHandler) {
 	id := registerQueryTypeID([]string{reflect.TypeOf(data).String(), reflect.TypeOf(selectFunctor).String()})
 	selectMacroMapper[id] = handler
-}
-
-// SelectReflect 反射实现
-func SelectReflect(data interface{}, selectFuctor interface{}) interface{} {
-	dataValue := reflect.ValueOf(data)
-	dataLen := dataValue.Len()
-
-	selectFuctorValue := reflect.ValueOf(selectFuctor)
-	selectFuctorType := selectFuctorValue.Type()
-	selectFuctorOuterType := selectFuctorType.Out(0)
-	resultType := reflect.SliceOf(selectFuctorOuterType)
-	resultValue := reflect.MakeSlice(resultType, dataLen, dataLen)
-	callArgument := []reflect.Value{reflect.Value{}}
-
-	for i := 0; i != dataLen; i++ {
-		singleDataValue := dataValue.Index(i)
-		callArgument[0] = singleDataValue
-		singleResultValue := selectFuctorValue.Call(callArgument)[0]
-		resultValue.Index(i).Set(singleResultValue)
-	}
-	return resultValue.Interface()
 }
 
 // Select select data from table
@@ -63,7 +38,7 @@ func Select(data interface{}, selectFunctor interface{}) interface{} {
 	}
 
 	reflectWarn("QuerySelect")
-	return SelectReflect(data, selectFunctor)
+	return query.SelectReflect(data, selectFunctor)
 }
 
 // WhereMacroHandler 基础类函数QueryWhere
@@ -73,26 +48,6 @@ type WhereMacroHandler func(data interface{}, whereFunctor interface{}) interfac
 func WhereMacroRegister(data interface{}, whereFunctor interface{}, handler WhereMacroHandler) {
 	id := registerQueryTypeID([]string{reflect.TypeOf(data).String(), reflect.TypeOf(whereFunctor).String()})
 	whereMacroMapper[id] = handler
-}
-
-// WhereReflect 反射
-func WhereReflect(data interface{}, whereFuctor interface{}) interface{} {
-	dataValue := reflect.ValueOf(data)
-	dataType := dataValue.Type()
-	dataLen := dataValue.Len()
-
-	whereFuctorValue := reflect.ValueOf(whereFuctor)
-	resultType := reflect.SliceOf(dataType.Elem())
-	resultValue := reflect.MakeSlice(resultType, 0, 0)
-
-	for i := 0; i != dataLen; i++ {
-		singleDataValue := dataValue.Index(i)
-		singleResultValue := whereFuctorValue.Call([]reflect.Value{singleDataValue})[0]
-		if singleResultValue.Bool() {
-			resultValue = reflect.Append(resultValue, singleDataValue)
-		}
-	}
-	return resultValue.Interface()
 }
 
 // Where filter data from table
@@ -113,7 +68,7 @@ func Where(data interface{}, whereFuctor interface{}) interface{} {
 	}
 
 	reflectWarn("QueryWhere")
-	return WhereReflect(data, whereFuctor)
+	return query.WhereReflect(data, whereFuctor)
 }
 
 // sortInterface 基础类函数QuerySort
@@ -161,32 +116,6 @@ func SortMacroRegister(data interface{}, sortType string, handler SortMacroHandl
 	sortMacroMapper[id] = handler
 }
 
-// SortReflect 反射
-func SortReflect(data interface{}, sortType string) interface{} {
-	//拷贝一份
-	dataValue := reflect.ValueOf(data)
-	dataType := dataValue.Type()
-	dataElemType := dataType.Elem()
-	dataValueLen := dataValue.Len()
-
-	dataResult := reflect.MakeSlice(dataType, dataValueLen, dataValueLen)
-	reflect.Copy(dataResult, dataValue)
-
-	//排序
-	targetCompares := getQueryExtractAndCompares(dataElemType, sortType)
-	targetCompare := combineQueryCompare(targetCompares)
-	result := dataResult.Interface()
-	swapper := reflect.Swapper(result)
-
-	SortInternal(dataValueLen, func(i int, j int) int {
-		left := dataResult.Index(i)
-		right := dataResult.Index(j)
-		return targetCompare(left, right)
-	}, swapper)
-
-	return result
-}
-
 // Sort sort data from table,support multiple column,for Example: UserID desc,Age asc
 // * First Argument:table
 // * Second Argument:sort condition
@@ -200,7 +129,7 @@ func Sort(data interface{}, sortType string) interface{} {
 	}
 
 	reflectWarn("QuerySort")
-	return SortReflect(data, sortType)
+	return query.SortReflect(data, sortType)
 }
 
 // JoinMacroHandler 基础类函数QueryJoin
@@ -212,87 +141,6 @@ func JoinMacroRegister(leftData interface{}, rightData interface{}, joinPlace st
 	joinMacroMapper[id] = handler
 }
 
-// JoinReflect 联表
-func JoinReflect(leftData interface{}, rightData interface{}, joinPlace string, joinType string, joinFuctor interface{}) interface{} {
-	//解析配置
-	leftJoinType, rightJoinType := analyseJoin(joinType)
-
-	leftDataValue := reflect.ValueOf(leftData)
-	leftDataType := leftDataValue.Type()
-	leftDataElemType := leftDataType.Elem()
-	leftDataValueLen := leftDataValue.Len()
-	leftDataJoinType, leftDataJoinExtract := getQueryExtract(leftDataElemType, leftJoinType)
-
-	rightDataValue := reflect.ValueOf(rightData)
-	rightDataType := rightDataValue.Type()
-	rightDataElemType := rightDataType.Elem()
-	rightDataValueLen := rightDataValue.Len()
-	_, rightDataJoinExtract := getQueryExtract(rightDataElemType, rightJoinType)
-
-	joinFuctorValue := reflect.ValueOf(joinFuctor)
-	joinFuctorType := joinFuctorValue.Type()
-
-	resultValue := reflect.MakeSlice(reflect.SliceOf(joinFuctorType.Out(0)), 0, 0)
-
-	//执行join
-	emptyLeftValue := reflect.New(leftDataElemType).Elem()
-	emptyRightValue := reflect.New(rightDataElemType).Elem()
-	joinPlace = strings.Trim(strings.ToLower(joinPlace), " ")
-
-	nextData := make([]int, rightDataValueLen, rightDataValueLen)
-	mapDataNext := reflect.MakeMapWithSize(reflect.MapOf(leftDataJoinType, reflect.TypeOf(1)), rightDataValueLen)
-	mapDataFirst := reflect.MakeMapWithSize(reflect.MapOf(leftDataJoinType, reflect.TypeOf(1)), rightDataValueLen)
-	tempValueInt := reflect.New(reflect.TypeOf(1)).Elem()
-
-	for i := 0; i != rightDataValueLen; i++ {
-		tempValueInt.SetInt(int64(i))
-		fieldValue := rightDataJoinExtract(rightDataValue.Index(i))
-		lastNextIndex := mapDataNext.MapIndex(fieldValue)
-		if lastNextIndex.IsValid() {
-			nextData[int(lastNextIndex.Int())] = i
-		} else {
-			mapDataFirst.SetMapIndex(fieldValue, tempValueInt)
-		}
-		nextData[i] = -1
-		mapDataNext.SetMapIndex(fieldValue, tempValueInt)
-	}
-	rightHaveJoin := make([]bool, rightDataValueLen, rightDataValueLen)
-	for i := 0; i != leftDataValueLen; i++ {
-		leftValue := leftDataValue.Index(i)
-		fieldValue := leftDataJoinExtract(leftDataValue.Index(i))
-		rightIndex := mapDataFirst.MapIndex(fieldValue)
-		if rightIndex.IsValid() {
-			//找到右值
-			j := int(rightIndex.Int())
-			for nextData[j] != -1 {
-				singleResult := joinFuctorValue.Call([]reflect.Value{leftValue, rightDataValue.Index(j)})[0]
-				resultValue = reflect.Append(resultValue, singleResult)
-				rightHaveJoin[j] = true
-				j = nextData[j]
-			}
-			singleResult := joinFuctorValue.Call([]reflect.Value{leftValue, rightDataValue.Index(j)})[0]
-			resultValue = reflect.Append(resultValue, singleResult)
-			rightHaveJoin[j] = true
-		} else {
-			//找不到右值
-			if joinPlace == "left" || joinPlace == "outer" {
-				singleResult := joinFuctorValue.Call([]reflect.Value{leftValue, emptyRightValue})[0]
-				resultValue = reflect.Append(resultValue, singleResult)
-			}
-		}
-	}
-	if joinPlace == "right" || joinPlace == "outer" {
-		for j := 0; j != rightDataValueLen; j++ {
-			if rightHaveJoin[j] {
-				continue
-			}
-			singleResult := joinFuctorValue.Call([]reflect.Value{emptyLeftValue, rightDataValue.Index(j)})[0]
-			resultValue = reflect.Append(resultValue, singleResult)
-		}
-	}
-	return resultValue.Interface()
-}
-
 // Join see LeftJoin
 func Join(leftData interface{}, rightData interface{}, joinPlace string, joinType string, joinFuctor interface{}) interface{} {
 	id := getQueryTypeID([]string{reflect.TypeOf(leftData).String(), reflect.TypeOf(rightData).String(), joinPlace, joinType, reflect.TypeOf(joinFuctor).String()})
@@ -302,7 +150,7 @@ func Join(leftData interface{}, rightData interface{}, joinPlace string, joinTyp
 	}
 
 	reflectWarn("QueryJoin")
-	return JoinReflect(leftData, rightData, joinPlace, joinType, joinFuctor)
+	return query.JoinReflect(leftData, rightData, joinPlace, joinType, joinFuctor)
 }
 
 // GroupMacroHandler 基础类函数 QueryGroup
@@ -312,84 +160,6 @@ type GroupMacroHandler func(data interface{}, groupType string, groupFunctor int
 func GroupMacroRegister(data interface{}, groupType string, groupFunctor interface{}, handler GroupMacroHandler) {
 	id := registerQueryTypeID([]string{reflect.TypeOf(data).String(), groupType, reflect.TypeOf(groupFunctor).String()})
 	groupMacroMapper[id] = handler
-}
-
-type groupWalkHandler func(data reflect.Value)
-
-func groupWalkReflect(data interface{}, groupType string, groupWalkHandler groupWalkHandler) {
-	//解析输入数据
-	dataValue := reflect.ValueOf(data)
-	dataType := dataValue.Type()
-	dataElemType := dataType.Elem()
-	dataValueLen := dataValue.Len()
-
-	//分组操作
-	groupType = strings.Trim(groupType, " ")
-	dataFieldType, dataFieldExtract := getQueryExtract(dataElemType, groupType)
-	findMap := reflect.MakeMapWithSize(reflect.MapOf(dataFieldType, reflect.TypeOf(1)), dataValueLen)
-	bufferData := reflect.MakeSlice(dataType, dataValueLen, dataValueLen)
-	tempValueInt := reflect.New(reflect.TypeOf(1)).Elem()
-
-	nextData := make([]int, dataValueLen, dataValueLen)
-	for i := 0; i != dataValueLen; i++ {
-		fieldValue := dataFieldExtract(dataValue.Index(i))
-		lastIndex := findMap.MapIndex(fieldValue)
-		if lastIndex.IsValid() {
-			nextData[int(lastIndex.Int())] = i
-		}
-		nextData[i] = -1
-		tempValueInt.SetInt(int64(i))
-		findMap.SetMapIndex(fieldValue, tempValueInt)
-	}
-	k := 0
-	for i := 0; i != dataValueLen; i++ {
-		j := i
-		if nextData[j] == 0 {
-			continue
-		}
-		kbegin := k
-		for nextData[j] != -1 {
-			nextJ := nextData[j]
-			bufferData.Index(k).Set(dataValue.Index(j))
-			nextData[j] = 0
-			j = nextJ
-			k++
-		}
-		bufferData.Index(k).Set(dataValue.Index(j))
-		k++
-		nextData[j] = 0
-		groupWalkHandler(bufferData.Slice(kbegin, k))
-	}
-}
-
-// GroupReflect 反射
-func GroupReflect(data interface{}, groupType string, groupFunctor interface{}) interface{} {
-	groupFuctorValue := reflect.ValueOf(groupFunctor)
-	groupFuctorType := groupFuctorValue.Type()
-
-	//解析输入数据
-	dataValueLen := reflect.ValueOf(data).Len()
-
-	//计算最终数据
-	var resultValue reflect.Value
-	resultType := groupFuctorType.Out(0)
-	if resultType.Kind() == reflect.Slice {
-		resultValue = reflect.MakeSlice(resultType, 0, dataValueLen)
-	} else {
-		resultValue = reflect.MakeSlice(reflect.SliceOf(resultType), 0, dataValueLen)
-	}
-
-	//执行分组操作
-	groupWalkReflect(data, groupType, func(data reflect.Value) {
-		singleResult := groupFuctorValue.Call([]reflect.Value{data})[0]
-		if singleResult.Kind() == reflect.Slice {
-			resultValue = reflect.AppendSlice(resultValue, singleResult)
-		} else {
-			resultValue = reflect.Append(resultValue, singleResult)
-		}
-	})
-
-	return resultValue.Interface()
 }
 
 // Group group data from table
@@ -410,191 +180,7 @@ func Group(data interface{}, groupType string, groupFunctor interface{}) interfa
 	}
 
 	reflectWarn("QueryGroup")
-	return GroupReflect(data, groupType, groupFunctor)
-}
-
-func analyseJoin(joinType string) (string, string) {
-	joinTypeArray := strings.Split(joinType, "=")
-	leftJoinType := strings.Trim(joinTypeArray[0], " ")
-	rightJoinType := strings.Trim(joinTypeArray[1], " ")
-	return leftJoinType, rightJoinType
-}
-
-func analyseSort(sortType string) (result1 []string, result2 []bool) {
-	sortTypeArray := strings.Split(sortType, ",")
-	for _, singleSortTypeArray := range sortTypeArray {
-		singleSortTypeArrayTemp := strings.Split(singleSortTypeArray, " ")
-		singleSortTypeArray := []string{}
-		for _, singleSort := range singleSortTypeArrayTemp {
-			singleSort = strings.Trim(singleSort, " ")
-			if singleSort == "" {
-				continue
-			}
-			singleSortTypeArray = append(singleSortTypeArray, singleSort)
-		}
-		var singleSortName string
-		var singleSortType bool
-		if len(singleSortTypeArray) >= 2 {
-			singleSortName = singleSortTypeArray[0]
-			singleSortType = (strings.ToLower(strings.Trim(singleSortTypeArray[1], " ")) == "asc")
-		} else {
-			singleSortName = singleSortTypeArray[0]
-			singleSortType = true
-		}
-		result1 = append(result1, singleSortName)
-		result2 = append(result2, singleSortType)
-	}
-	return result1, result2
-}
-
-func getQueryExtractAndCompares(dataType reflect.Type, sortTypeStr string) []queryCompare {
-	sortName, sortType := analyseSort(sortTypeStr)
-	targetCompare := []queryCompare{}
-	for index, singleSortName := range sortName {
-		singleSortType := sortType[index]
-		singleCompare := getQueryExtractAndCompare(dataType, singleSortName)
-		if !singleSortType {
-			//逆序
-			singleTempCompare := singleCompare
-			singleCompare = func(left reflect.Value, right reflect.Value) int {
-				return singleTempCompare(right, left)
-			}
-		}
-		targetCompare = append(targetCompare, singleCompare)
-	}
-	return targetCompare
-}
-
-func getQueryCompare(fieldType reflect.Type) queryCompare {
-	typeKind := kind.GetTypeKind(fieldType)
-	if typeKind == kind.TypeKind.BOOL {
-		return func(left reflect.Value, right reflect.Value) int {
-			leftBool := left.Bool()
-			rightBool := right.Bool()
-			if leftBool == rightBool {
-				return 0
-			} else if leftBool == false {
-				return -1
-			} else {
-				return 1
-			}
-		}
-	} else if typeKind == kind.TypeKind.INT {
-		return func(left reflect.Value, right reflect.Value) int {
-			leftInt := left.Int()
-			rightInt := right.Int()
-			if leftInt < rightInt {
-				return -1
-			} else if leftInt > rightInt {
-				return 1
-			} else {
-				return 0
-			}
-		}
-	} else if typeKind == kind.TypeKind.UINT {
-		return func(left reflect.Value, right reflect.Value) int {
-			leftUint := left.Uint()
-			rightUint := right.Uint()
-			if leftUint < rightUint {
-				return -1
-			} else if leftUint > rightUint {
-				return 1
-			} else {
-				return 0
-			}
-		}
-	} else if typeKind == kind.TypeKind.FLOAT {
-		return func(left reflect.Value, right reflect.Value) int {
-			leftFloat := left.Float()
-			rightFloat := right.Float()
-			if leftFloat < rightFloat {
-				return -1
-			} else if leftFloat > rightFloat {
-				return 1
-			} else {
-				return 0
-			}
-		}
-	} else if typeKind == kind.TypeKind.STRING {
-		if fieldType == reflect.TypeOf(decimal.Decimal("")) {
-			return func(left reflect.Value, right reflect.Value) int {
-				leftDecimal := left.Interface().(decimal.Decimal)
-				rightDecimal := right.Interface().(decimal.Decimal)
-				return leftDecimal.Cmp(rightDecimal)
-			}
-		}
-
-		return func(left reflect.Value, right reflect.Value) int {
-			leftString := left.String()
-			rightString := right.String()
-			if leftString < rightString {
-				return -1
-			} else if leftString > rightString {
-				return 1
-			} else {
-				return 0
-			}
-		}
-
-	} else if typeKind == kind.TypeKind.STRUCT && fieldType == reflect.TypeOf(time.Time{}) {
-		return func(left reflect.Value, right reflect.Value) int {
-			leftTime := left.Interface().(time.Time)
-			rightTime := right.Interface().(time.Time)
-			if leftTime.Before(rightTime) {
-				return -1
-			} else if leftTime.After(rightTime) {
-				return 1
-			} else {
-				return 0
-			}
-		}
-	} else {
-		panic(fieldType.Name() + " can not compare")
-	}
-}
-
-type queryCompare func(reflect.Value, reflect.Value) int
-
-func combineQueryCompare(targetCompare []queryCompare) queryCompare {
-	return func(left reflect.Value, right reflect.Value) int {
-		for _, singleCompare := range targetCompare {
-			compareResult := singleCompare(left, right)
-			if compareResult < 0 {
-				return -1
-			} else if compareResult > 0 {
-				return 1
-			}
-		}
-		return 0
-	}
-}
-
-type queryExtract func(reflect.Value) reflect.Value
-
-func getQueryExtract(dataType reflect.Type, name string) (reflect.Type, queryExtract) {
-	if name == "." {
-		return dataType, func(v reflect.Value) reflect.Value {
-			return v
-		}
-	}
-
-	field, ok := kind.GetFieldByName(dataType, name)
-	if !ok {
-		panic(dataType.Name() + " has not name " + name)
-	}
-	fieldIndex := field.Index
-	fieldType := field.Type
-	return fieldType, func(v reflect.Value) reflect.Value {
-		return v.FieldByIndex(fieldIndex)
-	}
-}
-
-func getQueryExtractAndCompare(dataType reflect.Type, name string) queryCompare {
-	fieldType, extract := getQueryExtract(dataType, name)
-	compare := getQueryCompare(fieldType)
-	return func(left reflect.Value, right reflect.Value) int {
-		return compare(extract(left), extract(right))
-	}
+	return query.GroupReflect(data, groupType, groupFunctor)
 }
 
 // ColumnMacroHandler 扩展类函数 QueryColumn
@@ -604,24 +190,6 @@ type ColumnMacroHandler func(data interface{}, column string) interface{}
 func ColumnMacroRegister(data interface{}, column string, handler ColumnMacroHandler) {
 	id := registerQueryTypeID([]string{reflect.TypeOf(data).String(), column})
 	columnMacroMapper[id] = handler
-}
-
-// ColumnReflect 反射
-func ColumnReflect(data interface{}, column string) interface{} {
-	dataValue := reflect.ValueOf(data)
-	dataType := dataValue.Type().Elem()
-	dataLen := dataValue.Len()
-	column = strings.Trim(column, " ")
-	dataFieldType, dataFieldExtract := getQueryExtract(dataType, column)
-
-	resultValue := reflect.MakeSlice(reflect.SliceOf(dataFieldType), dataLen, dataLen)
-
-	for i := 0; i != dataLen; i++ {
-		singleDataValue := dataValue.Index(i)
-		singleResultValue := dataFieldExtract(singleDataValue)
-		resultValue.Index(i).Set(singleResultValue)
-	}
-	return resultValue.Interface()
 }
 
 // Column extract column from table
@@ -637,7 +205,7 @@ func Column(data interface{}, column string) interface{} {
 	}
 
 	reflectWarn("QueryColumn")
-	return ColumnReflect(data, column)
+	return query.ColumnReflect(data, column)
 }
 
 // ColumnMapMacroHandler 扩展类函数 QueryColumnMap
@@ -647,50 +215,6 @@ type ColumnMapMacroHandler func(data interface{}, column string) interface{}
 func ColumnMapMacroRegister(data interface{}, column string, handler ColumnMapMacroHandler) {
 	id := registerQueryTypeID([]string{reflect.TypeOf(data).String(), column})
 	columnMapMacroMapper[id] = handler
-}
-
-// ColumnMapReflect 反射
-func ColumnMapReflect(data interface{}, column string) interface{} {
-	column = strings.Trim(column, " ")
-	if len(column) >= 2 && column[0:2] == "[]" {
-		column = column[2:]
-		return columnMapReflectSlice(data, column)
-	} else {
-		return columnMapReflectSingle(data, column)
-	}
-}
-
-func columnMapReflectSlice(data interface{}, column string) interface{} {
-	dataValue := reflect.ValueOf(data)
-	dataValueType := dataValue.Type()
-	dataType := dataValue.Type().Elem()
-	dataLen := dataValue.Len()
-	column = strings.Trim(column, " ")
-	dataFieldType, dataFieldExtract := getQueryExtract(dataType, column)
-
-	resultValue := reflect.MakeMapWithSize(reflect.MapOf(dataFieldType, dataValueType), dataLen)
-
-	groupWalkReflect(data, column, func(group reflect.Value) {
-		singleResultValue := dataFieldExtract(group.Index(0))
-		resultValue.SetMapIndex(singleResultValue, group)
-	})
-	return resultValue.Interface()
-}
-
-func columnMapReflectSingle(data interface{}, column string) interface{} {
-	dataValue := reflect.ValueOf(data)
-	dataType := dataValue.Type().Elem()
-	dataLen := dataValue.Len()
-	column = strings.Trim(column, " ")
-	dataFieldType, dataFieldExtract := getQueryExtract(dataType, column)
-
-	resultValue := reflect.MakeMapWithSize(reflect.MapOf(dataFieldType, dataType), dataLen)
-	for i := dataLen - 1; i >= 0; i-- {
-		singleDataValue := dataValue.Index(i)
-		singleResultValue := dataFieldExtract(singleDataValue)
-		resultValue.SetMapIndex(singleResultValue, singleDataValue)
-	}
-	return resultValue.Interface()
 }
 
 // ColumnMap generate a map from table,key is column value and value is it's row
@@ -706,7 +230,7 @@ func ColumnMap(data interface{}, column string) interface{} {
 	}
 
 	reflectWarn("QueryColumnMap")
-	return ColumnMapReflect(data, column)
+	return query.ColumnMapReflect(data, column)
 }
 
 // LeftJoin join data from two table，support LeftJoin,RightJoin,InnerJoin和OuterJoin
@@ -751,24 +275,6 @@ func CombineMacroRegister(leftData interface{}, rightData interface{}, combineFu
 	combineMacroMapper[id] = handler
 }
 
-// CombineReflect 反射
-func CombineReflect(leftData interface{}, rightData interface{}, combineFuctor interface{}) interface{} {
-	leftValue := reflect.ValueOf(leftData)
-	rightValue := reflect.ValueOf(rightData)
-	if leftValue.Len() != rightValue.Len() {
-		panic(fmt.Sprintf("len dos not equal %v != %v", leftValue.Len(), rightValue.Len()))
-	}
-	dataLen := leftValue.Len()
-	combineFuctorValue := reflect.ValueOf(combineFuctor)
-	resultType := combineFuctorValue.Type().Out(0)
-	result := reflect.MakeSlice(reflect.SliceOf(resultType), dataLen, dataLen)
-	for i := 0; i != dataLen; i++ {
-		singleResultValue := combineFuctorValue.Call([]reflect.Value{leftValue.Index(i), rightValue.Index(i)})
-		result.Index(i).Set(singleResultValue[0])
-	}
-	return result.Interface()
-}
-
 // Combine combine data from two table , one by one
 // * First Argument:left table
 // * Second Argument:right table
@@ -790,7 +296,7 @@ func Combine(leftData interface{}, rightData interface{}, combineFuctor interfac
 	}
 
 	reflectWarn("QueryCombine")
-	return CombineReflect(leftData, rightData, combineFuctor)
+	return query.CombineReflect(leftData, rightData, combineFuctor)
 }
 
 // Reduce 降维
@@ -920,11 +426,11 @@ func Reverse(data interface{}) interface{} {
 func Distinct(data interface{}, columnNames string) interface{} {
 	//提取信息
 	name := plode.Explode(columnNames, ",")
-	extractInfo := []queryExtract{}
+	extractInfo := []query.QueryExtract{}
 	dataValue := reflect.ValueOf(data)
 	dataType := dataValue.Type().Elem()
 	for _, singleName := range name {
-		_, extract := getQueryExtract(dataType, singleName)
+		_, extract := query.GetQueryExtract(dataType, singleName)
 		extractInfo = append(extractInfo, extract)
 	}
 
@@ -954,7 +460,7 @@ func registerQueryTypeID(data []string) int64 {
 	var result int64
 	for _, m := range data {
 		id, isExist := typeIDMapper[m]
-		if isExist == false {
+		if !isExist {
 			id = int64(len(typeIDMapper)) + 1
 			typeIDMapper[m] = id
 		}
@@ -967,7 +473,7 @@ func getQueryTypeID(data []string) int64 {
 	var result int64
 	for _, m := range data {
 		id, isExist := typeIDMapper[m]
-		if isExist == false {
+		if !isExist {
 			return -1
 		}
 		result = result<<10 + id
