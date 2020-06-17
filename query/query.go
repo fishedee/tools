@@ -21,15 +21,15 @@ func SelectMacroRegister(data interface{}, selectFunctor interface{}, handler Se
 }
 
 // Select select data from table
-// * First Argument:table
-// * Second Argument:select rule
-// result = query.Select(users, func(a User) Sex {
-//     if len(a.Name) >= 3 && a.Name[0:3] == "Man" {
-//         return Sex{IsMale: true}
-//     }
-//     return Sex{IsMale: false}
-// })
-// sel := result.([]Sex)
+//     * First Argument:table
+//     * Second Argument:select rule
+//     result = query.Select(users, func(a User) Sex {
+//         if len(a.Name) >= 3 && a.Name[0:3] == "Man" {
+//             return Sex{IsMale: true}
+//         }
+//         return Sex{IsMale: false}
+//     })
+//     sel := result.([]Sex)
 func Select(data interface{}, selectFunctor interface{}) interface{} {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), reflect.TypeOf(selectFunctor).String()})
 	handler, isExist := selectMacroMapper[id]
@@ -51,15 +51,15 @@ func WhereMacroRegister(data interface{}, whereFunctor interface{}, handler Wher
 }
 
 // Where filter data from table
-// * First Argument:table
-// * Second Argument:filter rule
-// result = query.Where(users, func(a User) bool {
-//     if len(a.Name) >= 3 && a.Name[0:3] == "Man" {
-//         return true
-//     }
-//     return false
-// })
-// where := result.([]User)
+//     * First Argument:table
+//     * Second Argument:filter rule
+//     result = query.Where(users, func(a User) bool {
+//         if len(a.Name) >= 3 && a.Name[0:3] == "Man" {
+//             return true
+//         }
+//         return false
+//     })
+//     where := result.([]User)
 func Where(data interface{}, whereFuctor interface{}) interface{} {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), reflect.TypeOf(whereFuctor).String()})
 	handler, isExist := whereMacroMapper[id]
@@ -117,10 +117,10 @@ func SortMacroRegister(data interface{}, sortType string, handler SortMacroHandl
 }
 
 // Sort sort data from table,support multiple column,for Example: UserID desc,Age asc
-// * First Argument:table
-// * Second Argument:sort condition
-// result = query.Sort(users, "UserID asc")
-// sort := result.([]User)
+//     * First Argument:table
+//     * Second Argument:sort condition
+//     result = query.Sort(users, "UserID asc")
+//     sort := result.([]User)
 func Sort(data interface{}, sortType string) interface{} {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), sortType})
 	handler, isExist := sortMacroMapper[id]
@@ -163,15 +163,15 @@ func GroupMacroRegister(data interface{}, groupType string, groupFunctor interfa
 }
 
 // Group group data from table
-// * First Argument: left table
-// * Second Argument: group column name
-// * Third Argument: group rule
-// result = query.Group(users, "UserID", func(users []User) Department {
-//     return Department{
-//         Employees: users,
-//     }
-// })
-// group := result.([]Department)
+//     * First Argument: left table
+//     * Second Argument: group column name
+//     * Third Argument: group rule
+//     result = query.Group(users, "UserID", func(users []User) Department {
+//         return Department{
+//             Employees: users,
+//         }
+//     })
+//     group := result.([]Department)
 func Group(data interface{}, groupType string, groupFunctor interface{}) interface{} {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), groupType, reflect.TypeOf(groupFunctor).String()})
 	handler, isExist := groupMacroMapper[id]
@@ -193,10 +193,10 @@ func ColumnMacroRegister(data interface{}, column string, handler ColumnMacroHan
 }
 
 // Column extract column from table
-// * First Argument:table
-// * Second Argument:column name
-// result := query.Column(users, "UserID")
-// userIDs := result.([]int)
+//     * First Argument:table
+//     * Second Argument:column name
+//     result := query.Column(users, "UserID")
+//     userIDs := result.([]int)
 func Column(data interface{}, column string) interface{} {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), column})
 	handler, isExist := columnMacroMapper[id]
@@ -218,10 +218,10 @@ func ColumnMapMacroRegister(data interface{}, column string, handler ColumnMapMa
 }
 
 // ColumnMap generate a map from table,key is column value and value is it's row
-// * First Argument:table
-// * Second Argument:column name
-// result = query.ColumnMap(users, "UserID")
-// userMap := result.(map[int]User)
+//     * First Argument:table
+//     * Second Argument:column name
+//     result = query.ColumnMap(users, "UserID")
+//     userMap := result.(map[int]User)
 func ColumnMap(data interface{}, column string) interface{} {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), column})
 	handler, isExist := columnMapMacroMapper[id]
@@ -234,19 +234,19 @@ func ColumnMap(data interface{}, column string) interface{} {
 }
 
 // LeftJoin join data from two table，support LeftJoin,RightJoin,InnerJoin和OuterJoin
-// * First Argument: left table
-// * Second Argument: right table
-// * Third Argument: join condition
-// * Forth Argument: join rule
-// result = query.LeftJoin(admins, users, "AdminID = UserID", func(admin Admin, user User) AdminUser {
-//     return AdminUser{
-//         AdminID:    admin.AdminID,
-//         Level:      admin.Level,
-//         Name:       user.Name,
-//         CreateTime: user.CreateTime,
-//     }
-// })
-// join := result.([]AdminUser)
+//     * First Argument: left table
+//     * Second Argument: right table
+//     * Third Argument: join condition
+//     * Forth Argument: join rule
+//     result = query.LeftJoin(admins, users, "AdminID = UserID", func(admin Admin, user User) AdminUser {
+//         return AdminUser{
+//             AdminID:    admin.AdminID,
+//             Level:      admin.Level,
+//             Name:       user.Name,
+//             CreateTime: user.CreateTime,
+//         }
+//     })
+//     join := result.([]AdminUser)
 func LeftJoin(leftData interface{}, rightData interface{}, joinType string, joinFuctor interface{}) interface{} {
 	return Join(leftData, rightData, "left", joinType, joinFuctor)
 }
@@ -276,18 +276,18 @@ func CombineMacroRegister(leftData interface{}, rightData interface{}, combineFu
 }
 
 // Combine combine data from two table , one by one
-// * First Argument:left table
-// * Second Argument:right table
-// * Third Argument:combine rule
-// result = query.Combine(admins, users, func(admin Admin, user User) AdminUser {
-//     return AdminUser{
-//         AdminID:    admin.AdminID,
-//         Level:      admin.Level,
-//         Name:       user.Name,
-//         CreateTime: user.CreateTime,
-//     }
-// })
-// combine := result.([]AdminUser)
+//     * First Argument:left table
+//     * Second Argument:right table
+//     * Third Argument:combine rule
+//     result = query.Combine(admins, users, func(admin Admin, user User) AdminUser {
+//         return AdminUser{
+//             AdminID:    admin.AdminID,
+//             Level:      admin.Level,
+//             Name:       user.Name,
+//             CreateTime: user.CreateTime,
+//         }
+//     })
+//     combine := result.([]AdminUser)
 func Combine(leftData interface{}, rightData interface{}, combineFuctor interface{}) interface{} {
 	id := getQueryTypeID([]string{reflect.TypeOf(leftData).String(), reflect.TypeOf(rightData).String(), reflect.TypeOf(combineFuctor).String()})
 	handler, isExist := combineMacroMapper[id]
@@ -299,10 +299,10 @@ func Combine(leftData interface{}, rightData interface{}, combineFuctor interfac
 	return query.CombineReflect(leftData, rightData, combineFuctor)
 }
 
-// Reduce 降维
-// query.Reduce([]User{}, func(sum int, singleData User) int {
-// 	return 1
-// }, 0)
+// Reduce reduce from list to single
+//     query.Reduce([]User{}, func(sum int, singleData User) int {
+//         return 1
+//     }, 0)
 func Reduce(data interface{}, reduceFuctor interface{}, resultReduce interface{}) interface{} {
 	dataValue := reflect.ValueOf(data)
 	dataLen := dataValue.Len()
@@ -323,7 +323,7 @@ func Reduce(data interface{}, reduceFuctor interface{}, resultReduce interface{}
 	return resultReduceValue.Interface()
 }
 
-// Sum get the sum of data
+// Sum get the sum of data.
 // only support int, float32, float64 type
 func Sum(data interface{}) interface{} {
 	dataType := reflect.TypeOf(data).Elem()
@@ -344,7 +344,7 @@ func Sum(data interface{}) interface{} {
 	}
 }
 
-// Max get max value from table
+// Max get max value from table.
 // only support int, float32, float64 type
 func Max(data interface{}) interface{} {
 	dataType := reflect.TypeOf(data).Elem()
@@ -374,7 +374,7 @@ func Max(data interface{}) interface{} {
 	}
 }
 
-// Min get min value from table
+// Min get min value from table.
 // only support int, float32, float64 type
 func Min(data interface{}) interface{} {
 	dataType := reflect.TypeOf(data).Elem()
@@ -405,9 +405,9 @@ func Min(data interface{}) interface{} {
 }
 
 // Reverse reverse data in table
-// query.Reverse(
-// 	[]User{},
-// )
+//     query.Reverse(
+//         []User{},
+//     )
 func Reverse(data interface{}) interface{} {
 	dataValue := reflect.ValueOf(data)
 	dataType := dataValue.Type()
@@ -420,9 +420,9 @@ func Reverse(data interface{}) interface{} {
 	return result.Interface()
 }
 
-// Distinct 唯一
-// result := query.Distinct([]User{}, "Name")
-// dis := result.([]User{})
+// Distinct unique by column
+//     result := query.Distinct([]User{}, "Name")
+//     dis := result.([]User{})
 func Distinct(data interface{}, columnNames string) interface{} {
 	//提取信息
 	name := plode.Explode(columnNames, ",")
