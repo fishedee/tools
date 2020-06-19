@@ -164,19 +164,28 @@ func run() {
 	flag.Usage = usage
 	flag.Parse()
 	args := flag.Args()
+
+	var pkgPath string
 	if len(args) == 0 {
-		usage()
-		panic("need package name")
+		// 没有参数时，尝试获取当前目录所在模块的go.mod文件，从而获取包路径
+		pkgPath = getPkgPathFromDir()
+
+		if pkgPath == "" {
+			usage()
+			panic("need package name")
+		}
+	} else {
+		pkgPath = args[0]
 	}
 
 	macroObj := macro.NewMacro()
 	if *recursive {
-		err := macroObj.ImportRecursive(args[0])
+		err := macroObj.ImportRecursive(pkgPath)
 		if err != nil {
 			panic(err)
 		}
 	} else {
-		err := macroObj.Import(args[0])
+		err := macroObj.Import(pkgPath)
 		if err != nil {
 			panic(err)
 		}
@@ -184,12 +193,12 @@ func run() {
 
 	genPackage := []QueryGenResponse{}
 	initPackageName := ""
-	globalGeneratePackagePath = args[0]
+	globalGeneratePackagePath = pkgPath
 	err := macroObj.Walk(func(pkg macro.Package) {
-		if pkg.Package().Path() == args[0] {
+		if pkg.Package().Path() == pkgPath {
 			initPackageName = pkg.Package().Name()
 		}
-		if isInVendorPath(pkg.Package().Path()) == true {
+		if isInVendorPath(pkg.Package().Path()) {
 			return
 		}
 		pkg.OnFuncCall(func(expr *ast.CallExpr, caller *types.Func, args []types.TypeAndValue) {
@@ -212,7 +221,7 @@ func run() {
 		panic(err)
 	}
 
-	generate(initPackageName, args[0], genPackage)
+	generate(initPackageName, pkgPath, genPackage)
 }
 
 func main() {
