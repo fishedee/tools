@@ -4,13 +4,18 @@ import (
 	"bytes"
 	"crypto/sha1"
 	"encoding/hex"
+	"fmt"
 	"go/constant"
 	"go/types"
 	"html/template"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/fishedee/tools/exception"
 	"github.com/fishedee/tools/plode"
+	"golang.org/x/mod/modfile"
 )
 
 func getFunctionSignature(line string, arguments []types.TypeAndValue, isConstant []bool) string {
@@ -375,6 +380,55 @@ func getCombineLessCompareCode(line string, name1 string, name2 string, sortFiel
 		code = append(code, singleCode)
 	}
 	return plode.Implode(code, "\n")
+}
+
+func getPkgPathFromDir() (pkgPath string) {
+	// 获取目录
+	dir, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("dir: %s\n", dir)
+
+	// 找到go.mod所在目录
+	var modfilePath string
+	var modfileDir = dir
+	for {
+		modfilePath = filepath.Join(modfileDir, "go.mod")
+
+		_, err := os.Stat(modfilePath)
+		if os.IsNotExist(err) {
+			// 不存在，则继续往上层目录找
+			tmpDir, file := filepath.Split(modfileDir)
+			if file == "" {
+				modfilePath = ""
+				break
+			}
+			modfileDir = filepath.Clean(tmpDir)
+			continue
+		}
+
+		break
+	}
+	if modfilePath == "" {
+		return ""
+	}
+	fmt.Printf("mod path: %s, mod dir: %s\n", modfilePath, modfileDir)
+
+	// 解析目录里的go.mod文件，获取模块名
+	content, err := ioutil.ReadFile(modfilePath)
+	if err != nil {
+		panic(err)
+	}
+	modPath := modfile.ModulePath(content)
+	fmt.Printf("modPath: %s\n", modPath)
+
+	// 拿到go.mod所在目录和模块名，再结合当前目录信息，得到当前包路径
+	// modPath + (modfileDir - dir)
+	relPart := strings.ReplaceAll(dir, modfileDir, "")
+	pkgPath = filepath.Join(modPath, relPart)
+
+	return
 }
 
 var (
