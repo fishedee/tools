@@ -13,7 +13,9 @@ import (
 	"log"
 	"os"
 	"sort"
+	"time"
 
+	"github.com/briandowns/spinner"
 	"github.com/fishedee/tools/exception"
 	"github.com/fishedee/tools/macro"
 	"github.com/fishedee/tools/plode"
@@ -190,6 +192,13 @@ func run() {
 			panic(err)
 		}
 	}
+
+	s := spinner.New(spinner.CharSets[9], 100*time.Millisecond) // Build our new spinner
+	s.FinalMSG = "gen finish.\n"
+	s.Start() // Start the spinner
+	defer func() {
+		s.Stop()
+	}()
 
 	genPackage := []QueryGenResponse{}
 	initPackageName := ""
