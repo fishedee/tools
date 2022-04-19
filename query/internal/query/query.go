@@ -33,7 +33,7 @@ func SelectReflect[T, R any](data []T, selectFuctor func(a T) R) []R {
 }
 
 // WhereReflect 反射
-func WhereReflect(data interface{}, whereFuctor interface{}) interface{} {
+func WhereReflect[T any](data []T, whereFuctor func(T) bool) []T {
 	dataValue := reflect.ValueOf(data)
 	dataType := dataValue.Type()
 	dataLen := dataValue.Len()
@@ -49,11 +49,11 @@ func WhereReflect(data interface{}, whereFuctor interface{}) interface{} {
 			resultValue = reflect.Append(resultValue, singleDataValue)
 		}
 	}
-	return resultValue.Interface()
+	return resultValue.Interface().([]T)
 }
 
 // SortReflect 反射
-func SortReflect(data interface{}, sortType string) interface{} {
+func SortReflect[T any](data []T, sortType string) []T {
 	//拷贝一份
 	dataValue := reflect.ValueOf(data)
 	dataType := dataValue.Type()
@@ -75,7 +75,7 @@ func SortReflect(data interface{}, sortType string) interface{} {
 		return targetCompare(left, right)
 	}, swapper)
 
-	return result
+	return result.([]T)
 }
 
 func getQueryExtractAndCompares(dataType reflect.Type, sortTypeStr string) []queryCompare {
@@ -292,7 +292,7 @@ func (si *sortInterface) Swap(i int, j int) {
 }
 
 // JoinReflect 联表
-func JoinReflect(leftData interface{}, rightData interface{}, joinPlace string, joinType string, joinFuctor interface{}) interface{} {
+func JoinReflect[L, R, LR any](leftData []L, rightData []R, joinPlace, joinType string, joinFuctor func(L, R) LR) []LR {
 	//解析配置
 	leftJoinType, rightJoinType := analyseJoin(joinType)
 
@@ -369,7 +369,7 @@ func JoinReflect(leftData interface{}, rightData interface{}, joinPlace string, 
 			resultValue = reflect.Append(resultValue, singleResult)
 		}
 	}
-	return resultValue.Interface()
+	return resultValue.Interface().([]LR)
 }
 
 func analyseJoin(joinType string) (string, string) {

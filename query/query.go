@@ -42,10 +42,10 @@ func Select[T, R any](data []T, selectFunctor func(a T) R) []R {
 }
 
 // WhereMacroHandler 基础类函数QueryWhere
-type WhereMacroHandler func(data interface{}, whereFunctor interface{}) interface{}
+type WhereMacroHandler[T any] func(data []T, whereFunctor func(T) bool) []T
 
 // WhereMacroRegister 注册器
-func WhereMacroRegister(data interface{}, whereFunctor interface{}, handler WhereMacroHandler) {
+func WhereMacroRegister[T any](data []T, whereFunctor func(T) bool, handler WhereMacroHandler[T]) {
 	id := registerQueryTypeID([]string{reflect.TypeOf(data).String(), reflect.TypeOf(whereFunctor).String()})
 	whereMacroMapper[id] = handler
 }
@@ -60,11 +60,11 @@ func WhereMacroRegister(data interface{}, whereFunctor interface{}, handler Wher
 //         return false
 //     })
 //     where := result.([]User)
-func Where(data interface{}, whereFuctor interface{}) interface{} {
+func Where[T any](data []T, whereFuctor func(T) bool) []T {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), reflect.TypeOf(whereFuctor).String()})
 	handler, isExist := whereMacroMapper[id]
 	if isExist {
-		return handler(data, whereFuctor)
+		return handler.(WhereMacroHandler[T])(data, whereFuctor)
 	}
 
 	reflectWarn("QueryWhere")
@@ -108,10 +108,10 @@ func SortInternal(length int, lessHandler func(i, j int) int, swapHandler func(i
 }
 
 // SortMacroHandler 处理器
-type SortMacroHandler func(data interface{}, sortType string) interface{}
+type SortMacroHandler[T any] func(data []T, sortType string) []T
 
 // SortMacroRegister 注册
-func SortMacroRegister(data interface{}, sortType string, handler SortMacroHandler) {
+func SortMacroRegister[T any](data []T, sortType string, handler SortMacroHandler[T]) {
 	id := registerQueryTypeID([]string{reflect.TypeOf(data).String(), sortType})
 	sortMacroMapper[id] = handler
 }
@@ -121,11 +121,11 @@ func SortMacroRegister(data interface{}, sortType string, handler SortMacroHandl
 //     * Second Argument:sort condition
 //     result = query.Sort(users, "UserID asc")
 //     sort := result.([]User)
-func Sort(data interface{}, sortType string) interface{} {
+func Sort[T any](data []T, sortType string) []T {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), sortType})
 	handler, isExist := sortMacroMapper[id]
 	if isExist {
-		return handler(data, sortType)
+		return handler.(SortMacroHandler[T])(data, sortType)
 	}
 
 	reflectWarn("QuerySort")
@@ -133,20 +133,20 @@ func Sort(data interface{}, sortType string) interface{} {
 }
 
 // JoinMacroHandler 基础类函数QueryJoin
-type JoinMacroHandler func(leftData interface{}, rightData interface{}, joinPlace string, joinType string, joinFuctor interface{}) interface{}
+type JoinMacroHandler[L, R, LR any] func(leftData []L, rightData []R, joinPlace, joinType string, joinFuctor func(L, R) LR) []LR
 
 // JoinMacroRegister 注册
-func JoinMacroRegister(leftData interface{}, rightData interface{}, joinPlace string, joinType string, joinFuctor interface{}, handler JoinMacroHandler) {
+func JoinMacroRegister[L, R, LR any](leftData []L, rightData []R, joinPlace, joinType string, joinFuctor func(L, R) LR, handler JoinMacroHandler[L, R, LR]) {
 	id := registerQueryTypeID([]string{reflect.TypeOf(leftData).String(), reflect.TypeOf(rightData).String(), joinPlace, joinType, reflect.TypeOf(joinFuctor).String()})
 	joinMacroMapper[id] = handler
 }
 
 // Join see LeftJoin
-func Join(leftData interface{}, rightData interface{}, joinPlace string, joinType string, joinFuctor interface{}) interface{} {
+func Join[L, R, LR any](leftData []L, rightData []R, joinPlace, joinType string, joinFuctor func(L, R) LR) []LR {
 	id := getQueryTypeID([]string{reflect.TypeOf(leftData).String(), reflect.TypeOf(rightData).String(), joinPlace, joinType, reflect.TypeOf(joinFuctor).String()})
 	handler, isExist := joinMacroMapper[id]
 	if isExist {
-		return handler(leftData, rightData, joinPlace, joinType, joinFuctor)
+		return handler.(JoinMacroHandler[L, R, LR])(leftData, rightData, joinPlace, joinType, joinFuctor)
 	}
 
 	reflectWarn("QueryJoin")
@@ -247,22 +247,22 @@ func ColumnMap(data interface{}, column string) interface{} {
 //         }
 //     })
 //     join := result.([]AdminUser)
-func LeftJoin(leftData interface{}, rightData interface{}, joinType string, joinFuctor interface{}) interface{} {
+func LeftJoin[L, R, LR any](leftData []L, rightData []R, joinType string, joinFuctor func(L, R) LR) []LR {
 	return Join(leftData, rightData, "left", joinType, joinFuctor)
 }
 
 // RightJoin see LeftJoin
-func RightJoin(leftData interface{}, rightData interface{}, joinType string, joinFuctor interface{}) interface{} {
+func RightJoin[L, R, LR any](leftData []L, rightData []R, joinType string, joinFuctor func(L, R) LR) []LR {
 	return Join(leftData, rightData, "right", joinType, joinFuctor)
 }
 
 // InnerJoin see LeftJoin
-func InnerJoin(leftData interface{}, rightData interface{}, joinType string, joinFuctor interface{}) interface{} {
+func InnerJoin[L, R, LR any](leftData []L, rightData []R, joinType string, joinFuctor func(L, R) LR) []LR {
 	return Join(leftData, rightData, "inner", joinType, joinFuctor)
 }
 
 // OuterJoin see LeftJoin
-func OuterJoin(leftData interface{}, rightData interface{}, joinType string, joinFuctor interface{}) interface{} {
+func OuterJoin[L, R, LR any](leftData []L, rightData []R, joinType string, joinFuctor func(L, R) LR) []LR {
 	return Join(leftData, rightData, "outer", joinType, joinFuctor)
 }
 
@@ -496,9 +496,9 @@ func ReflectWarning(isWarning bool) {
 
 var (
 	selectMacroMapper    = map[int64]any{}
-	whereMacroMapper     = map[int64]WhereMacroHandler{}
-	sortMacroMapper      = map[int64]SortMacroHandler{}
-	joinMacroMapper      = map[int64]JoinMacroHandler{}
+	whereMacroMapper     = map[int64]any{}
+	sortMacroMapper      = map[int64]any{}
+	joinMacroMapper      = map[int64]any{}
 	groupMacroMapper     = map[int64]GroupMacroHandler{}
 	columnMacroMapper    = map[int64]ColumnMacroHandler{}
 	columnMapMacroMapper = map[int64]ColumnMapMacroHandler{}

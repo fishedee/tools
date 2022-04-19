@@ -62,10 +62,9 @@ var (
 func init() {
 	var err error
 	querySortFuncTmpl, err = template.New("name").Parse(`
-	func ` + sortFuncPrefix + `{{ .signature }}(data interface{},sortType string)interface{}{
-		dataIn := data.([]{{ .firstArgElemType }})
-		newData := make([]{{ .firstArgElemType }},len(dataIn),len(dataIn))
-		copy(newData,dataIn)
+	func ` + sortFuncPrefix + `{{ .signature }}(data []{{ .firstArgElemType }},sortType string)[]{{ .firstArgElemType }}{
+		newData := make([]{{ .firstArgElemType }},len(data),len(data))
+		copy(newData,data)
 
 		query.SortInternal(len(newData),func(i int, j int)int{
 			{{ .sortCode }}

@@ -115,10 +115,10 @@ var (
 func init() {
 	var err error
 	queryJoinFuncTmpl, err = template.New("name").Parse(`
-	func ` + joinFuncPrefix + `{{ .signature }}(leftData interface{},rightData interface{},joinPlace string,joinType string,joinFunctor interface{})interface{}{
-		leftDataIn := leftData.([]{{ .firstArgElemType }})
-		rightDataIn := rightData.([]{{ .secondArgElemType }})
-		joinFunctorIn := joinFunctor.({{ .fifthArgType }})
+	func ` + joinFuncPrefix + `{{ .signature }}(leftData []{{ .firstArgElemType }},rightData []{{ .secondArgElemType }},joinPlace, joinType string,joinFunctor {{ .fifthArgType }})[]{{ .fifthArgReturnType }}{
+		leftDataIn := leftData
+		rightDataIn := rightData
+		joinFunctorIn := joinFunctor
 		result := make([]{{ .fifthArgReturnType }},0,len(leftDataIn))
 
 		emptyLeftData := {{ .firstArgElemTypeDefine }}

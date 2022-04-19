@@ -73,14 +73,12 @@ var (
 func init() {
 	var err error
 	queryWhereFuncTmpl, err = template.New("name").Parse(`
-	func ` + whereFuncPrefix + `{{ .signature }}(data interface{},whereFunctor interface{})interface{}{
-		dataIn := data.([]{{ .firstArgElemType }})
-		whereFunctorIn := whereFunctor.({{ .secondArgType }})
-		result := make([]{{ .firstArgElemType }},0,len(dataIn))
+	func ` + whereFuncPrefix + `{{ .signature }}(data []{{ .firstArgElemType }},whereFunctor {{ .secondArgType }}) []{{ .firstArgElemType }} {
+		result := make([]{{ .firstArgElemType }},0,len(data))
 
-		for _,single := range dataIn{
+		for _,single := range data{
 			shouldStay := whereFunctorIn(single)
-			if shouldStay == true {
+			if shouldStay {
 				result = append(result,single)
 			}
 		}
