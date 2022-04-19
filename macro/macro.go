@@ -111,22 +111,22 @@ func NewMacro() *Macro {
 }
 
 // Import Import
-func (m *Macro) Import(pkg string) error {
+func (m *Macro) Import(modPath, pkg string) error {
 	m.packages[pkg] = true
 	return nil
 }
 
-func (m *Macro) getAllDir(baseDir string, pkgName string) ([]string, error) {
+func (m *Macro) getAllDir(baseDir string, modPath, pkgName string) ([]string, error) {
 	files, err := ioutil.ReadDir(baseDir + "/" + pkgName)
 	if err != nil {
 		return nil, err
 	}
 	result := []string{}
-	result = append(result, pkgName)
+	result = append(result, modPath+pkgName)
 	for _, file := range files {
 		if file.IsDir() {
 			subPackageName := pkgName + "/" + file.Name()
-			subPackages, err := m.getAllDir(baseDir, subPackageName)
+			subPackages, err := m.getAllDir(baseDir, modPath, subPackageName)
 			if err != nil {
 				return nil, err
 			}
@@ -137,13 +137,19 @@ func (m *Macro) getAllDir(baseDir string, pkgName string) ([]string, error) {
 }
 
 // ImportRecursive ImportRecursive
-func (m *Macro) ImportRecursive(pkg string) error {
-	baseDir, err := m.getPkgBaseDir(pkg)
+func (m *Macro) ImportRecursive(modPath, pkg string) error {
+	// 先把pkg里的module部分去掉
+	if modPath != "" {
+		modPath += "/"
+	}
+	shortPkg := strings.ReplaceAll(pkg, modPath, "")
+
+	baseDir, err := m.getPkgBaseDir(pkg, shortPkg)
 	if err != nil {
 		return err
 	}
 
-	allPackage, err := m.getAllDir(baseDir, pkg)
+	allPackage, err := m.getAllDir(baseDir, modPath, shortPkg)
 	if err != nil {
 		return err
 	}
@@ -153,14 +159,14 @@ func (m *Macro) ImportRecursive(pkg string) error {
 	return nil
 }
 
-func (m *Macro) getPkgBaseDir(pkg string) (string, error) {
+func (m *Macro) getPkgBaseDir(pkg string, shortPkg string) (string, error) {
 	buildPkg, err := build.Import(pkg, "", build.ImportComment)
 	if err != nil {
 		return "", err
 	}
 	dir := buildPkg.Dir
 
-	index := strings.LastIndex(dir, pkg)
+	index := strings.LastIndex(dir, shortPkg)
 	if index == -1 {
 		return "", fmt.Errorf("路径中找不到包: %s, %s", dir, pkg)
 	}

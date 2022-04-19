@@ -167,10 +167,10 @@ func run() {
 	flag.Parse()
 	args := flag.Args()
 
-	var pkgPath string
+	var modPath, pkgPath string
 	if len(args) == 0 {
 		// 没有参数时，尝试获取当前目录所在模块的go.mod文件，从而获取包路径
-		pkgPath = getPkgPathFromDir()
+		modPath, pkgPath = getPkgPathFromDir()
 
 		if pkgPath == "" {
 			usage()
@@ -182,12 +182,12 @@ func run() {
 
 	macroObj := macro.NewMacro()
 	if *recursive {
-		err := macroObj.ImportRecursive(pkgPath)
+		err := macroObj.ImportRecursive(modPath, pkgPath)
 		if err != nil {
 			panic(err)
 		}
 	} else {
-		err := macroObj.Import(pkgPath)
+		err := macroObj.Import(modPath, pkgPath)
 		if err != nil {
 			panic(err)
 		}

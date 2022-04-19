@@ -12,10 +12,10 @@ import (
 )
 
 // SelectMacroHandler 基础类函数QuerySelect
-type SelectMacroHandler func(data interface{}, selectFunctor interface{}) interface{}
+type SelectMacroHandler[T, R any] func(data []T, selectFunctor func(a T) R) []R
 
 // SelectMacroRegister 注册器
-func SelectMacroRegister(data interface{}, selectFunctor interface{}, handler SelectMacroHandler) {
+func SelectMacroRegister[T, R any](data []T, selectFunctor func(a T) R, handler SelectMacroHandler[T, R]) {
 	id := registerQueryTypeID([]string{reflect.TypeOf(data).String(), reflect.TypeOf(selectFunctor).String()})
 	selectMacroMapper[id] = handler
 }
@@ -30,11 +30,11 @@ func SelectMacroRegister(data interface{}, selectFunctor interface{}, handler Se
 //         return Sex{IsMale: false}
 //     })
 //     sel := result.([]Sex)
-func Select(data interface{}, selectFunctor interface{}) interface{} {
+func Select[T, R any](data []T, selectFunctor func(a T) R) []R {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), reflect.TypeOf(selectFunctor).String()})
 	handler, isExist := selectMacroMapper[id]
 	if isExist {
-		return handler(data, selectFunctor)
+		return handler.(SelectMacroHandler[T, R])(data, selectFunctor)
 	}
 
 	reflectWarn("QuerySelect")
@@ -495,7 +495,7 @@ func ReflectWarning(isWarning bool) {
 }
 
 var (
-	selectMacroMapper    = map[int64]SelectMacroHandler{}
+	selectMacroMapper    = map[int64]any{}
 	whereMacroMapper     = map[int64]WhereMacroHandler{}
 	sortMacroMapper      = map[int64]SortMacroHandler{}
 	joinMacroMapper      = map[int64]JoinMacroHandler{}

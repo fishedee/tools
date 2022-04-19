@@ -2026,90 +2026,74 @@ func queryJoinVfdfe281f6058a6868c2e12f32ca13f6c3dabe242(leftData interface{}, ri
 	return result
 }
 
-func querySelectV03b12a1acb9918d749bfa5c88ad41af5d11af1be(data interface{}, selectFunctor interface{}) interface{} {
-	dataIn := data.([]ContentType)
-	selectFunctorIn := selectFunctor.(func(ContentType) bool)
-	result := make([]bool, len(dataIn), len(dataIn))
+func querySelectV03b12a1acb9918d749bfa5c88ad41af5d11af1be(data []ContentType, selectFunctor func(a ContentType) bool) []bool {
+	result := make([]bool, len(data), len(data))
 
-	for i, single := range dataIn {
-		result[i] = selectFunctorIn(single)
+	for i, single := range data {
+		result[i] = selectFunctor(single)
 	}
 	return result
 }
 
-func querySelectV2df5a9ed3c5d3e88750329401c4bf91a6ff879ed(data interface{}, selectFunctor interface{}) interface{} {
-	dataIn := data.([]ContentType)
-	selectFunctorIn := selectFunctor.(func(ContentType) string)
-	result := make([]string, len(dataIn), len(dataIn))
+func querySelectV2df5a9ed3c5d3e88750329401c4bf91a6ff879ed(data []ContentType, selectFunctor func(a ContentType) string) []string {
+	result := make([]string, len(data), len(data))
 
-	for i, single := range dataIn {
-		result[i] = selectFunctorIn(single)
+	for i, single := range data {
+		result[i] = selectFunctor(single)
 	}
 	return result
 }
 
-func querySelectV446a51935e0be020e2e4b8c4aefb054faac5e32c(data interface{}, selectFunctor interface{}) interface{} {
-	dataIn := data.([]ContentType)
-	selectFunctorIn := selectFunctor.(func(ContentType) map[string]int)
-	result := make([]map[string]int, len(dataIn), len(dataIn))
+func querySelectV446a51935e0be020e2e4b8c4aefb054faac5e32c(data []ContentType, selectFunctor func(a ContentType) map[string]int) []map[string]int {
+	result := make([]map[string]int, len(data), len(data))
 
-	for i, single := range dataIn {
-		result[i] = selectFunctorIn(single)
+	for i, single := range data {
+		result[i] = selectFunctor(single)
 	}
 	return result
 }
 
-func querySelectV48d789bc642d669f7044381e856125972c5002f7(data interface{}, selectFunctor interface{}) interface{} {
-	dataIn := data.([]ContentType)
-	selectFunctorIn := selectFunctor.(func(ContentType) float64)
-	result := make([]float64, len(dataIn), len(dataIn))
+func querySelectV48d789bc642d669f7044381e856125972c5002f7(data []ContentType, selectFunctor func(a ContentType) float64) []float64 {
+	result := make([]float64, len(data), len(data))
 
-	for i, single := range dataIn {
-		result[i] = selectFunctorIn(single)
+	for i, single := range data {
+		result[i] = selectFunctor(single)
 	}
 	return result
 }
 
-func querySelectV49410ca5646fa429d1c1a39d6adbe922a8b398de(data interface{}, selectFunctor interface{}) interface{} {
-	dataIn := data.([]ContentType)
-	selectFunctorIn := selectFunctor.(func(ContentType) time.Time)
-	result := make([]time.Time, len(dataIn), len(dataIn))
+func querySelectV49410ca5646fa429d1c1a39d6adbe922a8b398de(data []ContentType, selectFunctor func(a ContentType) time.Time) []time.Time {
+	result := make([]time.Time, len(data), len(data))
 
-	for i, single := range dataIn {
-		result[i] = selectFunctorIn(single)
+	for i, single := range data {
+		result[i] = selectFunctor(single)
 	}
 	return result
 }
 
-func querySelectV4b690bab06e586f19389ddb3bb327d5abd08d9d4(data interface{}, selectFunctor interface{}) interface{} {
-	dataIn := data.([]ContentType)
-	selectFunctorIn := selectFunctor.(func(ContentType) ContentType)
-	result := make([]ContentType, len(dataIn), len(dataIn))
+func querySelectV4b690bab06e586f19389ddb3bb327d5abd08d9d4(data []ContentType, selectFunctor func(a ContentType) ContentType) []ContentType {
+	result := make([]ContentType, len(data), len(data))
 
-	for i, single := range dataIn {
-		result[i] = selectFunctorIn(single)
+	for i, single := range data {
+		result[i] = selectFunctor(single)
 	}
 	return result
 }
 
-func querySelectV4dfeeca849a875cfddf58f802cd0c7b99c4d6ee5(data interface{}, selectFunctor interface{}) interface{} {
-	dataIn := data.([]ContentType)
-	selectFunctorIn := selectFunctor.(func(ContentType) float32)
-	result := make([]float32, len(dataIn), len(dataIn))
+func querySelectV4dfeeca849a875cfddf58f802cd0c7b99c4d6ee5(data []ContentType, selectFunctor func(a ContentType) float32) []float32 {
+	result := make([]float32, len(data), len(data))
 
-	for i, single := range dataIn {
-		result[i] = selectFunctorIn(single)
+	for i, single := range data {
+		result[i] = selectFunctor(single)
 	}
 	return result
 }
 
-func querySelectV56ff3e10b6f0a89535dd3a999fd35056dcde6d1b(data interface{}, selectFunctor interface{}) interface{} {
-	dataIn := data.([]ContentType)
-	selectFunctorIn := selectFunctor.(func(ContentType) int)
-	result := make([]int, len(dataIn), len(dataIn))
+func querySelectV56ff3e10b6f0a89535dd3a999fd35056dcde6d1b(data []ContentType, selectFunctor func(a ContentType) int) []int {
+	result := make([]int, len(data), len(data))
 
-	for i, single := range dataIn {
-		result[i] = selectFunctorIn(single)
+	for i, single := range data {
+		result[i] = selectFunctor(single)
 	}
 	return result
 }

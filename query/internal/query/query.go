@@ -12,7 +12,7 @@ import (
 )
 
 // SelectReflect 反射实现
-func SelectReflect(data interface{}, selectFuctor interface{}) interface{} {
+func SelectReflect[T, R any](data []T, selectFuctor func(a T) R) []R {
 	dataValue := reflect.ValueOf(data)
 	dataLen := dataValue.Len()
 
@@ -29,7 +29,7 @@ func SelectReflect(data interface{}, selectFuctor interface{}) interface{} {
 		singleResultValue := selectFuctorValue.Call(callArgument)[0]
 		resultValue.Index(i).Set(singleResultValue)
 	}
-	return resultValue.Interface()
+	return resultValue.Interface().([]R)
 }
 
 // WhereReflect 反射

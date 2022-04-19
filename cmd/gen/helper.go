@@ -382,7 +382,7 @@ func getCombineLessCompareCode(line string, name1 string, name2 string, sortFiel
 	return plode.Implode(code, "\n")
 }
 
-func getPkgPathFromDir() (pkgPath string) {
+func getPkgPathFromDir() (modPath, pkgPath string) {
 	// 获取目录
 	dir, err := os.Getwd()
 	if err != nil {
@@ -411,7 +411,7 @@ func getPkgPathFromDir() (pkgPath string) {
 		break
 	}
 	if modfilePath == "" {
-		return ""
+		return "", ""
 	}
 	fmt.Printf("mod path: %s, mod dir: %s\n", modfilePath, modfileDir)
 
@@ -420,7 +420,7 @@ func getPkgPathFromDir() (pkgPath string) {
 	if err != nil {
 		panic(err)
 	}
-	modPath := modfile.ModulePath(content)
+	modPath = modfile.ModulePath(content)
 	fmt.Printf("modPath: %s\n", modPath)
 
 	// 拿到go.mod所在目录和模块名，再结合当前目录信息，得到当前包路径

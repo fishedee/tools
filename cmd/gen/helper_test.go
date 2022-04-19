@@ -10,7 +10,8 @@ func TestGetPkgPathFromDir(t *testing.T) {
 		{name: "test", want: "github.com/fishedee/tools/cmd/gen"},
 	} {
 		_ = cas
-		pkgPath := getPkgPathFromDir()
+		modPath, pkgPath := getPkgPathFromDir()
+		t.Logf("modPath: %s\n", modPath)
 		if pkgPath != cas.want {
 			t.Fatalf("No.%s Bad pkgPath: %s != %s\n", cas.name, pkgPath, cas.want)
 		}

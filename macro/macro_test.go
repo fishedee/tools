@@ -19,7 +19,7 @@ func nodeString(fset *token.FileSet, n ast.Node) string {
 
 func TestFuncCallInspect(t *testing.T) {
 	macro := NewMacro()
-	err := macro.ImportRecursive("github.com/fishedee/tools/macro")
+	err := macro.ImportRecursive("github.com/fishedee/tools", "github.com/fishedee/tools/macro")
 	assert.Equal(t, err, nil)
 
 	err = macro.Walk(func(pkg Package) {
@@ -66,7 +66,7 @@ func TestPkgDir(t *testing.T) {
 		{"database/sql"},
 	} {
 
-		r, err := m.getPkgBaseDir(cas.pkg)
+		r, err := m.getPkgBaseDir(cas.pkg, "macro")
 		if err != nil {
 			t.Fatal(err)
 		}

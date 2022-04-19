@@ -72,13 +72,11 @@ var (
 func init() {
 	var err error
 	querySelectFuncTmpl, err = template.New("name").Parse(`
-	func ` + selectFuncPrefix + `{{ .signature }}(data interface{},selectFunctor interface{})interface{}{
-		dataIn := data.([]{{ .firstArgElemType }})
-		selectFunctorIn := selectFunctor.({{ .secondArgType }})
-		result := make([]{{ .secondArgReturnType }},len(dataIn),len(dataIn))
+	func ` + selectFuncPrefix + `{{ .signature }}(data []{{ .firstArgElemType }},selectFunctor func(a {{ .firstArgElemType }}) {{ .secondArgReturnType }}) []{{ .secondArgReturnType }} {
+		result := make([]{{ .secondArgReturnType }},len(data),len(data))
 
-		for i,single := range dataIn{
-			result[i] = selectFunctorIn(single)
+		for i,single := range data {
+			result[i] = selectFunctor(single)
 		}
 		return result
 	}
