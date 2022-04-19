@@ -13,18 +13,18 @@ import (
 
 func TestQueryCombine(t *testing.T) {
 	admin := []gentestdata.Admin{
-		gentestdata.Admin{AdminID: 23, Level: 5},
-		gentestdata.Admin{AdminID: 23, Level: 5},
-		gentestdata.Admin{AdminID: 23, Level: 5},
-		gentestdata.Admin{AdminID: 3, Level: 30},
-		gentestdata.Admin{AdminID: 4, Level: 7},
+		{AdminID: 23, Level: 5},
+		{AdminID: 23, Level: 5},
+		{AdminID: 23, Level: 5},
+		{AdminID: 3, Level: 30},
+		{AdminID: 4, Level: 7},
 	}
 	user := []gentestdata.User{
-		gentestdata.User{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
-		gentestdata.User{UserID: 23, Name: "g", CreateTime: time.Unix(1, 0)},
-		gentestdata.User{UserID: 23, Name: "h", CreateTime: time.Unix(33, 0)},
-		gentestdata.User{UserID: 3, Name: "a"},
-		gentestdata.User{UserID: 4, Name: "j"},
+		{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
+		{UserID: 23, Name: "g", CreateTime: time.Unix(1, 0)},
+		{UserID: 23, Name: "h", CreateTime: time.Unix(33, 0)},
+		{UserID: 3, Name: "a"},
+		{UserID: 4, Name: "j"},
 	}
 	assert.Equal(t, query.Combine(admin, user, func(admin gentestdata.Admin, user gentestdata.User) gentestdata.AdminUser {
 		return gentestdata.AdminUser{
@@ -34,11 +34,11 @@ func TestQueryCombine(t *testing.T) {
 			CreateTime: user.CreateTime,
 		}
 	}), []gentestdata.AdminUser{
-		gentestdata.AdminUser{AdminID: 23, Level: 5, Name: "c", CreateTime: time.Unix(29, 0)},
-		gentestdata.AdminUser{AdminID: 23, Level: 5, Name: "g", CreateTime: time.Unix(1, 0)},
-		gentestdata.AdminUser{AdminID: 23, Level: 5, Name: "h", CreateTime: time.Unix(33, 0)},
-		gentestdata.AdminUser{AdminID: 3, Level: 30, Name: "a"},
-		gentestdata.AdminUser{AdminID: 4, Level: 7, Name: "j"},
+		{AdminID: 23, Level: 5, Name: "c", CreateTime: time.Unix(29, 0)},
+		{AdminID: 23, Level: 5, Name: "g", CreateTime: time.Unix(1, 0)},
+		{AdminID: 23, Level: 5, Name: "h", CreateTime: time.Unix(33, 0)},
+		{AdminID: 3, Level: 30, Name: "a"},
+		{AdminID: 4, Level: 7, Name: "j"},
 	})
 	assert.Equal(t, query.Combine([]int{1, 2, 3, 4, 5}, user, func(admin int, user gentestdata.User) gentestdata.User {
 		return gentestdata.User{
@@ -47,11 +47,11 @@ func TestQueryCombine(t *testing.T) {
 			CreateTime: user.CreateTime,
 		}
 	}), []gentestdata.User{
-		gentestdata.User{UserID: 1, Name: "c", CreateTime: time.Unix(29, 0)},
-		gentestdata.User{UserID: 2, Name: "g", CreateTime: time.Unix(1, 0)},
-		gentestdata.User{UserID: 3, Name: "h", CreateTime: time.Unix(33, 0)},
-		gentestdata.User{UserID: 4, Name: "a"},
-		gentestdata.User{UserID: 5, Name: "j"},
+		{UserID: 1, Name: "c", CreateTime: time.Unix(29, 0)},
+		{UserID: 2, Name: "g", CreateTime: time.Unix(1, 0)},
+		{UserID: 3, Name: "h", CreateTime: time.Unix(33, 0)},
+		{UserID: 4, Name: "a"},
+		{UserID: 5, Name: "j"},
 	})
 
 	// 测试

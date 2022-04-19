@@ -13,9 +13,9 @@ import (
 
 func TestQueryColumn(t *testing.T) {
 	data := []gentestdata.User{
-		gentestdata.User{UserID: 1},
-		gentestdata.User{UserID: -2},
-		gentestdata.User{UserID: 3},
+		{UserID: 1},
+		{UserID: -2},
+		{UserID: 3},
 	}
 	assert.Equal(t, query.Column(data, "UserID"), []int{1, -2, 3})
 	assert.Equal(t, query.Column(data, "."), data)

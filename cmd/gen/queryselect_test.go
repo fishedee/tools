@@ -10,9 +10,9 @@ import (
 
 func TestQuerySelect(t *testing.T) {
 	data := []User{
-		User{Name: "Man_a"},
-		User{Name: "Woman_b"},
-		User{Name: "Man_c"},
+		{Name: "Man_a"},
+		{Name: "Woman_b"},
+		{Name: "Man_c"},
 	}
 
 	assert.Equal(t, query.Select(data, func(a User) Sex {
@@ -21,17 +21,17 @@ func TestQuerySelect(t *testing.T) {
 		}
 		return Sex{IsMale: false}
 	}), []Sex{
-		Sex{IsMale: true},
-		Sex{IsMale: false},
-		Sex{IsMale: true},
+		{IsMale: true},
+		{IsMale: false},
+		{IsMale: true},
 	})
 	assert.Equal(t, query.Select([]int{3, 4, 5, -1}, func(a int) User {
 		return User{UserID: a}
 	}), []User{
-		User{UserID: 3},
-		User{UserID: 4},
-		User{UserID: 5},
-		User{UserID: -1},
+		{UserID: 3},
+		{UserID: 4},
+		{UserID: 5},
+		{UserID: -1},
 	})
 
 	// 测试

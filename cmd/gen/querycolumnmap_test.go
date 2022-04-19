@@ -12,14 +12,14 @@ import (
 
 func TestQueryColumnMap(t *testing.T) {
 	data := []gentestdata.User{
-		gentestdata.User{UserID: 1},
-		gentestdata.User{UserID: -2},
-		gentestdata.User{UserID: 3},
+		{UserID: 1},
+		{UserID: -2},
+		{UserID: 3},
 	}
 	assert.Equal(t, query.ColumnMap(data, "UserID"), map[int]gentestdata.User{
-		1:  gentestdata.User{UserID: 1},
-		-2: gentestdata.User{UserID: -2},
-		3:  gentestdata.User{UserID: 3},
+		1:  {UserID: 1},
+		-2: {UserID: -2},
+		3:  {UserID: 3},
 	})
 	assert.Equal(t, query.ColumnMap([]int{5, 6, 8, 8, 0, 6}, "."), map[int]int{
 		5: 5,

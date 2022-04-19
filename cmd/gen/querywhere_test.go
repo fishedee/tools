@@ -10,9 +10,9 @@ import (
 
 func TestQueryWhere(t *testing.T) {
 	data := []User{
-		User{Name: "Man_a"},
-		User{Name: "Woman_b"},
-		User{Name: "Man_c"},
+		{Name: "Man_a"},
+		{Name: "Woman_b"},
+		{Name: "Man_c"},
 	}
 
 	assert.Equal(t, query.Where(data, func(a User) bool {
@@ -21,8 +21,8 @@ func TestQueryWhere(t *testing.T) {
 		}
 		return false
 	}), []User{
-		User{Name: "Man_a"},
-		User{Name: "Man_c"},
+		{Name: "Man_a"},
+		{Name: "Man_c"},
 	})
 	assert.Equal(t, query.Where([]int{3, 2, 3, 5, 9, 4}, func(c int) bool {
 		return c%2 == 0

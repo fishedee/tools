@@ -13,26 +13,26 @@ import (
 
 func TestQuerySort(t *testing.T) {
 	data := []User{
-		User{UserID: 3, Name: "a"},
-		User{UserID: 3, Name: "c"},
-		User{UserID: 23, Name: "d"},
-		User{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
-		User{UserID: 23, Name: "c", CreateTime: time.Unix(1, 0)},
-		User{UserID: 23, Name: "c", CreateTime: time.Unix(33, 0)},
-		User{UserID: 23, Name: "a"},
-		User{UserID: 1},
-		User{UserID: 1},
+		{UserID: 3, Name: "a"},
+		{UserID: 3, Name: "c"},
+		{UserID: 23, Name: "d"},
+		{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
+		{UserID: 23, Name: "c", CreateTime: time.Unix(1, 0)},
+		{UserID: 23, Name: "c", CreateTime: time.Unix(33, 0)},
+		{UserID: 23, Name: "a"},
+		{UserID: 1},
+		{UserID: 1},
 	}
 	assert.Equal(t, query.Sort(data, "UserID desc,Name asc,CreateTime asc"), []User{
-		User{UserID: 23, Name: "a"},
-		User{UserID: 23, Name: "c", CreateTime: time.Unix(1, 0)},
-		User{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
-		User{UserID: 23, Name: "c", CreateTime: time.Unix(33, 0)},
-		User{UserID: 23, Name: "d"},
-		User{UserID: 3, Name: "a"},
-		User{UserID: 3, Name: "c"},
-		User{UserID: 1},
-		User{UserID: 1},
+		{UserID: 23, Name: "a"},
+		{UserID: 23, Name: "c", CreateTime: time.Unix(1, 0)},
+		{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
+		{UserID: 23, Name: "c", CreateTime: time.Unix(33, 0)},
+		{UserID: 23, Name: "d"},
+		{UserID: 3, Name: "a"},
+		{UserID: 3, Name: "c"},
+		{UserID: 1},
+		{UserID: 1},
 	})
 	assert.Equal(t, query.Sort([]int{3, 2, 1, 7, -8}, ". desc"), []int{7, 3, 2, 1, -8})
 

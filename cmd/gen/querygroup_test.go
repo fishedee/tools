@@ -13,54 +13,54 @@ import (
 
 func TestQueryGroup(t *testing.T) {
 	data := []gentestdata.User{
-		gentestdata.User{UserID: 3, Name: "a"},
-		gentestdata.User{UserID: 3, Name: "c"},
-		gentestdata.User{UserID: 23, Name: "d"},
-		gentestdata.User{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
-		gentestdata.User{UserID: 23, Name: "c", CreateTime: time.Unix(1, 0)},
-		gentestdata.User{UserID: 23, Name: "c", CreateTime: time.Unix(33, 0)},
-		gentestdata.User{UserID: 23, Name: "a"},
-		gentestdata.User{UserID: 1},
-		gentestdata.User{UserID: 1},
+		{UserID: 3, Name: "a"},
+		{UserID: 3, Name: "c"},
+		{UserID: 23, Name: "d"},
+		{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
+		{UserID: 23, Name: "c", CreateTime: time.Unix(1, 0)},
+		{UserID: 23, Name: "c", CreateTime: time.Unix(33, 0)},
+		{UserID: 23, Name: "a"},
+		{UserID: 1},
+		{UserID: 1},
 	}
 	assert.Equal(t, query.Group(data, "UserID", func(users []gentestdata.User) gentestdata.Department {
 		return gentestdata.Department{
 			Employees: users,
 		}
 	}), []gentestdata.Department{
-		gentestdata.Department{Employees: []gentestdata.User{
-			gentestdata.User{UserID: 3, Name: "a"},
-			gentestdata.User{UserID: 3, Name: "c"},
+		{Employees: []gentestdata.User{
+			{UserID: 3, Name: "a"},
+			{UserID: 3, Name: "c"},
 		}},
-		gentestdata.Department{Employees: []gentestdata.User{
-			gentestdata.User{UserID: 23, Name: "d"},
-			gentestdata.User{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
-			gentestdata.User{UserID: 23, Name: "c", CreateTime: time.Unix(1, 0)},
-			gentestdata.User{UserID: 23, Name: "c", CreateTime: time.Unix(33, 0)},
-			gentestdata.User{UserID: 23, Name: "a"},
+		{Employees: []gentestdata.User{
+			{UserID: 23, Name: "d"},
+			{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
+			{UserID: 23, Name: "c", CreateTime: time.Unix(1, 0)},
+			{UserID: 23, Name: "c", CreateTime: time.Unix(33, 0)},
+			{UserID: 23, Name: "a"},
 		}},
-		gentestdata.Department{Employees: []gentestdata.User{
-			gentestdata.User{UserID: 1},
-			gentestdata.User{UserID: 1},
+		{Employees: []gentestdata.User{
+			{UserID: 1},
+			{UserID: 1},
 		}},
 	})
 	assert.Equal(t, query.Group([]int{1, 3, 4, 4, 3, 3}, ".", func(ids []int) gentestdata.Department {
 		users := query.Select(ids, func(id int) gentestdata.User {
 			return gentestdata.User{UserID: id}
-		}).([]gentestdata.User)
+		})
 		return gentestdata.Department{Employees: users}
 	}), []gentestdata.Department{
-		gentestdata.Department{Employees: []gentestdata.User{
-			gentestdata.User{UserID: 1},
+		{Employees: []gentestdata.User{
+			{UserID: 1},
 		}},
-		gentestdata.Department{Employees: []gentestdata.User{
-			gentestdata.User{UserID: 3},
-			gentestdata.User{UserID: 3},
-			gentestdata.User{UserID: 3},
+		{Employees: []gentestdata.User{
+			{UserID: 3},
+			{UserID: 3},
+			{UserID: 3},
 		}},
-		gentestdata.Department{Employees: []gentestdata.User{
-			gentestdata.User{UserID: 4},
-			gentestdata.User{UserID: 4},
+		{Employees: []gentestdata.User{
+			{UserID: 4},
+			{UserID: 4},
 		}},
 	})
 

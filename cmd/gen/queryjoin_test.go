@@ -12,20 +12,20 @@ import (
 
 func TestQueryJoin(t *testing.T) {
 	admin := []Admin{
-		Admin{AdminID: 23, Level: 5},
-		Admin{AdminID: 3, Level: 30},
-		Admin{AdminID: 4, Level: 7},
+		{AdminID: 23, Level: 5},
+		{AdminID: 3, Level: 30},
+		{AdminID: 4, Level: 7},
 	}
 	user := []User{
-		User{UserID: 3, Name: "a"},
-		User{UserID: 3, Name: "c"},
-		User{UserID: 23, Name: "d"},
-		User{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
-		User{UserID: 23, Name: "g", CreateTime: time.Unix(1, 0)},
-		User{UserID: 23, Name: "h", CreateTime: time.Unix(33, 0)},
-		User{UserID: 23, Name: "a"},
-		User{UserID: 1},
-		User{UserID: 1},
+		{UserID: 3, Name: "a"},
+		{UserID: 3, Name: "c"},
+		{UserID: 23, Name: "d"},
+		{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
+		{UserID: 23, Name: "g", CreateTime: time.Unix(1, 0)},
+		{UserID: 23, Name: "h", CreateTime: time.Unix(33, 0)},
+		{UserID: 23, Name: "a"},
+		{UserID: 1},
+		{UserID: 1},
 	}
 	assert.Equal(t, query.LeftJoin(admin, user, "AdminID = UserID", func(admin Admin, user User) AdminUser {
 		return AdminUser{
@@ -35,14 +35,14 @@ func TestQueryJoin(t *testing.T) {
 			CreateTime: user.CreateTime,
 		}
 	}), []AdminUser{
-		AdminUser{AdminID: 23, Level: 5, Name: "d"},
-		AdminUser{AdminID: 23, Level: 5, Name: "c", CreateTime: time.Unix(29, 0)},
-		AdminUser{AdminID: 23, Level: 5, Name: "g", CreateTime: time.Unix(1, 0)},
-		AdminUser{AdminID: 23, Level: 5, Name: "h", CreateTime: time.Unix(33, 0)},
-		AdminUser{AdminID: 23, Level: 5, Name: "a"},
-		AdminUser{AdminID: 3, Level: 30, Name: "a"},
-		AdminUser{AdminID: 3, Level: 30, Name: "c"},
-		AdminUser{AdminID: 4, Level: 7},
+		{AdminID: 23, Level: 5, Name: "d"},
+		{AdminID: 23, Level: 5, Name: "c", CreateTime: time.Unix(29, 0)},
+		{AdminID: 23, Level: 5, Name: "g", CreateTime: time.Unix(1, 0)},
+		{AdminID: 23, Level: 5, Name: "h", CreateTime: time.Unix(33, 0)},
+		{AdminID: 23, Level: 5, Name: "a"},
+		{AdminID: 3, Level: 30, Name: "a"},
+		{AdminID: 3, Level: 30, Name: "c"},
+		{AdminID: 4, Level: 7},
 	})
 	assert.Equal(t, query.RightJoin(user, []int{23, 3, 4, 6, 7}, "UserID = .", func(left User, right int) User {
 		return User{
@@ -51,16 +51,16 @@ func TestQueryJoin(t *testing.T) {
 			CreateTime: left.CreateTime,
 		}
 	}), []User{
-		User{UserID: 3, Name: "a"},
-		User{UserID: 3, Name: "c"},
-		User{UserID: 23, Name: "d"},
-		User{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
-		User{UserID: 23, Name: "g", CreateTime: time.Unix(1, 0)},
-		User{UserID: 23, Name: "h", CreateTime: time.Unix(33, 0)},
-		User{UserID: 23, Name: "a"},
-		User{UserID: 4},
-		User{UserID: 6},
-		User{UserID: 7},
+		{UserID: 3, Name: "a"},
+		{UserID: 3, Name: "c"},
+		{UserID: 23, Name: "d"},
+		{UserID: 23, Name: "c", CreateTime: time.Unix(29, 0)},
+		{UserID: 23, Name: "g", CreateTime: time.Unix(1, 0)},
+		{UserID: 23, Name: "h", CreateTime: time.Unix(33, 0)},
+		{UserID: 23, Name: "a"},
+		{UserID: 4},
+		{UserID: 6},
+		{UserID: 7},
 	})
 
 	// 测试
