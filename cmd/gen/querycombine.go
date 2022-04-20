@@ -79,10 +79,10 @@ var (
 func init() {
 	var err error
 	queryCombineFuncTmpl, err = template.New("name").Parse(`
-	func ` + combineFuncPrefix + `{{ .signature }}(leftData interface{},rightData interface{},combineFunctor interface{})interface{}{
-		leftDataIn := leftData.([]{{ .firstArgElemType }})
-		rightDataIn := rightData.([]{{ .secondArgElemType }})
-		combineFunctorIn := combineFunctor.({{ .thirdArgType }})
+	func ` + combineFuncPrefix + `{{ .signature }}(leftData []{{ .firstArgElemType }},rightData []{{ .secondArgElemType }},combineFunctor {{ .thirdArgType }})[]{{ .thirdArgReturnType }}{
+		leftDataIn := leftData
+		rightDataIn := rightData
+		combineFunctorIn := combineFunctor
 		newData := make([]{{ .thirdArgReturnType }},len(leftDataIn),len(leftDataIn))
 
 		for i := 0 ;i != len(leftDataIn);i++{

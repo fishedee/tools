@@ -93,13 +93,13 @@ func init() {
 	var err error
 	queryGroupFuncTmpl, err = template.New("name").Parse(`
 	 {{if eq .isFunctorGroup "true"}}` +
-		`func ` + groupFuncPrefix + "{{ .signature }}(data interface{},groupType string,groupFunctor interface{})interface{}{\n" +
+		`func ` + groupFuncPrefix + "{{ .signature }}(data []{{ .firstArgElemType }},groupType string,groupFunctor {{ .thirdArgType }})[]{{ .thirdArgReturnType}}{\n" +
 		`{{else}}` +
-		`func ` + columnMapFuncPrefix + "{{ .signature }}(data interface{},column string)interface{}{\n" +
-		`{{end}}dataIn := data.([]{{ .firstArgElemType }})
+		`func ` + columnMapFuncPrefix + "{{ .signature }}(data []{{ .firstArgElemType }},column string)map[{{ .columnType }}][]{{ .firstArgElemType}}{\n" +
+		`{{end}}dataIn := data
 		bufferData := make([]{{ .firstArgElemType }},len(dataIn),len(dataIn))
 		mapData := make(map[{{ .columnType }}]int,len(dataIn))
-		{{if eq .isFunctorGroup "true"}}groupFunctorIn := groupFunctor.({{ .thirdArgType }})
+		{{if eq .isFunctorGroup "true"}}groupFunctorIn := groupFunctor
 		result := make([]{{ .thirdArgReturnType}},0,len(dataIn))
 		{{else}}result := make(map[{{ .columnType }}][]{{ .firstArgElemType}},len(dataIn))
 		{{end}}

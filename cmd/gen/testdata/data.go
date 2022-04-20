@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/fishedee/tools/query"
-	"github.com/fishedee/tools/query/testdata"
+	testdata "github.com/fishedee/tools/query/test_data"
 )
 
 // Department Department
@@ -53,19 +53,19 @@ type QueryInnerStruct = testdata.QueryInnerStruct
 type QueryInnerStruct2 = testdata.QueryInnerStruct2
 
 func logic() {
-	query.Column([]User{}, "UserID")
-	query.Column([]User{}, "Name")
-	query.Column([]ContentType{}, " Name ")
-	query.Column([]ContentType{}, "     Name         ")
-	query.Column([]ContentType{}, "Age        ")
-	query.Column([]ContentType{}, "Ok        ")
-	query.Column([]ContentType{}, "    Money  ")
-	query.Column([]ContentType{}, "    CardMoney")
-	query.Column([]QueryInnerStruct2{}, "QueryInnerStruct.MM")
-	query.Column([]User{}, ".")
-	query.Column([]int{}, ".")
-	query.Column([]int{}, " . ")
-	query.Column([]string{}, " . ")
+	query.Column[User, int]([]User{}, "UserID")
+	query.Column[User, string]([]User{}, "Name")
+	query.Column[ContentType, string]([]ContentType{}, " Name ")
+	query.Column[ContentType, string]([]ContentType{}, "     Name         ")
+	query.Column[ContentType, int]([]ContentType{}, "Age        ")
+	query.Column[ContentType, bool]([]ContentType{}, "Ok        ")
+	query.Column[ContentType, float32]([]ContentType{}, "    Money  ")
+	query.Column[ContentType, float64]([]ContentType{}, "    CardMoney")
+	query.Column[QueryInnerStruct2, int]([]QueryInnerStruct2{}, "QueryInnerStruct.MM")
+	query.Column[User, User]([]User{}, ".")
+	query.Column[int, int]([]int{}, ".")
+	query.Column[int, int]([]int{}, " . ")
+	query.Column[string, string]([]string{}, " . ")
 	query.Select([]User{}, func(d User) Sex {
 		return Sex{}
 	})
@@ -79,41 +79,41 @@ func logic() {
 	query.Sort([]User{}, "UserID asc")
 	query.Sort([]int{}, ". desc")
 	query.Sort([]Admin{}, "IsMale asc")
-	query.ColumnMap([]User{}, "UserID")
-	query.ColumnMap([]User{}, "Name")
-	query.ColumnMap([]User{}, "[]UserID")
-	query.ColumnMap([]int{}, ".")
-	query.ColumnMap([]int{}, " . ")
-	query.ColumnMap([]string{}, " . ")
-	query.ColumnMap([]ContentType{}, " Name ")
-	query.ColumnMap([]ContentType{}, "     Name         ")
-	query.ColumnMap([]ContentType{}, "Age        ")
-	query.ColumnMap([]ContentType{}, "Ok        ")
-	query.ColumnMap([]ContentType{}, "    Money  ")
-	query.ColumnMap([]ContentType{}, "    CardMoney")
-	query.ColumnMap([]QueryInnerStruct2{}, "QueryInnerStruct.MM")
-	query.Group([]User{}, "UserID", func(user []User) Department {
+	query.ColumnMap[User, int]([]User{}, "UserID")
+	query.ColumnMap[User, string]([]User{}, "Name")
+	query.ColumnMap[User, int]([]User{}, "[]UserID")
+	query.ColumnMap[int, int]([]int{}, ".")
+	query.ColumnMap[int, int]([]int{}, " . ")
+	query.ColumnMap[string, string]([]string{}, " . ")
+	query.ColumnMap[ContentType, string]([]ContentType{}, " Name ")
+	query.ColumnMap[ContentType, string]([]ContentType{}, "     Name         ")
+	query.ColumnMap[ContentType, int]([]ContentType{}, "Age        ")
+	query.ColumnMap[ContentType, bool]([]ContentType{}, "Ok        ")
+	query.ColumnMap[ContentType, float32]([]ContentType{}, "    Money  ")
+	query.ColumnMap[ContentType, float64]([]ContentType{}, "    CardMoney")
+	query.ColumnMap[QueryInnerStruct2, int]([]QueryInnerStruct2{}, "QueryInnerStruct.MM")
+	query.Group[User, Department, []Department]([]User{}, "UserID", func(user []User) Department {
 		return Department{}
 	})
-	query.Group([]User{}, "CreateTime", func(user []User) Department {
+	query.Group[User, Department, []Department]([]User{}, "CreateTime", func(user []User) Department {
 		return Department{}
 	})
-	query.Group([]User{}, "CreateTime", func(user []User) []Department {
+	query.Group[User, []Department, *[]Department]([]User{}, "CreateTime", func(user []User) []Department {
 		return []Department{}
 	})
-	query.Group([]int{}, ".", func(ids []int) Department {
-		users := query.Select(ids, func(id int) User {
+	query.Group[int, Department, []Department]([]int{}, ".", func(ids []int) Department {
+		users := query.Select[int, User](ids, func(id int) User {
 			return User{UserID: id}
-		}).([]User)
+		})
 		return Department{Employees: users}
 	})
-	query.Group([]int{}, ".", func(Data []int) int {
+	query.Group[int, int, []int]([]int{}, ".", func(Data []int) int {
 		return len(Data)
 	})
-	query.Group([]ContentType{}, " Ok ", func(list []ContentType) []ContentType {
+	query.Group[ContentType, []ContentType, *[]ContentType]([]ContentType{}, " Ok ", func(list []ContentType) []ContentType {
 		return []ContentType{}
 	})
-	query.Group([]string{"a", "a", "", "", "z"},
+	query.Group[string, ContentType, []ContentType]([]string{"a", "a", "", "", "z"},
 		".",
 		func(list []string) ContentType {
 			return ContentType{
@@ -121,64 +121,64 @@ func logic() {
 				Age:  len(list),
 			}
 		})
-	query.Group([]ContentType{},
+	query.Group[ContentType, []ContentType, *[]ContentType]([]ContentType{},
 		"Name",
 		func(list []ContentType) []ContentType {
-			sum := query.Sum(query.Column(list, "  Money  "))
+			sum := query.Sum(query.Column[ContentType, float32](list, "  Money  "))
 			list[0].Money = sum.(float32)
 			return []ContentType{list[0]}
 		})
-	query.Group([]ContentType{},
+	query.Group[ContentType, float32, []float32]([]ContentType{},
 		"Name",
 		func(list []ContentType) float32 {
-			sum := query.Sum(query.Column(list, "  Money  ")).(float32)
+			sum := query.Sum(query.Column[ContentType, float32](list, "  Money  ")).(float32)
 			return sum
 		})
-	query.Group([]ContentType{},
+	query.Group[ContentType, []ContentType, *[]ContentType]([]ContentType{},
 		"Ok",
 		func(list []ContentType) []ContentType {
-			sum := query.Sum(query.Column(list, "CardMoney  "))
+			sum := query.Sum(query.Column[ContentType, float64](list, "CardMoney  "))
 			list[0].CardMoney = sum.(float64)
 			return []ContentType{list[0]}
 		})
-	query.Group([]ContentType{},
+	query.Group[ContentType, []ContentType, *[]ContentType]([]ContentType{},
 		" Age ",
 		func(list []ContentType) []ContentType {
-			sum := query.Sum(query.Column(list, "  CardMoney  "))
+			sum := query.Sum(query.Column[ContentType, float64](list, "  CardMoney  "))
 			list[0].CardMoney = sum.(float64)
 			return []ContentType{list[0]}
 		})
-	query.Group([]ContentType{},
+	query.Group[ContentType, float64, []float64]([]ContentType{},
 		" Age ",
 		func(list []ContentType) float64 {
-			sum := query.Sum(query.Column(list, "  CardMoney  ")).(float64)
+			sum := query.Sum(query.Column[ContentType, float64](list, "  CardMoney  ")).(float64)
 			return sum
 
 		})
-	query.Group([]ContentType{},
+	query.Group[ContentType, []float64, *[]float64]([]ContentType{},
 		" Age ",
 		func(list []ContentType) []float64 {
-			sum := query.Sum(query.Column(list, "  CardMoney  "))
+			sum := query.Sum(query.Column[ContentType, float64](list, "  CardMoney  "))
 			return []float64{sum.(float64)}
 		})
-	query.Group([]ContentType{},
+	query.Group[ContentType, int, []int]([]ContentType{},
 		"Register ",
 		func(list []ContentType) int {
-			sum := query.Sum(query.Column(list, "  Age  "))
+			sum := query.Sum(query.Column[ContentType, int](list, "  Age  "))
 			return sum.(int)
 
 		})
-	query.Group([]ContentType{},
+	query.Group[ContentType, []ContentType, *[]ContentType]([]ContentType{},
 		"Register ",
 		func(list []ContentType) []ContentType {
-			sum := query.Sum(query.Column(list, "  Age  "))
+			sum := query.Sum(query.Column[ContentType, int](list, "  Age  "))
 			list[0].Age = sum.(int)
 			return []ContentType{list[0]}
 		})
-	query.Group([]QueryInnerStruct2{},
+	query.Group[QueryInnerStruct2, []QueryInnerStruct2, *[]QueryInnerStruct2]([]QueryInnerStruct2{},
 		"QueryInnerStruct.MM",
 		func(list []QueryInnerStruct2) []QueryInnerStruct2 {
-			sum := query.Sum(query.Column(list, "  MM  "))
+			sum := query.Sum(query.Column[QueryInnerStruct2, int](list, "  MM  "))
 			list[0].MM = sum.(int)
 			return []QueryInnerStruct2{list[0]}
 		})

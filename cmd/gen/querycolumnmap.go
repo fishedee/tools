@@ -76,8 +76,8 @@ var (
 func init() {
 	var err error
 	queryColumnMapFuncTmpl, err = template.New("name").Parse(`
-	func ` + columnMapFuncPrefix + `{{ .signature }}(data interface{},column string)interface{}{
-		dataIn := data.([]{{ .firstArgElemType }})
+	func ` + columnMapFuncPrefix + `{{ .signature }}(data []{{ .firstArgElemType }},column string)map[{{ .firstArgElemColumnType }}]{{ .firstArgElemType }}{
+		dataIn := data
 		result := make(map[{{ .firstArgElemColumnType }}]{{ .firstArgElemType }},len(dataIn))
 
 		for i := len(dataIn)-1; i >= 0; i--{

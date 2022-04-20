@@ -11,5 +11,5 @@ type Address struct {
 }
 
 func logic() {
-	query.Column([]Address{}, "City")
+	query.Column[Address, string]([]Address{}, "City")
 }

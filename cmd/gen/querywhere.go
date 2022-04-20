@@ -77,7 +77,7 @@ func init() {
 		result := make([]{{ .firstArgElemType }},0,len(data))
 
 		for _,single := range data{
-			shouldStay := whereFunctorIn(single)
+			shouldStay := whereFunctor(single)
 			if shouldStay {
 				result = append(result,single)
 			}

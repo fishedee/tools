@@ -154,10 +154,10 @@ func Join[L, R, LR any](leftData []L, rightData []R, joinPlace, joinType string,
 }
 
 // GroupMacroHandler 基础类函数 QueryGroup
-type GroupMacroHandler func(data interface{}, groupType string, groupFunctor interface{}) interface{}
+type GroupMacroHandler[T, E any, R *E | []E] func(data []T, groupType string, groupFunctor func([]T) E) R
 
 // GroupMacroRegister 注册
-func GroupMacroRegister(data interface{}, groupType string, groupFunctor interface{}, handler GroupMacroHandler) {
+func GroupMacroRegister[T, E any, R *E | []E](data []T, groupType string, groupFunctor func([]T) E, handler GroupMacroHandler[T, E, R]) {
 	id := registerQueryTypeID([]string{reflect.TypeOf(data).String(), groupType, reflect.TypeOf(groupFunctor).String()})
 	groupMacroMapper[id] = handler
 }
@@ -172,22 +172,22 @@ func GroupMacroRegister(data interface{}, groupType string, groupFunctor interfa
 //         }
 //     })
 //     group := result.([]Department)
-func Group(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+func Group[T, E any, R *E | []E](data []T, groupType string, groupFunctor func([]T) E) R {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), groupType, reflect.TypeOf(groupFunctor).String()})
 	handler, isExist := groupMacroMapper[id]
 	if isExist {
-		return handler(data, groupType, groupFunctor)
+		return handler.(GroupMacroHandler[T, E, R])(data, groupType, groupFunctor)
 	}
 
 	reflectWarn("QueryGroup")
-	return query.GroupReflect(data, groupType, groupFunctor)
+	return query.GroupReflect[T, E, R](data, groupType, groupFunctor)
 }
 
 // ColumnMacroHandler 扩展类函数 QueryColumn
-type ColumnMacroHandler func(data interface{}, column string) interface{}
+type ColumnMacroHandler[T, R any] func(data []T, column string) []R
 
 // ColumnMacroRegister 注册
-func ColumnMacroRegister(data interface{}, column string, handler ColumnMacroHandler) {
+func ColumnMacroRegister[T, R any](data []T, column string, handler ColumnMacroHandler[T, R]) {
 	id := registerQueryTypeID([]string{reflect.TypeOf(data).String(), column})
 	columnMacroMapper[id] = handler
 }
@@ -197,22 +197,22 @@ func ColumnMacroRegister(data interface{}, column string, handler ColumnMacroHan
 //     * Second Argument:column name
 //     result := query.Column(users, "UserID")
 //     userIDs := result.([]int)
-func Column(data interface{}, column string) interface{} {
+func Column[T, R any](data []T, column string) []R {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), column})
 	handler, isExist := columnMacroMapper[id]
 	if isExist {
-		return handler(data, column)
+		return handler.(ColumnMacroHandler[T, R])(data, column)
 	}
 
 	reflectWarn("QueryColumn")
-	return query.ColumnReflect(data, column)
+	return query.ColumnReflect[T, R](data, column)
 }
 
 // ColumnMapMacroHandler 扩展类函数 QueryColumnMap
-type ColumnMapMacroHandler func(data interface{}, column string) interface{}
+type ColumnMapMacroHandler[T any, K comparable] func(data []T, column string) map[K]T
 
 // ColumnMapMacroRegister 注册
-func ColumnMapMacroRegister(data interface{}, column string, handler ColumnMapMacroHandler) {
+func ColumnMapMacroRegister[T any, K comparable](data []T, column string, handler ColumnMapMacroHandler[T, K]) {
 	id := registerQueryTypeID([]string{reflect.TypeOf(data).String(), column})
 	columnMapMacroMapper[id] = handler
 }
@@ -222,15 +222,15 @@ func ColumnMapMacroRegister(data interface{}, column string, handler ColumnMapMa
 //     * Second Argument:column name
 //     result = query.ColumnMap(users, "UserID")
 //     userMap := result.(map[int]User)
-func ColumnMap(data interface{}, column string) interface{} {
+func ColumnMap[T any, K comparable](data []T, column string) map[K]T {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), column})
 	handler, isExist := columnMapMacroMapper[id]
 	if isExist {
-		return handler(data, column)
+		return handler.(ColumnMapMacroHandler[T, K])(data, column)
 	}
 
 	reflectWarn("QueryColumnMap")
-	return query.ColumnMapReflect(data, column)
+	return query.ColumnMapReflect[T, K](data, column)
 }
 
 // LeftJoin join data from two table，support LeftJoin,RightJoin,InnerJoin和OuterJoin
@@ -267,10 +267,10 @@ func OuterJoin[L, R, LR any](leftData []L, rightData []R, joinType string, joinF
 }
 
 // CombineMacroHandler 扩展累函数 QueryCombine
-type CombineMacroHandler func(leftData interface{}, rightData interface{}, combineFuctor interface{}) interface{}
+type CombineMacroHandler[L, R, LR any] func(leftData []L, rightData []R, combineFuctor func(L, R) LR) []LR
 
 // CombineMacroRegister 注册
-func CombineMacroRegister(leftData interface{}, rightData interface{}, combineFuctor interface{}, handler CombineMacroHandler) {
+func CombineMacroRegister[L, R, LR any](leftData []L, rightData []R, combineFuctor func(L, R) LR, handler CombineMacroHandler[L, R, LR]) {
 	id := registerQueryTypeID([]string{reflect.TypeOf(leftData).String(), reflect.TypeOf(rightData).String(), reflect.TypeOf(combineFuctor).String()})
 	combineMacroMapper[id] = handler
 }
@@ -288,11 +288,11 @@ func CombineMacroRegister(leftData interface{}, rightData interface{}, combineFu
 //         }
 //     })
 //     combine := result.([]AdminUser)
-func Combine(leftData interface{}, rightData interface{}, combineFuctor interface{}) interface{} {
+func Combine[L, R, LR any](leftData []L, rightData []R, combineFuctor func(L, R) LR) []LR {
 	id := getQueryTypeID([]string{reflect.TypeOf(leftData).String(), reflect.TypeOf(rightData).String(), reflect.TypeOf(combineFuctor).String()})
 	handler, isExist := combineMacroMapper[id]
 	if isExist {
-		return handler(leftData, rightData, combineFuctor)
+		return handler.(CombineMacroHandler[L, R, LR])(leftData, rightData, combineFuctor)
 	}
 
 	reflectWarn("QueryCombine")
@@ -408,7 +408,7 @@ func Min(data interface{}) interface{} {
 //     query.Reverse(
 //         []User{},
 //     )
-func Reverse(data interface{}) interface{} {
+func Reverse[T any](data []T) []T {
 	dataValue := reflect.ValueOf(data)
 	dataType := dataValue.Type()
 	dataLen := dataValue.Len()
@@ -417,13 +417,13 @@ func Reverse(data interface{}) interface{} {
 	for i := 0; i != dataLen; i++ {
 		result.Index(dataLen - i - 1).Set(dataValue.Index(i))
 	}
-	return result.Interface()
+	return result.Interface().([]T)
 }
 
 // Distinct unique by column
 //     result := query.Distinct([]User{}, "Name")
 //     dis := result.([]User{})
-func Distinct(data interface{}, columnNames string) interface{} {
+func Distinct[T any](data []T, columnNames string) []T {
 	//提取信息
 	name := plode.Explode(columnNames, ",")
 	extractInfo := []query.QueryExtract{}
@@ -453,7 +453,7 @@ func Distinct(data interface{}, columnNames string) interface{} {
 		result = reflect.Append(result, singleValue)
 		existsMap[newDataValue] = true
 	}
-	return result.Interface()
+	return result.Interface().([]T)
 }
 
 func registerQueryTypeID(data []string) int64 {
@@ -499,10 +499,10 @@ var (
 	whereMacroMapper     = map[int64]any{}
 	sortMacroMapper      = map[int64]any{}
 	joinMacroMapper      = map[int64]any{}
-	groupMacroMapper     = map[int64]GroupMacroHandler{}
-	columnMacroMapper    = map[int64]ColumnMacroHandler{}
-	columnMapMacroMapper = map[int64]ColumnMapMacroHandler{}
-	combineMacroMapper   = map[int64]CombineMacroHandler{}
+	groupMacroMapper     = map[int64]any{}
+	columnMacroMapper    = map[int64]any{}
+	columnMapMacroMapper = map[int64]any{}
+	combineMacroMapper   = map[int64]any{}
 	typeIDMapper         = map[string]int64{}
 	reflectWarning       = false
 )

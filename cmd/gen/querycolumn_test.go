@@ -8,7 +8,7 @@ import (
 	"github.com/fishedee/tools/assert"
 	gentestdata "github.com/fishedee/tools/cmd/gen/testdata"
 	"github.com/fishedee/tools/query"
-	"github.com/fishedee/tools/query/testdata"
+	testdata "github.com/fishedee/tools/query/test_data"
 )
 
 func TestQueryColumn(t *testing.T) {
@@ -17,9 +17,9 @@ func TestQueryColumn(t *testing.T) {
 		{UserID: -2},
 		{UserID: 3},
 	}
-	assert.Equal(t, query.Column(data, "UserID"), []int{1, -2, 3})
-	assert.Equal(t, query.Column(data, "."), data)
-	assert.Equal(t, query.Column([]int{1, -2, 3}, "."), []int{1, -2, 3})
+	assert.Equal(t, query.Column[gentestdata.User, int](data, "UserID"), []int{1, -2, 3})
+	assert.Equal(t, query.Column[gentestdata.User, gentestdata.User](data, "."), data)
+	assert.Equal(t, query.Column[int, int]([]int{1, -2, 3}, "."), []int{1, -2, 3})
 
 	// 测试
 	testCase := testdata.GetQueryColumnTestCase()
@@ -48,7 +48,7 @@ func BenchmarkQueryColumnMacro(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
-		query.Column(data, "UserID")
+		query.Column[gentestdata.User, int](data, "UserID")
 	}
 }
 
@@ -57,7 +57,7 @@ func BenchmarkQueryColumnReflect(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
-		query.Column(data, "Age")
+		query.Column[gentestdata.User, int](data, "Age")
 	}
 }
 

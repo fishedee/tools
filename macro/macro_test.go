@@ -60,13 +60,14 @@ func main() { fmt.Println("123") }
 func TestPkgDir(t *testing.T) {
 	m := &Macro{}
 	for _, cas := range []struct {
-		pkg string
+		pkg      string
+		shortPkg string
 	}{
-		{"github.com/fishedee/tools/macro"},
-		{"database/sql"},
+		{"github.com/fishedee/tools/macro", "macro"},
+		{"database/sql", "database/sql"},
 	} {
 
-		r, err := m.getPkgBaseDir(cas.pkg, "macro")
+		r, err := m.getPkgBaseDir(cas.pkg, cas.shortPkg)
 		if err != nil {
 			t.Fatal(err)
 		}

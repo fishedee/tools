@@ -60,8 +60,8 @@ var (
 func init() {
 	var err error
 	queryColumnFuncTmpl, err = template.New("name").Parse(`
-	func ` + columnFuncPrefix + `{{ .signature }}(data interface{},column string)interface{}{
-		dataIn := data.([]{{ .firstArgElemType }})
+	func ` + columnFuncPrefix + `{{ .signature }}(data []{{ .firstArgElemType }},column string)[]{{ .firstArgElemColumnType }}{
+		dataIn := data
 		result := make([]{{ .firstArgElemColumnType }},len(dataIn),len(dataIn))
 
 		for i,single := range dataIn{

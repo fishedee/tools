@@ -8,7 +8,7 @@ import (
 	"github.com/fishedee/tools/assert"
 	gentestdata "github.com/fishedee/tools/cmd/gen/testdata"
 	"github.com/fishedee/tools/query"
-	"github.com/fishedee/tools/query/testdata"
+	testdata "github.com/fishedee/tools/query/test_data"
 )
 
 func TestQueryGroup(t *testing.T) {
@@ -23,7 +23,7 @@ func TestQueryGroup(t *testing.T) {
 		{UserID: 1},
 		{UserID: 1},
 	}
-	assert.Equal(t, query.Group(data, "UserID", func(users []gentestdata.User) gentestdata.Department {
+	assert.Equal(t, query.Group[gentestdata.User, gentestdata.Department, []gentestdata.Department](data, "UserID", func(users []gentestdata.User) gentestdata.Department {
 		return gentestdata.Department{
 			Employees: users,
 		}
@@ -44,7 +44,7 @@ func TestQueryGroup(t *testing.T) {
 			{UserID: 1},
 		}},
 	})
-	assert.Equal(t, query.Group([]int{1, 3, 4, 4, 3, 3}, ".", func(ids []int) gentestdata.Department {
+	assert.Equal(t, query.Group[int, gentestdata.Department, []gentestdata.Department]([]int{1, 3, 4, 4, 3, 3}, ".", func(ids []int) gentestdata.Department {
 		users := query.Select(ids, func(id int) gentestdata.User {
 			return gentestdata.User{UserID: id}
 		})
@@ -116,7 +116,7 @@ func BenchmarkQueryGroupMacro(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
-		query.Group(data, "UserID", func(users []User) Department {
+		query.Group[gentestdata.User, Department, []Department](data, "UserID", func(users []User) Department {
 			return Department{
 				Employees: users,
 			}
@@ -129,7 +129,7 @@ func BenchmarkQueryGroupReflect(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
-		query.Group(data, "Age", func(users []User) Department {
+		query.Group[gentestdata.User, Department, []Department](data, "Age", func(users []User) Department {
 			return Department{
 				Employees: users,
 			}

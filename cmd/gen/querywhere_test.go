@@ -5,7 +5,7 @@ import (
 
 	"github.com/fishedee/tools/assert"
 	"github.com/fishedee/tools/query"
-	"github.com/fishedee/tools/query/testdata"
+	testdata "github.com/fishedee/tools/query/test_data"
 )
 
 func TestQueryWhere(t *testing.T) {

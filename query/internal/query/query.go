@@ -380,7 +380,7 @@ func analyseJoin(joinType string) (string, string) {
 }
 
 // GroupReflect 反射
-func GroupReflect(data interface{}, groupType string, groupFunctor interface{}) interface{} {
+func GroupReflect[T, E any, R *E | []E](data []T, groupType string, groupFunctor func([]T) E) R {
 	groupFuctorValue := reflect.ValueOf(groupFunctor)
 	groupFuctorType := groupFuctorValue.Type()
 
@@ -406,7 +406,13 @@ func GroupReflect(data interface{}, groupType string, groupFunctor interface{}) 
 		}
 	})
 
-	return resultValue.Interface()
+	if resultType.Kind() == reflect.Slice {
+		res := reflect.New(resultType).Elem()
+		res.Set(resultValue)
+		return res.Addr().Interface().(R)
+	}
+
+	return resultValue.Interface().(R)
 }
 
 type GroupWalkHandler func(data reflect.Value)
@@ -458,7 +464,7 @@ func GroupWalkReflect(data interface{}, groupType string, groupWalkHandler Group
 }
 
 // ColumnReflect 反射
-func ColumnReflect(data interface{}, column string) interface{} {
+func ColumnReflect[T, R any](data []T, column string) []R {
 	dataValue := reflect.ValueOf(data)
 	dataType := dataValue.Type().Elem()
 	dataLen := dataValue.Len()
@@ -472,21 +478,22 @@ func ColumnReflect(data interface{}, column string) interface{} {
 		singleResultValue := dataFieldExtract(singleDataValue)
 		resultValue.Index(i).Set(singleResultValue)
 	}
-	return resultValue.Interface()
+	return resultValue.Interface().([]R)
 }
 
 // ColumnMapReflect 反射
-func ColumnMapReflect(data interface{}, column string) interface{} {
+func ColumnMapReflect[T any, K comparable](data []T, column string) map[K]T {
 	column = strings.Trim(column, " ")
-	if len(column) >= 2 && column[0:2] == "[]" {
-		column = column[2:]
-		return columnMapReflectSlice(data, column)
-	} else {
-		return columnMapReflectSingle(data, column)
-	}
+	// 返回值类型不一致，暂时去掉
+	// if len(column) >= 2 && column[0:2] == "[]" {
+	// 	column = column[2:]
+	// 	return columnMapReflectSlice[T, K](data, column)
+	// } else {
+	return columnMapReflectSingle[T, K](data, column)
+	// }
 }
 
-func columnMapReflectSlice(data interface{}, column string) interface{} {
+func columnMapReflectSlice[T any, K comparable](data []T, column string) map[K][]T {
 	dataValue := reflect.ValueOf(data)
 	dataValueType := dataValue.Type()
 	dataType := dataValue.Type().Elem()
@@ -500,10 +507,10 @@ func columnMapReflectSlice(data interface{}, column string) interface{} {
 		singleResultValue := dataFieldExtract(group.Index(0))
 		resultValue.SetMapIndex(singleResultValue, group)
 	})
-	return resultValue.Interface()
+	return resultValue.Interface().(map[K][]T)
 }
 
-func columnMapReflectSingle(data interface{}, column string) interface{} {
+func columnMapReflectSingle[T any, K comparable](data []T, column string) map[K]T {
 	dataValue := reflect.ValueOf(data)
 	dataType := dataValue.Type().Elem()
 	dataLen := dataValue.Len()
@@ -516,11 +523,11 @@ func columnMapReflectSingle(data interface{}, column string) interface{} {
 		singleResultValue := dataFieldExtract(singleDataValue)
 		resultValue.SetMapIndex(singleResultValue, singleDataValue)
 	}
-	return resultValue.Interface()
+	return resultValue.Interface().(map[K]T)
 }
 
 // CombineReflect 反射
-func CombineReflect(leftData interface{}, rightData interface{}, combineFuctor interface{}) interface{} {
+func CombineReflect[L, R, LR any](leftData []L, rightData []R, combineFuctor func(L, R) LR) []LR {
 	leftValue := reflect.ValueOf(leftData)
 	rightValue := reflect.ValueOf(rightData)
 	if leftValue.Len() != rightValue.Len() {
@@ -534,5 +541,5 @@ func CombineReflect(leftData interface{}, rightData interface{}, combineFuctor i
 		singleResultValue := combineFuctorValue.Call([]reflect.Value{leftValue.Index(i), rightValue.Index(i)})
 		result.Index(i).Set(singleResultValue[0])
 	}
-	return result.Interface()
+	return result.Interface().([]LR)
 }

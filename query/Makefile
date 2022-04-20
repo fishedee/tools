@@ -3,9 +3,9 @@ test_all:test_reflect test_macro
 	echo "test finish"
 test_macro:
 	go install github.com/fishedee/tools/cmd/gen
-	rm -rf testdata/testdata_querygen.go
-	cd testdata && gen -r 
+	rm -rf test_data/testdata_querygen.go
+	cd test_data && gen -r 
 	go test . -v -args macro
 test_reflect:
-	rm -rf testdata/testdata_querygen.go
+	rm -rf test_data/testdata_querygen.go
 	go test . -v -args reflect

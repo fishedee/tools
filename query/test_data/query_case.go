@@ -43,25 +43,25 @@ func GetQueryColumnTestCase() []TestCase {
 	testCase := []TestCase{
 		{
 			func() interface{} {
-				return query.Column([]int{}, " . ")
+				return query.Column[int, int]([]int{}, " . ")
 			},
 			[]int{},
 		},
 		{
 			func() interface{} {
-				return query.Column([]string{"1", "7", "8"}, " . ")
+				return query.Column[string, string]([]string{"1", "7", "8"}, " . ")
 			},
 			[]string{"1", "7", "8"},
 		},
 		{
 			func() interface{} {
-				return query.Column([]ContentType{}, " Name ")
+				return query.Column[ContentType, string]([]ContentType{}, " Name ")
 			},
 			[]string{},
 		},
 		{
 			func() interface{} {
-				return query.Column([]ContentType{
+				return query.Column[ContentType, string]([]ContentType{
 					ContentType{"a", 3, true, 0, 0, nowTime},
 					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
 					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
@@ -73,7 +73,7 @@ func GetQueryColumnTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.Column([]ContentType{
+				return query.Column[ContentType, int]([]ContentType{
 					ContentType{"a", 3, true, 0, 0, nowTime},
 					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
 					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
@@ -86,7 +86,7 @@ func GetQueryColumnTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.Column([]ContentType{
+				return query.Column[ContentType, bool]([]ContentType{
 					ContentType{"a", 3, true, 0, 0, nowTime},
 					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
 					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
@@ -99,7 +99,7 @@ func GetQueryColumnTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.Column([]ContentType{
+				return query.Column[ContentType, float32]([]ContentType{
 					ContentType{"a", 3, true, 0, 0, nowTime},
 					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
 					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
@@ -112,7 +112,7 @@ func GetQueryColumnTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.Column([]ContentType{
+				return query.Column[ContentType, float64]([]ContentType{
 					ContentType{"a", 3, true, 0, 0, nowTime},
 					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
 					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
@@ -125,7 +125,7 @@ func GetQueryColumnTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.Column([]QueryInnerStruct2{
+				return query.Column[QueryInnerStruct2, int]([]QueryInnerStruct2{
 					QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
 					QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
 					QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
@@ -1217,7 +1217,7 @@ func GetQueryGroupTestCase() []TestCase {
 	testCase := []TestCase{
 		{
 			func() interface{} {
-				return query.Group(
+				return query.Group[int, int, []int](
 					[]int{},
 					".",
 					func(Data []int) int {
@@ -1228,18 +1228,18 @@ func GetQueryGroupTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.Group(
+				return query.Group[ContentType, []ContentType, *[]ContentType](
 					[]ContentType{},
 					" Ok ",
 					func(list []ContentType) []ContentType {
 						return []ContentType{}
 					})
 			},
-			[]ContentType{},
+			&[]ContentType{},
 		},
 		{
 			func() interface{} {
-				return query.Group(
+				return query.Group[string, ContentType, []ContentType](
 					[]string{"a", "a", "", "", "z"},
 					".",
 					func(list []string) ContentType {
@@ -1257,7 +1257,7 @@ func GetQueryGroupTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.Group(
+				return query.Group[ContentType, []ContentType, *[]ContentType](
 					[]ContentType{
 						ContentType{"a", 3, true, 0, 0, nowTime},
 						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
@@ -1267,12 +1267,12 @@ func GetQueryGroupTestCase() []TestCase {
 					},
 					"Name",
 					func(list []ContentType) []ContentType {
-						sum := query.Sum(query.Column(list, "  Money  "))
+						sum := query.Sum(query.Column[ContentType, float32](list, "  Money  "))
 						list[0].Money = sum.(float32)
 						return []ContentType{list[0]}
 					})
 			},
-			[]ContentType{
+			&[]ContentType{
 				ContentType{"a", 3, true, 1.1, 0, nowTime},
 				ContentType{"", 10, true, -2.2, -1.2, oldTime},
 				ContentType{"z", 3, true, 0, 0, nowTime},
@@ -1280,7 +1280,7 @@ func GetQueryGroupTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.Group(
+				return query.Group[ContentType, float32, []float32](
 					[]ContentType{
 						ContentType{"a", 3, true, 0, 0, nowTime},
 						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
@@ -1290,7 +1290,7 @@ func GetQueryGroupTestCase() []TestCase {
 					},
 					"Name",
 					func(list []ContentType) float32 {
-						sum := query.Sum(query.Column(list, "  Money  ")).(float32)
+						sum := query.Sum(query.Column[ContentType, float32](list, "  Money  ")).(float32)
 						return sum
 					})
 			},
@@ -1298,7 +1298,7 @@ func GetQueryGroupTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.Group(
+				return query.Group[ContentType, []ContentType, *[]ContentType](
 					[]ContentType{
 						ContentType{"a", 3, true, 0, 0, nowTime},
 						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
@@ -1308,19 +1308,19 @@ func GetQueryGroupTestCase() []TestCase {
 					},
 					"Ok",
 					func(list []ContentType) []ContentType {
-						sum := query.Sum(query.Column(list, "CardMoney  "))
+						sum := query.Sum(query.Column[ContentType, float64](list, "CardMoney  "))
 						list[0].CardMoney = sum.(float64)
 						return []ContentType{list[0]}
 					})
 			},
-			[]ContentType{
+			&[]ContentType{
 				ContentType{"a", 3, true, 0, -1.2, nowTime},
 				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			func() interface{} {
-				return query.Group(
+				return query.Group[ContentType, []ContentType, *[]ContentType](
 					[]ContentType{
 						ContentType{"s", 1, true, 0, 0, nowTime},
 						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
@@ -1330,12 +1330,12 @@ func GetQueryGroupTestCase() []TestCase {
 					},
 					" Age ",
 					func(list []ContentType) []ContentType {
-						sum := query.Sum(query.Column(list, "  CardMoney  "))
+						sum := query.Sum(query.Column[ContentType, float64](list, "  CardMoney  "))
 						list[0].CardMoney = sum.(float64)
 						return []ContentType{list[0]}
 					})
 			},
-			[]ContentType{
+			&[]ContentType{
 				ContentType{"s", 1, true, 0, 0, nowTime},
 				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
 				ContentType{"", 0, true, -1.1, -1.1, oldTime},
@@ -1343,7 +1343,7 @@ func GetQueryGroupTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.Group(
+				return query.Group[ContentType, float64, []float64](
 					[]ContentType{
 						ContentType{"s", 1, true, 0, 0, nowTime},
 						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
@@ -1353,7 +1353,7 @@ func GetQueryGroupTestCase() []TestCase {
 					},
 					" Age ",
 					func(list []ContentType) float64 {
-						sum := query.Sum(query.Column(list, "  CardMoney  ")).(float64)
+						sum := query.Sum(query.Column[ContentType, float64](list, "  CardMoney  ")).(float64)
 						return sum
 
 					})
@@ -1362,7 +1362,7 @@ func GetQueryGroupTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.Group(
+				return query.Group[ContentType, []float64, *[]float64](
 					[]ContentType{
 						ContentType{"s", 1, true, 0, 0, nowTime},
 						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
@@ -1372,16 +1372,16 @@ func GetQueryGroupTestCase() []TestCase {
 					},
 					" Age ",
 					func(list []ContentType) []float64 {
-						sum := query.Sum(query.Column(list, "  CardMoney  "))
+						sum := query.Sum(query.Column[ContentType, float64](list, "  CardMoney  "))
 						return []float64{sum.(float64)}
 
 					})
 			},
-			[]float64{0, 1.1, -1.1},
+			&[]float64{0, 1.1, -1.1},
 		},
 		{
 			func() interface{} {
-				return query.Group(
+				return query.Group[ContentType, int, []int](
 					[]ContentType{
 						ContentType{"s", 1, true, 0, 0, nowTime},
 						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
@@ -1391,7 +1391,7 @@ func GetQueryGroupTestCase() []TestCase {
 					},
 					"Register ",
 					func(list []ContentType) int {
-						sum := query.Sum(query.Column(list, "  Age  "))
+						sum := query.Sum(query.Column[ContentType, int](list, "  Age  "))
 						return sum.(int)
 
 					})
@@ -1400,7 +1400,7 @@ func GetQueryGroupTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.Group(
+				return query.Group[ContentType, []ContentType, *[]ContentType](
 					[]ContentType{
 						ContentType{"s", 1, true, 0, 0, nowTime},
 						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
@@ -1410,12 +1410,12 @@ func GetQueryGroupTestCase() []TestCase {
 					},
 					"Register ",
 					func(list []ContentType) []ContentType {
-						sum := query.Sum(query.Column(list, "  Age  "))
+						sum := query.Sum(query.Column[ContentType, int](list, "  Age  "))
 						list[0].Age = sum.(int)
 						return []ContentType{list[0]}
 					})
 			},
-			[]ContentType{
+			&[]ContentType{
 				ContentType{"s", 2, true, 0, 0, nowTime},
 				ContentType{"a", -2, false, 1.1, 1.1, zeroTime},
 				ContentType{"", 0, true, -1.1, -1.1, oldTime},
@@ -1449,7 +1449,7 @@ func GetQueryGroupTestCase() []TestCase {
 		*/
 		{
 			func() interface{} {
-				return query.Group(
+				return query.Group[QueryInnerStruct2, []QueryInnerStruct2, *[]QueryInnerStruct2](
 					[]QueryInnerStruct2{
 						QueryInnerStruct2{QueryInnerStruct{3}, 4, 4.1},
 						QueryInnerStruct2{QueryInnerStruct{2}, 5, 5.1},
@@ -1458,12 +1458,12 @@ func GetQueryGroupTestCase() []TestCase {
 					},
 					"QueryInnerStruct.MM",
 					func(list []QueryInnerStruct2) []QueryInnerStruct2 {
-						sum := query.Sum(query.Column(list, "  MM  "))
+						sum := query.Sum(query.Column[QueryInnerStruct2, int](list, "  MM  "))
 						list[0].MM = sum.(int)
 						return []QueryInnerStruct2{list[0]}
 					})
 			},
-			[]QueryInnerStruct2{
+			&[]QueryInnerStruct2{
 				QueryInnerStruct2{QueryInnerStruct{3}, 4, 4.1},
 				QueryInnerStruct2{QueryInnerStruct{2}, 11, 5.1},
 				QueryInnerStruct2{QueryInnerStruct{1}, 6, 6.1},
@@ -1484,7 +1484,7 @@ func GetQueryColumnMapTestCase() []TestCase {
 		//querycolumn single
 		{
 			func() interface{} {
-				return query.ColumnMap(
+				return query.ColumnMap[int, int](
 					[]int{},
 					" . ")
 			},
@@ -1492,7 +1492,7 @@ func GetQueryColumnMapTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.ColumnMap(
+				return query.ColumnMap[string, string](
 					[]string{"1", "7", "8"},
 					" . ")
 			},
@@ -1500,7 +1500,7 @@ func GetQueryColumnMapTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.ColumnMap(
+				return query.ColumnMap[ContentType, string](
 					[]ContentType{},
 					" Name ")
 			},
@@ -1508,7 +1508,7 @@ func GetQueryColumnMapTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.ColumnMap(
+				return query.ColumnMap[ContentType, string](
 					[]ContentType{
 						ContentType{"a", 3, true, 0, 0, nowTime},
 						ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
@@ -1528,7 +1528,7 @@ func GetQueryColumnMapTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.ColumnMap(
+				return query.ColumnMap[ContentType, int](
 					[]ContentType{
 						ContentType{"a", 3, true, 0, 0, nowTime},
 						ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
@@ -1547,7 +1547,7 @@ func GetQueryColumnMapTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.ColumnMap(
+				return query.ColumnMap[ContentType, bool](
 					[]ContentType{
 						ContentType{"a", 3, true, 0, 0, nowTime},
 						ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
@@ -1564,7 +1564,7 @@ func GetQueryColumnMapTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.ColumnMap(
+				return query.ColumnMap[ContentType, float32](
 					[]ContentType{
 						ContentType{"a", 3, true, 0, 0, nowTime},
 						ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
@@ -1582,7 +1582,7 @@ func GetQueryColumnMapTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.ColumnMap(
+				return query.ColumnMap[ContentType, float64](
 					[]ContentType{
 						ContentType{"a", 3, true, 0, 0, nowTime},
 						ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
@@ -1600,7 +1600,7 @@ func GetQueryColumnMapTestCase() []TestCase {
 		},
 		{
 			func() interface{} {
-				return query.ColumnMap(
+				return query.ColumnMap[QueryInnerStruct2, int](
 					[]QueryInnerStruct2{
 						QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
 						QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
@@ -1615,160 +1615,160 @@ func GetQueryColumnMapTestCase() []TestCase {
 			},
 		},
 		//queryColumn []slice
-		{
-			func() interface{} {
-				return query.ColumnMap(
-					[]ContentType{},
-					" []Name ")
-			},
-			map[string][]ContentType{},
-		},
-		{
-			func() interface{} {
-				return query.ColumnMap(
-					[]ContentType{
-						ContentType{"a", 3, true, 0, 0, nowTime},
-						ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-						ContentType{"1", -2, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
-					},
-					"     [] Name         ")
-			},
-			map[string][]ContentType{
-				"a": []ContentType{
-					ContentType{"a", 3, true, 0, 0, nowTime},
-				},
-				"0": []ContentType{
-					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				},
-				"1": []ContentType{
-					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-					ContentType{"1", -2, false, 0, 0, zeroTime},
-				},
-				"z": []ContentType{
-					ContentType{"z", 3, true, 0, 0, nowTime},
-				},
-			},
-		},
-		{
-			func() interface{} {
-				return query.ColumnMap(
-					[]ContentType{
-						ContentType{"a", 10, true, 0, 0, nowTime},
-						ContentType{"0", 10, false, 1.1, 1.1, zeroTime},
-						ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-						ContentType{"-1", -2, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
-					},
-					"[]Age        ")
-			},
-			map[int][]ContentType{
-				10: []ContentType{
-					ContentType{"a", 10, true, 0, 0, nowTime},
-					ContentType{"0", 10, false, 1.1, 1.1, zeroTime},
-					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-				},
-				-2: []ContentType{
-					ContentType{"-1", -2, false, 0, 0, zeroTime},
-				},
-				3: []ContentType{
-					ContentType{"z", 3, true, 0, 0, nowTime},
-				},
-			},
-		},
-		{
-			func() interface{} {
-				return query.ColumnMap(
-					[]ContentType{
-						ContentType{"a", 3, true, 0, 0, nowTime},
-						ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-						ContentType{"-1", -2, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
-					},
-					"[]Ok        ")
-			},
-			map[bool][]ContentType{
-				true: []ContentType{
-					ContentType{"a", 3, true, 0, 0, nowTime},
-					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-					ContentType{"z", 3, true, 0, 0, nowTime},
-				},
-				false: []ContentType{
-					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-					ContentType{"-1", -2, false, 0, 0, zeroTime},
-				},
-			},
-		},
-		{
-			func() interface{} {
-				return query.ColumnMap(
-					[]ContentType{
-						ContentType{"a", 3, true, 0, 0, nowTime},
-						ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-						ContentType{"-1", -2, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
-					},
-					"    []Money  ")
-			},
-			map[float32][]ContentType{
-				0: []ContentType{
-					ContentType{"a", 3, true, 0, 0, nowTime},
-					ContentType{"-1", -2, false, 0, 0, zeroTime},
-					ContentType{"z", 3, true, 0, 0, nowTime},
-				},
-				1.1: []ContentType{
-					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				},
-				-2.2: []ContentType{
-					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-				},
-			},
-		},
-		{
-			func() interface{} {
-				return query.ColumnMap(
-					[]ContentType{
-						ContentType{"a", 3, true, 0, 0, nowTime},
-						ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-						ContentType{"-1", -2, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
-					},
-					"    []CardMoney")
-			},
-			map[float64][]ContentType{
-				0: []ContentType{
-					ContentType{"a", 3, true, 0, 0, nowTime},
-					ContentType{"-1", -2, false, 0, 0, zeroTime},
-					ContentType{"z", 3, true, 0, 0, nowTime},
-				},
-				1.1: []ContentType{
-					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				},
-				-1.2: []ContentType{
-					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-				},
-			},
-		},
-		{
-			func() interface{} {
-				return query.ColumnMap(
-					[]QueryInnerStruct2{
-						QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
-						QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
-						QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
-					},
-					"[]QueryInnerStruct.MM")
-			},
-			map[int][]QueryInnerStruct2{
-				1: []QueryInnerStruct2{QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1}},
-				2: []QueryInnerStruct2{QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1}},
-				3: []QueryInnerStruct2{QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1}},
-			},
-		},
+		// {
+		// 	func() interface{} {
+		// 		return query.ColumnMap(
+		// 			[]ContentType{},
+		// 			" []Name ")
+		// 	},
+		// 	map[string][]ContentType{},
+		// },
+		// {
+		// 	func() interface{} {
+		// 		return query.ColumnMap(
+		// 			[]ContentType{
+		// 				ContentType{"a", 3, true, 0, 0, nowTime},
+		// 				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+		// 				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+		// 				ContentType{"1", -2, false, 0, 0, zeroTime},
+		// 				ContentType{"z", 3, true, 0, 0, nowTime},
+		// 			},
+		// 			"     [] Name         ")
+		// 	},
+		// 	map[string][]ContentType{
+		// 		"a": []ContentType{
+		// 			ContentType{"a", 3, true, 0, 0, nowTime},
+		// 		},
+		// 		"0": []ContentType{
+		// 			ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+		// 		},
+		// 		"1": []ContentType{
+		// 			ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+		// 			ContentType{"1", -2, false, 0, 0, zeroTime},
+		// 		},
+		// 		"z": []ContentType{
+		// 			ContentType{"z", 3, true, 0, 0, nowTime},
+		// 		},
+		// 	},
+		// },
+		// {
+		// 	func() interface{} {
+		// 		return query.ColumnMap(
+		// 			[]ContentType{
+		// 				ContentType{"a", 10, true, 0, 0, nowTime},
+		// 				ContentType{"0", 10, false, 1.1, 1.1, zeroTime},
+		// 				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+		// 				ContentType{"-1", -2, false, 0, 0, zeroTime},
+		// 				ContentType{"z", 3, true, 0, 0, nowTime},
+		// 			},
+		// 			"[]Age        ")
+		// 	},
+		// 	map[int][]ContentType{
+		// 		10: []ContentType{
+		// 			ContentType{"a", 10, true, 0, 0, nowTime},
+		// 			ContentType{"0", 10, false, 1.1, 1.1, zeroTime},
+		// 			ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+		// 		},
+		// 		-2: []ContentType{
+		// 			ContentType{"-1", -2, false, 0, 0, zeroTime},
+		// 		},
+		// 		3: []ContentType{
+		// 			ContentType{"z", 3, true, 0, 0, nowTime},
+		// 		},
+		// 	},
+		// },
+		// {
+		// 	func() interface{} {
+		// 		return query.ColumnMap(
+		// 			[]ContentType{
+		// 				ContentType{"a", 3, true, 0, 0, nowTime},
+		// 				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+		// 				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+		// 				ContentType{"-1", -2, false, 0, 0, zeroTime},
+		// 				ContentType{"z", 3, true, 0, 0, nowTime},
+		// 			},
+		// 			"[]Ok        ")
+		// 	},
+		// 	map[bool][]ContentType{
+		// 		true: []ContentType{
+		// 			ContentType{"a", 3, true, 0, 0, nowTime},
+		// 			ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+		// 			ContentType{"z", 3, true, 0, 0, nowTime},
+		// 		},
+		// 		false: []ContentType{
+		// 			ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+		// 			ContentType{"-1", -2, false, 0, 0, zeroTime},
+		// 		},
+		// 	},
+		// },
+		// {
+		// 	func() interface{} {
+		// 		return query.ColumnMap(
+		// 			[]ContentType{
+		// 				ContentType{"a", 3, true, 0, 0, nowTime},
+		// 				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+		// 				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+		// 				ContentType{"-1", -2, false, 0, 0, zeroTime},
+		// 				ContentType{"z", 3, true, 0, 0, nowTime},
+		// 			},
+		// 			"    []Money  ")
+		// 	},
+		// 	map[float32][]ContentType{
+		// 		0: []ContentType{
+		// 			ContentType{"a", 3, true, 0, 0, nowTime},
+		// 			ContentType{"-1", -2, false, 0, 0, zeroTime},
+		// 			ContentType{"z", 3, true, 0, 0, nowTime},
+		// 		},
+		// 		1.1: []ContentType{
+		// 			ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+		// 		},
+		// 		-2.2: []ContentType{
+		// 			ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+		// 		},
+		// 	},
+		// },
+		// {
+		// 	func() interface{} {
+		// 		return query.ColumnMap(
+		// 			[]ContentType{
+		// 				ContentType{"a", 3, true, 0, 0, nowTime},
+		// 				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+		// 				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+		// 				ContentType{"-1", -2, false, 0, 0, zeroTime},
+		// 				ContentType{"z", 3, true, 0, 0, nowTime},
+		// 			},
+		// 			"    []CardMoney")
+		// 	},
+		// 	map[float64][]ContentType{
+		// 		0: []ContentType{
+		// 			ContentType{"a", 3, true, 0, 0, nowTime},
+		// 			ContentType{"-1", -2, false, 0, 0, zeroTime},
+		// 			ContentType{"z", 3, true, 0, 0, nowTime},
+		// 		},
+		// 		1.1: []ContentType{
+		// 			ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+		// 		},
+		// 		-1.2: []ContentType{
+		// 			ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+		// 		},
+		// 	},
+		// },
+		// {
+		// 	func() interface{} {
+		// 		return query.ColumnMap(
+		// 			[]QueryInnerStruct2{
+		// 				QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
+		// 				QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
+		// 				QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
+		// 			},
+		// 			"[]QueryInnerStruct.MM")
+		// 	},
+		// 	map[int][]QueryInnerStruct2{
+		// 		1: []QueryInnerStruct2{QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1}},
+		// 		2: []QueryInnerStruct2{QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1}},
+		// 		3: []QueryInnerStruct2{QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1}},
+		// 	},
+		// },
 	}
 
 	return testCase

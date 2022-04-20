@@ -8,7 +8,7 @@ import (
 	"github.com/fishedee/tools/assert"
 	gentestdata "github.com/fishedee/tools/cmd/gen/testdata"
 	"github.com/fishedee/tools/query"
-	"github.com/fishedee/tools/query/testdata"
+	testdata "github.com/fishedee/tools/query/test_data"
 )
 
 func TestQueryCombine(t *testing.T) {
