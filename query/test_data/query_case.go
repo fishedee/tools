@@ -62,11 +62,11 @@ func GetQueryColumnTestCase() []TestCase {
 		{
 			func() interface{} {
 				return query.Column[ContentType, string]([]ContentType{
-					ContentType{"a", 3, true, 0, 0, nowTime},
-					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-					ContentType{"-1", -2, false, 0, 0, zeroTime},
-					ContentType{"z", 3, true, 0, 0, nowTime},
+					{"a", 3, true, 0, 0, nowTime},
+					{"0", -1, false, 1.1, 1.1, zeroTime},
+					{"1", 10, true, -2.2, -1.2, oldTime},
+					{"-1", -2, false, 0, 0, zeroTime},
+					{"z", 3, true, 0, 0, nowTime},
 				}, "     Name         ")
 			},
 			[]string{"a", "0", "1", "-1", "z"},
@@ -74,11 +74,11 @@ func GetQueryColumnTestCase() []TestCase {
 		{
 			func() interface{} {
 				return query.Column[ContentType, int]([]ContentType{
-					ContentType{"a", 3, true, 0, 0, nowTime},
-					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-					ContentType{"-1", -2, false, 0, 0, zeroTime},
-					ContentType{"z", 3, true, 0, 0, nowTime},
+					{"a", 3, true, 0, 0, nowTime},
+					{"0", -1, false, 1.1, 1.1, zeroTime},
+					{"1", 10, true, -2.2, -1.2, oldTime},
+					{"-1", -2, false, 0, 0, zeroTime},
+					{"z", 3, true, 0, 0, nowTime},
 				},
 					"Age        ")
 			},
@@ -87,11 +87,11 @@ func GetQueryColumnTestCase() []TestCase {
 		{
 			func() interface{} {
 				return query.Column[ContentType, bool]([]ContentType{
-					ContentType{"a", 3, true, 0, 0, nowTime},
-					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-					ContentType{"-1", -2, false, 0, 0, zeroTime},
-					ContentType{"z", 3, true, 0, 0, nowTime},
+					{"a", 3, true, 0, 0, nowTime},
+					{"0", -1, false, 1.1, 1.1, zeroTime},
+					{"1", 10, true, -2.2, -1.2, oldTime},
+					{"-1", -2, false, 0, 0, zeroTime},
+					{"z", 3, true, 0, 0, nowTime},
 				},
 					"Ok        ")
 			},
@@ -100,11 +100,11 @@ func GetQueryColumnTestCase() []TestCase {
 		{
 			func() interface{} {
 				return query.Column[ContentType, float32]([]ContentType{
-					ContentType{"a", 3, true, 0, 0, nowTime},
-					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-					ContentType{"-1", -2, false, 0, 0, zeroTime},
-					ContentType{"z", 3, true, 0, 0, nowTime},
+					{"a", 3, true, 0, 0, nowTime},
+					{"0", -1, false, 1.1, 1.1, zeroTime},
+					{"1", 10, true, -2.2, -1.2, oldTime},
+					{"-1", -2, false, 0, 0, zeroTime},
+					{"z", 3, true, 0, 0, nowTime},
 				},
 					"    Money  ")
 			},
@@ -113,11 +113,11 @@ func GetQueryColumnTestCase() []TestCase {
 		{
 			func() interface{} {
 				return query.Column[ContentType, float64]([]ContentType{
-					ContentType{"a", 3, true, 0, 0, nowTime},
-					ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-					ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-					ContentType{"-1", -2, false, 0, 0, zeroTime},
-					ContentType{"z", 3, true, 0, 0, nowTime},
+					{"a", 3, true, 0, 0, nowTime},
+					{"0", -1, false, 1.1, 1.1, zeroTime},
+					{"1", 10, true, -2.2, -1.2, oldTime},
+					{"-1", -2, false, 0, 0, zeroTime},
+					{"z", 3, true, 0, 0, nowTime},
 				},
 					"    CardMoney")
 			},
@@ -126,9 +126,9 @@ func GetQueryColumnTestCase() []TestCase {
 		{
 			func() interface{} {
 				return query.Column[QueryInnerStruct2, int]([]QueryInnerStruct2{
-					QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
-					QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
-					QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
+					{QueryInnerStruct{1}, 2, 1.1},
+					{QueryInnerStruct{2}, 4, 2.1},
+					{QueryInnerStruct{3}, 5, 3.1},
 				},
 					"QueryInnerStruct.MM")
 			},
@@ -159,9 +159,9 @@ func GetQuerySelectTestCase() []TestCase {
 			func() interface{} {
 				return query.Select(
 					[]ContentType{
-						ContentType{"5", 1, true, -1.1, -1.1, oldTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"a", -1, false, 1.1, 1.1, nowTime},
+						{"5", 1, true, -1.1, -1.1, oldTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"a", -1, false, 1.1, 1.1, nowTime},
 					},
 					func(singleData ContentType) ContentType {
 
@@ -170,18 +170,18 @@ func GetQuerySelectTestCase() []TestCase {
 					})
 			},
 			[]ContentType{
-				ContentType{"5Edward", 1, true, -1.1, -1.1, oldTime},
-				ContentType{"Edward", 0, false, 0, 0, zeroTime},
-				ContentType{"aEdward", -1, false, 1.1, 1.1, nowTime},
+				{"5Edward", 1, true, -1.1, -1.1, oldTime},
+				{"Edward", 0, false, 0, 0, zeroTime},
+				{"aEdward", -1, false, 1.1, 1.1, nowTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Select(
 					[]ContentType{
-						ContentType{"5", 1, true, -1.1, -1.1, oldTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"a", -1, false, 1.1, 1.1, nowTime},
+						{"5", 1, true, -1.1, -1.1, oldTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"a", -1, false, 1.1, 1.1, nowTime},
 					},
 					func(singleData ContentType) ContentType {
 						singleData.Name += "Edward"
@@ -189,18 +189,18 @@ func GetQuerySelectTestCase() []TestCase {
 					})
 			},
 			[]ContentType{
-				ContentType{"5Edward", 1, true, -1.1, -1.1, oldTime},
-				ContentType{"Edward", 0, false, 0, 0, zeroTime},
-				ContentType{"aEdward", -1, false, 1.1, 1.1, nowTime},
+				{"5Edward", 1, true, -1.1, -1.1, oldTime},
+				{"Edward", 0, false, 0, 0, zeroTime},
+				{"aEdward", -1, false, 1.1, 1.1, nowTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Select(
 					[]ContentType{
-						ContentType{"5", 1, true, -1.1, -1.1, oldTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"a", -1, false, 1.1, 1.1, nowTime},
+						{"5", 1, true, -1.1, -1.1, oldTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"a", -1, false, 1.1, 1.1, nowTime},
 					},
 					func(singleData ContentType) string {
 						return singleData.Name
@@ -212,9 +212,9 @@ func GetQuerySelectTestCase() []TestCase {
 			func() interface{} {
 				return query.Select(
 					[]ContentType{
-						ContentType{"5", 1, true, -1.1, -1.1, oldTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"a", -1, false, 1.1, 1.1, nowTime},
+						{"5", 1, true, -1.1, -1.1, oldTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"a", -1, false, 1.1, 1.1, nowTime},
 					},
 					func(singleData ContentType) int {
 						return singleData.Age
@@ -226,9 +226,9 @@ func GetQuerySelectTestCase() []TestCase {
 			func() interface{} {
 				return query.Select(
 					[]ContentType{
-						ContentType{"5", 1, true, -1.1, -1.1, oldTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"a", -1, false, 1.1, 1.1, nowTime},
+						{"5", 1, true, -1.1, -1.1, oldTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"a", -1, false, 1.1, 1.1, nowTime},
 					},
 					func(singleData ContentType) bool {
 						return singleData.Ok
@@ -240,9 +240,9 @@ func GetQuerySelectTestCase() []TestCase {
 			func() interface{} {
 				return query.Select(
 					[]ContentType{
-						ContentType{"5", 1, true, -1.1, -1.1, oldTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"a", -1, false, 1.1, 1.1, nowTime},
+						{"5", 1, true, -1.1, -1.1, oldTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"a", -1, false, 1.1, 1.1, nowTime},
 					},
 					func(singleData ContentType) float32 {
 						return singleData.Money
@@ -254,9 +254,9 @@ func GetQuerySelectTestCase() []TestCase {
 			func() interface{} {
 				return query.Select(
 					[]ContentType{
-						ContentType{"5", 1, true, -1.1, -1.1, oldTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"a", -1, false, 1.1, 1.1, nowTime},
+						{"5", 1, true, -1.1, -1.1, oldTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"a", -1, false, 1.1, 1.1, nowTime},
 					},
 					func(singleData ContentType) float64 {
 						return singleData.CardMoney
@@ -268,9 +268,9 @@ func GetQuerySelectTestCase() []TestCase {
 			func() interface{} {
 				return query.Select(
 					[]ContentType{
-						ContentType{"5", 1, true, -1.1, -1.1, oldTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"a", -1, false, 1.1, 1.1, nowTime},
+						{"5", 1, true, -1.1, -1.1, oldTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"a", -1, false, 1.1, 1.1, nowTime},
 					},
 					func(singleData ContentType) time.Time {
 						return singleData.Register
@@ -282,9 +282,9 @@ func GetQuerySelectTestCase() []TestCase {
 			func() interface{} {
 				return query.Select(
 					[]ContentType{
-						ContentType{"5", 1, true, -1.1, -1.1, oldTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"a", -1, false, 1.1, 1.1, nowTime},
+						{"5", 1, true, -1.1, -1.1, oldTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"a", -1, false, 1.1, 1.1, nowTime},
 					},
 					func(singleData ContentType) map[string]int {
 						return map[string]int{singleData.Name: singleData.Age}
@@ -318,20 +318,20 @@ func GetQueryWhereTestCase() []TestCase {
 			func() interface{} {
 				return query.Where(
 					[]ContentType{
-						ContentType{"s", 3, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"", 10, true, -1.1, -1.1, oldTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
+						{"s", 3, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"", 10, true, -1.1, -1.1, oldTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"z", 3, true, 0, 0, nowTime},
 					},
 					func(singleData ContentType) bool {
 						return singleData.Age >= 1
 					})
 			},
 			[]ContentType{
-				ContentType{"s", 3, true, 0, 0, nowTime},
-				ContentType{"", 10, true, -1.1, -1.1, oldTime},
-				ContentType{"z", 3, true, 0, 0, nowTime},
+				{"s", 3, true, 0, 0, nowTime},
+				{"", 10, true, -1.1, -1.1, oldTime},
+				{"z", 3, true, 0, 0, nowTime},
 			},
 		},
 	}
@@ -362,11 +362,11 @@ func GetQueryReduceTestCase() []TestCase {
 			func() interface{} {
 				return query.Reduce(
 					[]ContentType{
-						ContentType{"s", 3, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"", 10, true, -1.1, -1.1, oldTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
+						{"s", 3, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"", 10, true, -1.1, -1.1, oldTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"z", 3, true, 0, 0, nowTime},
 					},
 					func(sum int, singleData ContentType) int {
 						return singleData.Age + sum
@@ -379,11 +379,11 @@ func GetQueryReduceTestCase() []TestCase {
 			func() interface{} {
 				return query.Reduce(
 					[]ContentType{
-						ContentType{"s", 3, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 2.2, 1.1, zeroTime},
-						ContentType{"", 10, true, -1.1, -1.1, oldTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
+						{"s", 3, true, 0, 0, nowTime},
+						{"a", -1, false, 2.2, 1.1, zeroTime},
+						{"", 10, true, -1.1, -1.1, oldTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"z", 3, true, 0, 0, nowTime},
 					},
 					func(sum float32, singleData ContentType) float32 {
 						return singleData.Money + sum
@@ -396,11 +396,11 @@ func GetQueryReduceTestCase() []TestCase {
 			func() interface{} {
 				return query.Reduce(
 					[]ContentType{
-						ContentType{"s", 3, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 2.2, 1.1, zeroTime},
-						ContentType{"", 10, true, -1.1, -2.2, oldTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
+						{"s", 3, true, 0, 0, nowTime},
+						{"a", -1, false, 2.2, 1.1, zeroTime},
+						{"", 10, true, -1.1, -2.2, oldTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"z", 3, true, 0, 0, nowTime},
 					},
 					func(sum float64, singleData ContentType) float64 {
 						return singleData.CardMoney + sum
@@ -459,214 +459,214 @@ func GetQuerySortTestCase() []TestCase {
 			func() interface{} {
 				return query.Sort(
 					[]ContentType{
-						ContentType{"5", 0, true, -1.1, -1.1, oldTime},
-						ContentType{"z", 1, true, 0, 0, nowTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"5", 0, true, -1.1, -1.1, oldTime},
+						{"z", 1, true, 0, 0, nowTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
 					},
 					"Name desc")
 			},
 			[]ContentType{
-				ContentType{"z", 1, true, 0, 0, nowTime},
-				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				ContentType{"5", 0, true, -1.1, -1.1, oldTime},
-				ContentType{"", 0, false, 0, 0, zeroTime},
+				{"z", 1, true, 0, 0, nowTime},
+				{"a", -1, false, 1.1, 1.1, zeroTime},
+				{"5", 0, true, -1.1, -1.1, oldTime},
+				{"", 0, false, 0, 0, zeroTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Sort(
 					[]ContentType{
-						ContentType{"z", -1, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"5", 10, true, -1.1, -1.1, oldTime},
-						ContentType{"", 5, false, 0, 0, zeroTime},
+						{"z", -1, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"5", 10, true, -1.1, -1.1, oldTime},
+						{"", 5, false, 0, 0, zeroTime},
 					},
 					"Age desc,Ok desc")
 			},
 			[]ContentType{
-				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
-				ContentType{"", 5, false, 0, 0, zeroTime},
-				ContentType{"z", -1, true, 0, 0, nowTime},
-				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				{"5", 10, true, -1.1, -1.1, oldTime},
+				{"", 5, false, 0, 0, zeroTime},
+				{"z", -1, true, 0, 0, nowTime},
+				{"a", -1, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Sort(
 					[]ContentType{
-						ContentType{"z", -1, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"5", 10, true, -1.1, -1.1, oldTime},
-						ContentType{"", 5, false, 0, 0, zeroTime},
+						{"z", -1, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"5", 10, true, -1.1, -1.1, oldTime},
+						{"", 5, false, 0, 0, zeroTime},
 					},
 					"Money,Register desc")
 			},
 			[]ContentType{
-				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
-				ContentType{"z", -1, true, 0, 0, nowTime},
-				ContentType{"", 5, false, 0, 0, zeroTime},
-				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				{"5", 10, true, -1.1, -1.1, oldTime},
+				{"z", -1, true, 0, 0, nowTime},
+				{"", 5, false, 0, 0, zeroTime},
+				{"a", -1, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Sort(
 					[]ContentType{
-						ContentType{"z", -1, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"5", 10, true, -1.1, -1.1, oldTime},
-						ContentType{"", 5, false, 0, 0, zeroTime},
+						{"z", -1, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"5", 10, true, -1.1, -1.1, oldTime},
+						{"", 5, false, 0, 0, zeroTime},
 					},
 					"CardMoney,Register desc")
 			},
 			[]ContentType{
-				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
-				ContentType{"z", -1, true, 0, 0, nowTime},
-				ContentType{"", 5, false, 0, 0, zeroTime},
-				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				{"5", 10, true, -1.1, -1.1, oldTime},
+				{"z", -1, true, 0, 0, nowTime},
+				{"", 5, false, 0, 0, zeroTime},
+				{"a", -1, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Sort(
 					[]ContentType{
-						ContentType{"z", -1, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"5", 10, true, -1.1, -1.1, oldTime},
-						ContentType{"", 5, false, 0, 0, zeroTime},
+						{"z", -1, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"5", 10, true, -1.1, -1.1, oldTime},
+						{"", 5, false, 0, 0, zeroTime},
 					},
 					"Ok desc,Name")
 			},
 			[]ContentType{
-				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
-				ContentType{"z", -1, true, 0, 0, nowTime},
-				ContentType{"", 5, false, 0, 0, zeroTime},
-				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				{"5", 10, true, -1.1, -1.1, oldTime},
+				{"z", -1, true, 0, 0, nowTime},
+				{"", 5, false, 0, 0, zeroTime},
+				{"a", -1, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Sort(
 					[]ContentType{
-						ContentType{"z", -1, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"5", 10, true, -1.1, -1.1, oldTime},
-						ContentType{"", 5, false, 0, 0, zeroTime},
+						{"z", -1, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"5", 10, true, -1.1, -1.1, oldTime},
+						{"", 5, false, 0, 0, zeroTime},
 					},
 					" Money desc,Age asc")
 			},
 			[]ContentType{
-				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				ContentType{"z", -1, true, 0, 0, nowTime},
-				ContentType{"", 5, false, 0, 0, zeroTime},
-				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				{"a", -1, false, 1.1, 1.1, zeroTime},
+				{"z", -1, true, 0, 0, nowTime},
+				{"", 5, false, 0, 0, zeroTime},
+				{"5", 10, true, -1.1, -1.1, oldTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Sort(
 					[]ContentType{
-						ContentType{"b", -1, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"5", 10, true, -1.1, -1.1, oldTime},
-						ContentType{"", 5, false, 0, 0, zeroTime},
-						ContentType{"h", -1, true, 0, 0, nowTime},
+						{"b", -1, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"5", 10, true, -1.1, -1.1, oldTime},
+						{"", 5, false, 0, 0, zeroTime},
+						{"h", -1, true, 0, 0, nowTime},
 					},
 					" Money desc,Age asc,Name desc")
 			},
 			[]ContentType{
-				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				ContentType{"h", -1, true, 0, 0, nowTime},
-				ContentType{"b", -1, true, 0, 0, nowTime},
-				ContentType{"", 5, false, 0, 0, zeroTime},
-				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				{"a", -1, false, 1.1, 1.1, zeroTime},
+				{"h", -1, true, 0, 0, nowTime},
+				{"b", -1, true, 0, 0, nowTime},
+				{"", 5, false, 0, 0, zeroTime},
+				{"5", 10, true, -1.1, -1.1, oldTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Sort(
 					[]ContentType{
-						ContentType{"b", -1, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"5", 10, true, -1.1, -1.1, oldTime},
-						ContentType{"", 5, false, 0, 0, zeroTime},
-						ContentType{"h", -1, true, 0, 0, nowTime},
+						{"b", -1, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"5", 10, true, -1.1, -1.1, oldTime},
+						{"", 5, false, 0, 0, zeroTime},
+						{"h", -1, true, 0, 0, nowTime},
 					},
 					" Money desc,Age asc,Name desc")
 			},
 			[]ContentType{
-				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				ContentType{"h", -1, true, 0, 0, nowTime},
-				ContentType{"b", -1, true, 0, 0, nowTime},
-				ContentType{"", 5, false, 0, 0, zeroTime},
-				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				{"a", -1, false, 1.1, 1.1, zeroTime},
+				{"h", -1, true, 0, 0, nowTime},
+				{"b", -1, true, 0, 0, nowTime},
+				{"", 5, false, 0, 0, zeroTime},
+				{"5", 10, true, -1.1, -1.1, oldTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Sort(
 					[]QueryInnerStruct2{
-						QueryInnerStruct2{QueryInnerStruct{3}, 4, 3.1},
-						QueryInnerStruct2{QueryInnerStruct{2}, 2, 1.1},
-						QueryInnerStruct2{QueryInnerStruct{1}, 5, 2.1},
+						{QueryInnerStruct{3}, 4, 3.1},
+						{QueryInnerStruct{2}, 2, 1.1},
+						{QueryInnerStruct{1}, 5, 2.1},
 					},
 					"MM desc")
 			},
 			[]QueryInnerStruct2{
-				QueryInnerStruct2{QueryInnerStruct{1}, 5, 2.1},
-				QueryInnerStruct2{QueryInnerStruct{3}, 4, 3.1},
-				QueryInnerStruct2{QueryInnerStruct{2}, 2, 1.1},
+				{QueryInnerStruct{1}, 5, 2.1},
+				{QueryInnerStruct{3}, 4, 3.1},
+				{QueryInnerStruct{2}, 2, 1.1},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Sort(
 					[]QueryInnerStruct2{
-						QueryInnerStruct2{QueryInnerStruct{3}, 4, 3.1},
-						QueryInnerStruct2{QueryInnerStruct{2}, 2, 1.1},
-						QueryInnerStruct2{QueryInnerStruct{1}, 5, 2.1},
+						{QueryInnerStruct{3}, 4, 3.1},
+						{QueryInnerStruct{2}, 2, 1.1},
+						{QueryInnerStruct{1}, 5, 2.1},
 					},
 					"QueryInnerStruct.MM asc")
 			},
 			[]QueryInnerStruct2{
-				QueryInnerStruct2{QueryInnerStruct{1}, 5, 2.1},
-				QueryInnerStruct2{QueryInnerStruct{2}, 2, 1.1},
-				QueryInnerStruct2{QueryInnerStruct{3}, 4, 3.1},
+				{QueryInnerStruct{1}, 5, 2.1},
+				{QueryInnerStruct{2}, 2, 1.1},
+				{QueryInnerStruct{3}, 4, 3.1},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Sort(
 					[]ContentType{
-						ContentType{"4", 7, true, 0, 0, nowTime},
-						ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"5", -9, true, 0, 0, nowTime},
-						ContentType{"5", 3, true, 0, 0, nowTime},
-						ContentType{"4", 13, true, 0, 0, nowTime},
-						ContentType{"7", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"5", 9, true, 0, 0, nowTime},
-						ContentType{"5", 1, true, -1.1, -1.1, oldTime},
-						ContentType{"1", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"4", 6, true, 0, 0, nowTime},
-						ContentType{"5", 2, false, 0, 0, zeroTime},
-						ContentType{"5", 7, true, 0, 0, nowTime},
+						{"4", 7, true, 0, 0, nowTime},
+						{"0", -1, false, 1.1, 1.1, zeroTime},
+						{"5", -9, true, 0, 0, nowTime},
+						{"5", 3, true, 0, 0, nowTime},
+						{"4", 13, true, 0, 0, nowTime},
+						{"7", -1, false, 1.1, 1.1, zeroTime},
+						{"5", 9, true, 0, 0, nowTime},
+						{"5", 1, true, -1.1, -1.1, oldTime},
+						{"1", -1, false, 1.1, 1.1, zeroTime},
+						{"4", 6, true, 0, 0, nowTime},
+						{"5", 2, false, 0, 0, zeroTime},
+						{"5", 7, true, 0, 0, nowTime},
 					},
 					"Name asc")
 			},
 			[]ContentType{
-				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				ContentType{"1", -1, false, 1.1, 1.1, zeroTime},
-				ContentType{"4", 7, true, 0, 0, nowTime},
-				ContentType{"4", 13, true, 0, 0, nowTime},
-				ContentType{"4", 6, true, 0, 0, nowTime},
-				ContentType{"5", -9, true, 0, 0, nowTime},
-				ContentType{"5", 3, true, 0, 0, nowTime},
-				ContentType{"5", 9, true, 0, 0, nowTime},
-				ContentType{"5", 1, true, -1.1, -1.1, oldTime},
-				ContentType{"5", 2, false, 0, 0, zeroTime},
-				ContentType{"5", 7, true, 0, 0, nowTime},
-				ContentType{"7", -1, false, 1.1, 1.1, zeroTime},
+				{"0", -1, false, 1.1, 1.1, zeroTime},
+				{"1", -1, false, 1.1, 1.1, zeroTime},
+				{"4", 7, true, 0, 0, nowTime},
+				{"4", 13, true, 0, 0, nowTime},
+				{"4", 6, true, 0, 0, nowTime},
+				{"5", -9, true, 0, 0, nowTime},
+				{"5", 3, true, 0, 0, nowTime},
+				{"5", 9, true, 0, 0, nowTime},
+				{"5", 1, true, -1.1, -1.1, oldTime},
+				{"5", 2, false, 0, 0, zeroTime},
+				{"5", 7, true, 0, 0, nowTime},
+				{"7", -1, false, 1.1, 1.1, zeroTime},
 			},
 		},
 	}
@@ -790,9 +790,9 @@ func GetQueryJoinTestCase() []TestCase {
 				return query.Join(
 					[]string{"edward", "fish", "jd"},
 					[]ContentType2{
-						ContentType2{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
-						//  ContentType2{"weinmey", "曲奇制作", "制作方法非常简单"},
-						//  ContentType2{"jd", "马卡龙", "好吃好玩"},
+						{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
+						//  {"weinmey", "曲奇制作", "制作方法非常简单"},
+						//  {"jd", "马卡龙", "好吃好玩"},
 					},
 					"left",
 					"  .  =  UserName ",
@@ -805,23 +805,23 @@ func GetQueryJoinTestCase() []TestCase {
 					})
 			},
 			[]ContentType2{
-				ContentType2{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
-				ContentType2{"fish", "", ""},
-				ContentType2{"jd", "", ""},
+				{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
+				{"fish", "", ""},
+				{"jd", "", ""},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Join(
 					[]UserType{
-						UserType{"edward", 0, false, 1.1, 0, nowTime},
-						UserType{"fish", -1, true, -1.1, -1.1, zeroTime},
-						UserType{"jd", 1, false, 0, 1.1, oldTime},
+						{"edward", 0, false, 1.1, 0, nowTime},
+						{"fish", -1, true, -1.1, -1.1, zeroTime},
+						{"jd", 1, false, 0, 1.1, oldTime},
 					},
 					[]ContentType2{
-						ContentType2{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
-						//  ContentType2{"weinmey", "曲奇制作", "制作方法非常简单"},
-						//  ContentType2{"jd", "马卡龙", "好吃好玩"},
+						{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
+						//  {"weinmey", "曲奇制作", "制作方法非常简单"},
+						//  {"jd", "马卡龙", "好吃好玩"},
 					},
 					"left",
 					"  Name  =  UserName ",
@@ -839,23 +839,23 @@ func GetQueryJoinTestCase() []TestCase {
 					})
 			},
 			[]resultType{
-				resultType{"edward", 0, false, 1.1, 0, nowTime, "威风蛋糕", "威风蛋糕好好吃野！"},
-				resultType{"fish", -1, true, -1.1, -1.1, zeroTime, "", ""},
-				resultType{"jd", 1, false, 0, 1.1, oldTime, "", ""},
+				{"edward", 0, false, 1.1, 0, nowTime, "威风蛋糕", "威风蛋糕好好吃野！"},
+				{"fish", -1, true, -1.1, -1.1, zeroTime, "", ""},
+				{"jd", 1, false, 0, 1.1, oldTime, "", ""},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Join(
 					[]UserType{
-						UserType{"edward", 0, false, 1.1, 0, nowTime},
-						// UserType{"fish", -1, true, -1.1, -1.1, zeroTime},
-						// UserType{"jd", 1, false, 0, 1.1, oldTime},
+						{"edward", 0, false, 1.1, 0, nowTime},
+						// {"fish", -1, true, -1.1, -1.1, zeroTime},
+						// {"jd", 1, false, 0, 1.1, oldTime},
 					},
 					[]ContentType2{
-						ContentType2{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
-						ContentType2{"weinmey", "曲奇制作", "制作方法非常简单"},
-						ContentType2{"jd", "马卡龙", "好吃好玩"},
+						{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
+						{"weinmey", "曲奇制作", "制作方法非常简单"},
+						{"jd", "马卡龙", "好吃好玩"},
 					},
 					"left",
 					"  Name  =  UserName ",
@@ -873,21 +873,21 @@ func GetQueryJoinTestCase() []TestCase {
 					})
 			},
 			[]resultType{
-				resultType{"edward", 0, false, 1.1, 0, nowTime, "威风蛋糕", "威风蛋糕好好吃野！"},
+				{"edward", 0, false, 1.1, 0, nowTime, "威风蛋糕", "威风蛋糕好好吃野！"},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Join(
 					[]UserType{
-						UserType{"edward", 0, false, 1.1, 0, nowTime},
+						{"edward", 0, false, 1.1, 0, nowTime},
 						// UserType{"fish", -1, true, -1.1, -1.1, nowTime},
 						// UserType{"jd", 1, false, 0, 1.1, oldTime},
 					},
 					[]ContentType2{
-						ContentType2{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
-						ContentType2{"weinmey", "曲奇制作", "制作方法非常简单"},
-						ContentType2{"jd", "马卡龙", "好吃好玩"},
+						{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
+						{"weinmey", "曲奇制作", "制作方法非常简单"},
+						{"jd", "马卡龙", "好吃好玩"},
 					},
 					"right",
 					"  Name  =  UserName ",
@@ -905,23 +905,23 @@ func GetQueryJoinTestCase() []TestCase {
 					})
 			},
 			[]resultType{
-				resultType{"edward", 0, false, 1.1, 0, nowTime, "威风蛋糕", "威风蛋糕好好吃野！"},
-				resultType{"", 0, false, 0, 0, zeroTime, "曲奇制作", "制作方法非常简单"},
-				resultType{"", 0, false, 0, 0, zeroTime, "马卡龙", "好吃好玩"},
+				{"edward", 0, false, 1.1, 0, nowTime, "威风蛋糕", "威风蛋糕好好吃野！"},
+				{"", 0, false, 0, 0, zeroTime, "曲奇制作", "制作方法非常简单"},
+				{"", 0, false, 0, 0, zeroTime, "马卡龙", "好吃好玩"},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Join(
 					[]UserType{
-						UserType{"edward", 0, false, 1.1, 0, nowTime},
-						UserType{"fish", -1, true, -1.1, -1.1, nowTime},
-						UserType{"jd", 1, false, 0, 1.1, oldTime},
+						{"edward", 0, false, 1.1, 0, nowTime},
+						{"fish", -1, true, -1.1, -1.1, nowTime},
+						{"jd", 1, false, 0, 1.1, oldTime},
 					},
 					[]ContentType2{
-						ContentType2{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
-						// ContentType2{"weinmey", "曲奇制作", "制作方法非常简单"},
-						// ContentType2{"jd", "马卡龙", "好吃好玩"},
+						{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
+						// {"weinmey", "曲奇制作", "制作方法非常简单"},
+						// {"jd", "马卡龙", "好吃好玩"},
 					},
 					"right",
 					"  Name  =  UserName ",
@@ -939,21 +939,21 @@ func GetQueryJoinTestCase() []TestCase {
 					})
 			},
 			[]resultType{
-				resultType{"edward", 0, false, 1.1, 0, nowTime, "威风蛋糕", "威风蛋糕好好吃野！"},
+				{"edward", 0, false, 1.1, 0, nowTime, "威风蛋糕", "威风蛋糕好好吃野！"},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Join(
 					[]UserType{
-						UserType{"edward", 0, false, 1.1, 0, nowTime},
-						UserType{"fish", -1, true, -1.1, -1.1, nowTime},
-						UserType{"jd", 1, false, 0, 1.1, oldTime},
+						{"edward", 0, false, 1.1, 0, nowTime},
+						{"fish", -1, true, -1.1, -1.1, nowTime},
+						{"jd", 1, false, 0, 1.1, oldTime},
 					},
 					[]ContentType2{
-						ContentType2{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
-						// ContentType2{"weinmey", "曲奇制作", "制作方法非常简单"},
-						// ContentType2{"jd", "马卡龙", "好吃好玩"},
+						{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
+						// {"weinmey", "曲奇制作", "制作方法非常简单"},
+						// {"jd", "马卡龙", "好吃好玩"},
 					},
 					"inner",
 					"  Name  =  UserName ",
@@ -971,21 +971,21 @@ func GetQueryJoinTestCase() []TestCase {
 					})
 			},
 			[]resultType{
-				resultType{"edward", 0, false, 1.1, 0, nowTime, "威风蛋糕", "威风蛋糕好好吃野！"},
+				{"edward", 0, false, 1.1, 0, nowTime, "威风蛋糕", "威风蛋糕好好吃野！"},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Join(
 					[]UserType{
-						UserType{"edward", 0, false, 1.1, 0, nowTime},
-						UserType{"fish", -1, true, -1.1, -1.1, nowTime},
-						UserType{"jd", 1, false, 0, 1.1, oldTime},
+						{"edward", 0, false, 1.1, 0, nowTime},
+						{"fish", -1, true, -1.1, -1.1, nowTime},
+						{"jd", 1, false, 0, 1.1, oldTime},
 					},
 					[]ContentType2{
-						ContentType2{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
-						ContentType2{"weinmey", "曲奇制作", "制作方法非常简单"},
-						ContentType2{"jd", "马卡龙", "好吃好玩"},
+						{"edward", "威风蛋糕", "威风蛋糕好好吃野！"},
+						{"weinmey", "曲奇制作", "制作方法非常简单"},
+						{"jd", "马卡龙", "好吃好玩"},
 					},
 					"outer",
 					"  Name  =  UserName ",
@@ -1003,28 +1003,28 @@ func GetQueryJoinTestCase() []TestCase {
 					})
 			},
 			[]resultType{
-				resultType{"edward", 0, false, 1.1, 0, nowTime, "威风蛋糕", "威风蛋糕好好吃野！"},
-				resultType{"", -1, true, -1.1, -1.1, nowTime, "", ""},
-				resultType{"jd", 1, false, 0, 1.1, oldTime, "马卡龙", "好吃好玩"},
-				resultType{"weinmey", 0, false, 0, 0, zeroTime, "曲奇制作", "制作方法非常简单"},
+				{"edward", 0, false, 1.1, 0, nowTime, "威风蛋糕", "威风蛋糕好好吃野！"},
+				{"", -1, true, -1.1, -1.1, nowTime, "", ""},
+				{"jd", 1, false, 0, 1.1, oldTime, "马卡龙", "好吃好玩"},
+				{"weinmey", 0, false, 0, 0, zeroTime, "曲奇制作", "制作方法非常简单"},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Join(
 					[]UserType{
-						UserType{"s", 0, false, 1.1, 0, oldTime},
-						UserType{"a", -1, true, -1.1, -1.1, nowTime},
-						UserType{"", 1, false, 1.1, 1.1, oldTime},
-						UserType{"", 0, true, 0, 0, zeroTime},
-						UserType{"z", -1, false, 0, 0, oldTime},
+						{"s", 0, false, 1.1, 0, oldTime},
+						{"a", -1, true, -1.1, -1.1, nowTime},
+						{"", 1, false, 1.1, 1.1, oldTime},
+						{"", 0, true, 0, 0, zeroTime},
+						{"z", -1, false, 0, 0, oldTime},
 					},
 					[]UserType{
-						UserType{"s", -1, true, 0, 0, nowTime},
-						UserType{"a", 0, false, 1.1, 1.1, zeroTime},
-						UserType{"", -1, true, -1.1, -1.1, oldTime},
-						UserType{"", 1, false, 1, 1, zeroTime},
-						UserType{"z", 1, true, -1, -1, nowTime},
+						{"s", -1, true, 0, 0, nowTime},
+						{"a", 0, false, 1.1, 1.1, zeroTime},
+						{"", -1, true, -1.1, -1.1, oldTime},
+						{"", 1, false, 1, 1, zeroTime},
+						{"z", 1, true, -1, -1, nowTime},
 					},
 					"right",
 					"Age=Age",
@@ -1040,27 +1040,27 @@ func GetQueryJoinTestCase() []TestCase {
 					})
 			},
 			[]UserType{
-				UserType{"s", 0, false, 1.1, 0, zeroTime},
-				UserType{"a", -1, true, 0, -1.1, nowTime},
-				UserType{"a", -1, true, -1.1, -1.1, oldTime},
-				UserType{"", 1, false, 1, 1.1, zeroTime},
-				UserType{"", 1, false, -1, 1.1, nowTime},
-				UserType{"", 0, true, 1.1, 0, zeroTime},
-				UserType{"z", -1, false, 0, 0, nowTime},
-				UserType{"z", -1, false, -1.1, 0, oldTime},
+				{"s", 0, false, 1.1, 0, zeroTime},
+				{"a", -1, true, 0, -1.1, nowTime},
+				{"a", -1, true, -1.1, -1.1, oldTime},
+				{"", 1, false, 1, 1.1, zeroTime},
+				{"", 1, false, -1, 1.1, nowTime},
+				{"", 0, true, 1.1, 0, zeroTime},
+				{"z", -1, false, 0, 0, nowTime},
+				{"z", -1, false, -1.1, 0, oldTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Join(
 					[]UserType{
-						UserType{"s", 0, false, 1.1, 0, oldTime},
-						UserType{"a", -1, true, -1.1, -1.1, nowTime},
-						UserType{"", 1, false, 1.1, 1.1, oldTime},
+						{"s", 0, false, 1.1, 0, oldTime},
+						{"a", -1, true, -1.1, -1.1, nowTime},
+						{"", 1, false, 1.1, 1.1, oldTime},
 					},
 					[]UserType{
-						UserType{"s", -1, true, 0, 0, nowTime},
-						UserType{"a", 0, false, 1.1, 1.1, zeroTime},
+						{"s", -1, true, 0, 0, nowTime},
+						{"a", 0, false, 1.1, 1.1, zeroTime},
 					},
 					"left",
 					"Ok  =  Ok",
@@ -1076,22 +1076,22 @@ func GetQueryJoinTestCase() []TestCase {
 					})
 			},
 			[]UserType{
-				UserType{"s", 0, false, 1.1, 0, zeroTime},
-				UserType{"a", -1, true, 0, -1.1, nowTime},
-				UserType{"", 0, false, 1.1, 1.1, zeroTime},
+				{"s", 0, false, 1.1, 0, zeroTime},
+				{"a", -1, true, 0, -1.1, nowTime},
+				{"", 0, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Join(
 					[]UserType{
-						UserType{"s", 0, false, 1.1, 0, oldTime},
-						UserType{"a", -1, true, -1.1, -1.1, nowTime},
-						UserType{"", 1, false, 0, 1.1, oldTime},
+						{"s", 0, false, 1.1, 0, oldTime},
+						{"a", -1, true, -1.1, -1.1, nowTime},
+						{"", 1, false, 0, 1.1, oldTime},
 					},
 					[]UserType{
-						UserType{"s", -1, true, 0, 0, nowTime},
-						UserType{"a", 0, false, 1.1, 1.1, zeroTime},
+						{"s", -1, true, 0, 0, nowTime},
+						{"a", 0, false, 1.1, 1.1, zeroTime},
 					},
 					"left",
 					" Money=Money ",
@@ -1107,22 +1107,22 @@ func GetQueryJoinTestCase() []TestCase {
 					})
 			},
 			[]UserType{
-				UserType{"s", 0, false, 1.1, 0, zeroTime},
-				UserType{"a", 0, true, 0, -1.1, zeroTime},
-				UserType{"", -1, false, 0, 1.1, nowTime},
+				{"s", 0, false, 1.1, 0, zeroTime},
+				{"a", 0, true, 0, -1.1, zeroTime},
+				{"", -1, false, 0, 1.1, nowTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Join(
 					[]UserType{
-						UserType{"s", 0, false, 1.1, 0, oldTime},
-						UserType{"a", -1, true, -1.1, -1.1, nowTime},
-						UserType{"", 1, false, 0, 1.1, oldTime},
+						{"s", 0, false, 1.1, 0, oldTime},
+						{"a", -1, true, -1.1, -1.1, nowTime},
+						{"", 1, false, 0, 1.1, oldTime},
 					},
 					[]UserType{
-						UserType{"s", -1, true, 0, 0, nowTime},
-						UserType{"a", 0, false, 1.1, 1.1, zeroTime},
+						{"s", -1, true, 0, 0, nowTime},
+						{"a", 0, false, 1.1, 1.1, zeroTime},
 					},
 					"left",
 					" CardMoney = Money ",
@@ -1138,22 +1138,22 @@ func GetQueryJoinTestCase() []TestCase {
 					})
 			},
 			[]UserType{
-				UserType{"s", -1, false, 0, 0, nowTime},
-				UserType{"a", 0, true, 0, -1.1, zeroTime},
-				UserType{"", 0, false, 1.1, 1.1, zeroTime},
+				{"s", -1, false, 0, 0, nowTime},
+				{"a", 0, true, 0, -1.1, zeroTime},
+				{"", 0, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Join(
 					[]UserType{
-						UserType{"s", 0, false, 1.1, 0, oldTime},
-						UserType{"a", -1, true, -1.1, -1.1, nowTime},
-						UserType{"", 1, false, 0, 1.1, oldTime},
+						{"s", 0, false, 1.1, 0, oldTime},
+						{"a", -1, true, -1.1, -1.1, nowTime},
+						{"", 1, false, 0, 1.1, oldTime},
 					},
 					[]UserType{
-						UserType{"s", -1, true, 0, 0, nowTime},
-						UserType{"a", 0, false, 1.1, 1.1, zeroTime},
+						{"s", -1, true, 0, 0, nowTime},
+						{"a", 0, false, 1.1, 1.1, zeroTime},
 					},
 					"left",
 					" Register = Register ",
@@ -1169,23 +1169,23 @@ func GetQueryJoinTestCase() []TestCase {
 					})
 			},
 			[]UserType{
-				UserType{"s", 0, false, 0, 0, zeroTime},
-				UserType{"a", -1, true, 0, -1.1, nowTime},
-				UserType{"", 0, false, 0, 1.1, zeroTime},
+				{"s", 0, false, 0, 0, zeroTime},
+				{"a", -1, true, 0, -1.1, nowTime},
+				{"", 0, false, 0, 1.1, zeroTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Join(
 					[]QueryInnerStruct2{
-						QueryInnerStruct2{QueryInnerStruct{3}, 1, 1.1},
-						QueryInnerStruct2{QueryInnerStruct{2}, 2, 2.1},
-						QueryInnerStruct2{QueryInnerStruct{1}, 3, 3.1},
+						{QueryInnerStruct{3}, 1, 1.1},
+						{QueryInnerStruct{2}, 2, 2.1},
+						{QueryInnerStruct{1}, 3, 3.1},
 					},
 					[]QueryInnerStruct2{
-						QueryInnerStruct2{QueryInnerStruct{3}, 4, 4.1},
-						QueryInnerStruct2{QueryInnerStruct{2}, 5, 5.1},
-						QueryInnerStruct2{QueryInnerStruct{1}, 6, 6.1},
+						{QueryInnerStruct{3}, 4, 4.1},
+						{QueryInnerStruct{2}, 5, 5.1},
+						{QueryInnerStruct{1}, 6, 6.1},
 					},
 					"left",
 					"QueryInnerStruct.MM = QueryInnerStruct.MM",
@@ -1198,9 +1198,9 @@ func GetQueryJoinTestCase() []TestCase {
 					})
 			},
 			[]QueryInnerStruct2{
-				QueryInnerStruct2{QueryInnerStruct{3}, 4, 1.1},
-				QueryInnerStruct2{QueryInnerStruct{2}, 5, 2.1},
-				QueryInnerStruct2{QueryInnerStruct{1}, 6, 3.1},
+				{QueryInnerStruct{3}, 4, 1.1},
+				{QueryInnerStruct{2}, 5, 2.1},
+				{QueryInnerStruct{1}, 6, 3.1},
 			},
 		},
 	}
@@ -1250,20 +1250,20 @@ func GetQueryGroupTestCase() []TestCase {
 					})
 			},
 			[]ContentType{
-				ContentType{"a", 2, false, 0, 0, zeroTime},
-				ContentType{"", 2, false, 0, 0, zeroTime},
-				ContentType{"z", 1, false, 0, 0, zeroTime},
+				{"a", 2, false, 0, 0, zeroTime},
+				{"", 2, false, 0, 0, zeroTime},
+				{"z", 1, false, 0, 0, zeroTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Group[ContentType, []ContentType, *[]ContentType](
 					[]ContentType{
-						ContentType{"a", 3, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"", 10, true, -2.2, -1.2, oldTime},
-						ContentType{"", -2, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
+						{"a", 3, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"", 10, true, -2.2, -1.2, oldTime},
+						{"", -2, false, 0, 0, zeroTime},
+						{"z", 3, true, 0, 0, nowTime},
 					},
 					"Name",
 					func(list []ContentType) []ContentType {
@@ -1273,20 +1273,20 @@ func GetQueryGroupTestCase() []TestCase {
 					})
 			},
 			&[]ContentType{
-				ContentType{"a", 3, true, 1.1, 0, nowTime},
-				ContentType{"", 10, true, -2.2, -1.2, oldTime},
-				ContentType{"z", 3, true, 0, 0, nowTime},
+				{"a", 3, true, 1.1, 0, nowTime},
+				{"", 10, true, -2.2, -1.2, oldTime},
+				{"z", 3, true, 0, 0, nowTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Group[ContentType, float32, []float32](
 					[]ContentType{
-						ContentType{"a", 3, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"", 10, true, -2.2, -1.2, oldTime},
-						ContentType{"", -2, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
+						{"a", 3, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"", 10, true, -2.2, -1.2, oldTime},
+						{"", -2, false, 0, 0, zeroTime},
+						{"z", 3, true, 0, 0, nowTime},
 					},
 					"Name",
 					func(list []ContentType) float32 {
@@ -1300,11 +1300,11 @@ func GetQueryGroupTestCase() []TestCase {
 			func() interface{} {
 				return query.Group[ContentType, []ContentType, *[]ContentType](
 					[]ContentType{
-						ContentType{"a", 3, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"", 10, true, -2.2, -1.2, oldTime},
-						ContentType{"", -2, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
+						{"a", 3, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"", 10, true, -2.2, -1.2, oldTime},
+						{"", -2, false, 0, 0, zeroTime},
+						{"z", 3, true, 0, 0, nowTime},
 					},
 					"Ok",
 					func(list []ContentType) []ContentType {
@@ -1314,19 +1314,19 @@ func GetQueryGroupTestCase() []TestCase {
 					})
 			},
 			&[]ContentType{
-				ContentType{"a", 3, true, 0, -1.2, nowTime},
-				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				{"a", 3, true, 0, -1.2, nowTime},
+				{"a", -1, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Group[ContentType, []ContentType, *[]ContentType](
 					[]ContentType{
-						ContentType{"s", 1, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"", 0, true, -1.1, -1.1, oldTime},
-						ContentType{"", -1, false, 0, 0, zeroTime},
-						ContentType{"z", 1, true, 0, 0, nowTime},
+						{"s", 1, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"", 0, true, -1.1, -1.1, oldTime},
+						{"", -1, false, 0, 0, zeroTime},
+						{"z", 1, true, 0, 0, nowTime},
 					},
 					" Age ",
 					func(list []ContentType) []ContentType {
@@ -1336,20 +1336,20 @@ func GetQueryGroupTestCase() []TestCase {
 					})
 			},
 			&[]ContentType{
-				ContentType{"s", 1, true, 0, 0, nowTime},
-				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				ContentType{"", 0, true, -1.1, -1.1, oldTime},
+				{"s", 1, true, 0, 0, nowTime},
+				{"a", -1, false, 1.1, 1.1, zeroTime},
+				{"", 0, true, -1.1, -1.1, oldTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Group[ContentType, float64, []float64](
 					[]ContentType{
-						ContentType{"s", 1, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"", 0, true, -1.1, -1.1, oldTime},
-						ContentType{"", -1, false, 0, 0, zeroTime},
-						ContentType{"z", 1, true, 0, 0, nowTime},
+						{"s", 1, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"", 0, true, -1.1, -1.1, oldTime},
+						{"", -1, false, 0, 0, zeroTime},
+						{"z", 1, true, 0, 0, nowTime},
 					},
 					" Age ",
 					func(list []ContentType) float64 {
@@ -1364,11 +1364,11 @@ func GetQueryGroupTestCase() []TestCase {
 			func() interface{} {
 				return query.Group[ContentType, []float64, *[]float64](
 					[]ContentType{
-						ContentType{"s", 1, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"", 0, true, -1.1, -1.1, oldTime},
-						ContentType{"", -1, false, 0, 0, zeroTime},
-						ContentType{"z", 1, true, 0, 0, nowTime},
+						{"s", 1, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"", 0, true, -1.1, -1.1, oldTime},
+						{"", -1, false, 0, 0, zeroTime},
+						{"z", 1, true, 0, 0, nowTime},
 					},
 					" Age ",
 					func(list []ContentType) []float64 {
@@ -1383,11 +1383,11 @@ func GetQueryGroupTestCase() []TestCase {
 			func() interface{} {
 				return query.Group[ContentType, int, []int](
 					[]ContentType{
-						ContentType{"s", 1, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"", 0, true, -1.1, -1.1, oldTime},
-						ContentType{"", -1, false, 0, 0, zeroTime},
-						ContentType{"z", 1, true, 0, 0, nowTime},
+						{"s", 1, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"", 0, true, -1.1, -1.1, oldTime},
+						{"", -1, false, 0, 0, zeroTime},
+						{"z", 1, true, 0, 0, nowTime},
 					},
 					"Register ",
 					func(list []ContentType) int {
@@ -1402,11 +1402,11 @@ func GetQueryGroupTestCase() []TestCase {
 			func() interface{} {
 				return query.Group[ContentType, []ContentType, *[]ContentType](
 					[]ContentType{
-						ContentType{"s", 1, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"", 0, true, -1.1, -1.1, oldTime},
-						ContentType{"", -1, false, 0, 0, zeroTime},
-						ContentType{"z", 1, true, 0, 0, nowTime},
+						{"s", 1, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"", 0, true, -1.1, -1.1, oldTime},
+						{"", -1, false, 0, 0, zeroTime},
+						{"z", 1, true, 0, 0, nowTime},
 					},
 					"Register ",
 					func(list []ContentType) []ContentType {
@@ -1416,9 +1416,9 @@ func GetQueryGroupTestCase() []TestCase {
 					})
 			},
 			&[]ContentType{
-				ContentType{"s", 2, true, 0, 0, nowTime},
-				ContentType{"a", -2, false, 1.1, 1.1, zeroTime},
-				ContentType{"", 0, true, -1.1, -1.1, oldTime},
+				{"s", 2, true, 0, 0, nowTime},
+				{"a", -2, false, 1.1, 1.1, zeroTime},
+				{"", 0, true, -1.1, -1.1, oldTime},
 			},
 		},
 		/*DO NOT SUPPORT MULTIPLE COLUMN GROUP
@@ -1426,12 +1426,12 @@ func GetQueryGroupTestCase() []TestCase {
 			func() interface{} {
 				return query.Group(
 					[]ContentType{
-						ContentType{"s", 1, true, 0, 0, nowTime},
-						ContentType{"s", 1, true, 6.6, 6.6, nowTime},
-						ContentType{"", 0, true, -5.1, -5.1, oldTime},
-						ContentType{"", 0, true, 2.1, 2.1, oldTime},
-						ContentType{"", -1, false, -3.3, -3.3, zeroTime},
-						ContentType{"", -1, false, 4.3, 4.3, zeroTime},
+						{"s", 1, true, 0, 0, nowTime},
+						{"s", 1, true, 6.6, 6.6, nowTime},
+						{"", 0, true, -5.1, -5.1, oldTime},
+						{"", 0, true, 2.1, 2.1, oldTime},
+						{"", -1, false, -3.3, -3.3, zeroTime},
+						{"", -1, false, 4.3, 4.3, zeroTime},
 					},
 					" Name , Ok ",
 					func(list []ContentType) []ContentType {
@@ -1441,9 +1441,9 @@ func GetQueryGroupTestCase() []TestCase {
 					})
 			},
 			[]ContentType{
-				ContentType{"", -2, false, -3.3, -3.3, zeroTime},
-				ContentType{"", 0, true, -5.1, -5.1, oldTime},
-				ContentType{"s", 2, true, 0, 0, nowTime},
+				{"", -2, false, -3.3, -3.3, zeroTime},
+				{"", 0, true, -5.1, -5.1, oldTime},
+				{"s", 2, true, 0, 0, nowTime},
 			},
 		},
 		*/
@@ -1451,10 +1451,10 @@ func GetQueryGroupTestCase() []TestCase {
 			func() interface{} {
 				return query.Group[QueryInnerStruct2, []QueryInnerStruct2, *[]QueryInnerStruct2](
 					[]QueryInnerStruct2{
-						QueryInnerStruct2{QueryInnerStruct{3}, 4, 4.1},
-						QueryInnerStruct2{QueryInnerStruct{2}, 5, 5.1},
-						QueryInnerStruct2{QueryInnerStruct{1}, 6, 6.1},
-						QueryInnerStruct2{QueryInnerStruct{2}, 6, 6.1},
+						{QueryInnerStruct{3}, 4, 4.1},
+						{QueryInnerStruct{2}, 5, 5.1},
+						{QueryInnerStruct{1}, 6, 6.1},
+						{QueryInnerStruct{2}, 6, 6.1},
 					},
 					"QueryInnerStruct.MM",
 					func(list []QueryInnerStruct2) []QueryInnerStruct2 {
@@ -1464,9 +1464,9 @@ func GetQueryGroupTestCase() []TestCase {
 					})
 			},
 			&[]QueryInnerStruct2{
-				QueryInnerStruct2{QueryInnerStruct{3}, 4, 4.1},
-				QueryInnerStruct2{QueryInnerStruct{2}, 11, 5.1},
-				QueryInnerStruct2{QueryInnerStruct{1}, 6, 6.1},
+				{QueryInnerStruct{3}, 4, 4.1},
+				{QueryInnerStruct{2}, 11, 5.1},
+				{QueryInnerStruct{1}, 6, 6.1},
 			},
 		},
 	}
@@ -1510,108 +1510,108 @@ func GetQueryColumnMapTestCase() []TestCase {
 			func() interface{} {
 				return query.ColumnMap[ContentType, string](
 					[]ContentType{
-						ContentType{"a", 3, true, 0, 0, nowTime},
-						ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-						ContentType{"-1", -2, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
+						{"a", 3, true, 0, 0, nowTime},
+						{"0", -1, false, 1.1, 1.1, zeroTime},
+						{"1", 10, true, -2.2, -1.2, oldTime},
+						{"-1", -2, false, 0, 0, zeroTime},
+						{"z", 3, true, 0, 0, nowTime},
 					},
 					"     Name         ")
 			},
 			map[string]ContentType{
-				"a":  ContentType{"a", 3, true, 0, 0, nowTime},
-				"0":  ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				"1":  ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-				"-1": ContentType{"-1", -2, false, 0, 0, zeroTime},
-				"z":  ContentType{"z", 3, true, 0, 0, nowTime},
+				"a":  {"a", 3, true, 0, 0, nowTime},
+				"0":  {"0", -1, false, 1.1, 1.1, zeroTime},
+				"1":  {"1", 10, true, -2.2, -1.2, oldTime},
+				"-1": {"-1", -2, false, 0, 0, zeroTime},
+				"z":  {"z", 3, true, 0, 0, nowTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.ColumnMap[ContentType, int](
 					[]ContentType{
-						ContentType{"a", 3, true, 0, 0, nowTime},
-						ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-						ContentType{"-1", -2, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
+						{"a", 3, true, 0, 0, nowTime},
+						{"0", -1, false, 1.1, 1.1, zeroTime},
+						{"1", 10, true, -2.2, -1.2, oldTime},
+						{"-1", -2, false, 0, 0, zeroTime},
+						{"z", 3, true, 0, 0, nowTime},
 					},
 					"Age        ")
 			},
 			map[int]ContentType{
-				3:  ContentType{"a", 3, true, 0, 0, nowTime},
-				-1: ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				10: ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-				-2: ContentType{"-1", -2, false, 0, 0, zeroTime},
+				3:  {"a", 3, true, 0, 0, nowTime},
+				-1: {"0", -1, false, 1.1, 1.1, zeroTime},
+				10: {"1", 10, true, -2.2, -1.2, oldTime},
+				-2: {"-1", -2, false, 0, 0, zeroTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.ColumnMap[ContentType, bool](
 					[]ContentType{
-						ContentType{"a", 3, true, 0, 0, nowTime},
-						ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-						ContentType{"-1", -2, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
+						{"a", 3, true, 0, 0, nowTime},
+						{"0", -1, false, 1.1, 1.1, zeroTime},
+						{"1", 10, true, -2.2, -1.2, oldTime},
+						{"-1", -2, false, 0, 0, zeroTime},
+						{"z", 3, true, 0, 0, nowTime},
 					},
 					"Ok        ")
 			},
 			map[bool]ContentType{
-				true:  ContentType{"a", 3, true, 0, 0, nowTime},
-				false: ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
+				true:  {"a", 3, true, 0, 0, nowTime},
+				false: {"0", -1, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.ColumnMap[ContentType, float32](
 					[]ContentType{
-						ContentType{"a", 3, true, 0, 0, nowTime},
-						ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-						ContentType{"-1", -2, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
+						{"a", 3, true, 0, 0, nowTime},
+						{"0", -1, false, 1.1, 1.1, zeroTime},
+						{"1", 10, true, -2.2, -1.2, oldTime},
+						{"-1", -2, false, 0, 0, zeroTime},
+						{"z", 3, true, 0, 0, nowTime},
 					},
 					"    Money  ")
 			},
 			map[float32]ContentType{
-				0:    ContentType{"a", 3, true, 0, 0, nowTime},
-				1.1:  ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				-2.2: ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+				0:    {"a", 3, true, 0, 0, nowTime},
+				1.1:  {"0", -1, false, 1.1, 1.1, zeroTime},
+				-2.2: {"1", 10, true, -2.2, -1.2, oldTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.ColumnMap[ContentType, float64](
 					[]ContentType{
-						ContentType{"a", 3, true, 0, 0, nowTime},
-						ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-						ContentType{"-1", -2, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
+						{"a", 3, true, 0, 0, nowTime},
+						{"0", -1, false, 1.1, 1.1, zeroTime},
+						{"1", 10, true, -2.2, -1.2, oldTime},
+						{"-1", -2, false, 0, 0, zeroTime},
+						{"z", 3, true, 0, 0, nowTime},
 					},
 					"    CardMoney")
 			},
 			map[float64]ContentType{
-				0:    ContentType{"a", 3, true, 0, 0, nowTime},
-				1.1:  ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				-1.2: ContentType{"1", 10, true, -2.2, -1.2, oldTime},
+				0:    {"a", 3, true, 0, 0, nowTime},
+				1.1:  {"0", -1, false, 1.1, 1.1, zeroTime},
+				-1.2: {"1", 10, true, -2.2, -1.2, oldTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.ColumnMap[QueryInnerStruct2, int](
 					[]QueryInnerStruct2{
-						QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
-						QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
-						QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
+						{QueryInnerStruct{1}, 2, 1.1},
+						{QueryInnerStruct{2}, 4, 2.1},
+						{QueryInnerStruct{3}, 5, 3.1},
 					},
 					"QueryInnerStruct.MM")
 			},
 			map[int]QueryInnerStruct2{
-				1: QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
-				2: QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
-				3: QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
+				1: {QueryInnerStruct{1}, 2, 1.1},
+				2: {QueryInnerStruct{2}, 4, 2.1},
+				3: {QueryInnerStruct{3}, 5, 3.1},
 			},
 		},
 		//queryColumn []slice
@@ -1793,19 +1793,19 @@ func GetQueryReverseTestCase() []TestCase {
 			func() interface{} {
 				return query.Reverse(
 					[]ContentType{
-						ContentType{"a", 3, true, 0, 0, nowTime},
-						ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-						ContentType{"-1", -2, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
+						{"a", 3, true, 0, 0, nowTime},
+						{"0", -1, false, 1.1, 1.1, zeroTime},
+						{"1", 10, true, -2.2, -1.2, oldTime},
+						{"-1", -2, false, 0, 0, zeroTime},
+						{"z", 3, true, 0, 0, nowTime},
 					})
 			},
 			[]ContentType{
-				ContentType{"z", 3, true, 0, 0, nowTime},
-				ContentType{"-1", -2, false, 0, 0, zeroTime},
-				ContentType{"1", 10, true, -2.2, -1.2, oldTime},
-				ContentType{"0", -1, false, 1.1, 1.1, zeroTime},
-				ContentType{"a", 3, true, 0, 0, nowTime},
+				{"z", 3, true, 0, 0, nowTime},
+				{"-1", -2, false, 0, 0, zeroTime},
+				{"1", 10, true, -2.2, -1.2, oldTime},
+				{"0", -1, false, 1.1, 1.1, zeroTime},
+				{"a", 3, true, 0, 0, nowTime},
 			},
 		},
 	}
@@ -1831,9 +1831,9 @@ func GetQueryCombineTestCase() []TestCase {
 			func() interface{} {
 				return query.Combine(
 					[]ContentType{
-						ContentType{Name: "1"},
-						ContentType{Name: "2"},
-						ContentType{Name: "3"},
+						{Name: "1"},
+						{Name: "2"},
+						{Name: "3"},
 					},
 					[]int{1, 2, 3},
 					func(left ContentType, right int) ContentType {
@@ -1844,9 +1844,9 @@ func GetQueryCombineTestCase() []TestCase {
 					})
 			},
 			[]ContentType{
-				ContentType{Name: "1", Age: 1},
-				ContentType{Name: "2", Age: 2},
-				ContentType{Name: "3", Age: 3},
+				{Name: "1", Age: 1},
+				{Name: "2", Age: 2},
+				{Name: "3", Age: 3},
 			},
 		},
 	}
@@ -1895,13 +1895,13 @@ func GetQueryDistinctTestCase() []TestCase {
 			func() interface{} {
 				return query.Distinct(
 					[]ContentType{
-						ContentType{"", 0, false, 0, 0, zeroTime},
+						{"", 0, false, 0, 0, zeroTime},
 					},
 					"",
 				)
 			},
 			[]ContentType{
-				ContentType{"", 0, false, 0, 0, zeroTime},
+				{"", 0, false, 0, 0, zeroTime},
 			},
 		},
 		//单排除
@@ -1918,114 +1918,114 @@ func GetQueryDistinctTestCase() []TestCase {
 			func() interface{} {
 				return query.Distinct(
 					[]ContentType{
-						ContentType{"s", 3, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"", 10, true, -1.1, -1.1, oldTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"z", 3, true, 0, 0, nowTime},
+						{"s", 3, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"", 10, true, -1.1, -1.1, oldTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"z", 3, true, 0, 0, nowTime},
 					},
 					"Name",
 				)
 			},
 			[]ContentType{
-				ContentType{"s", 3, true, 0, 0, nowTime},
-				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-				ContentType{"", 10, true, -1.1, -1.1, oldTime},
-				ContentType{"z", 3, true, 0, 0, nowTime},
+				{"s", 3, true, 0, 0, nowTime},
+				{"a", -1, false, 1.1, 1.1, zeroTime},
+				{"", 10, true, -1.1, -1.1, oldTime},
+				{"z", 3, true, 0, 0, nowTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Distinct(
 					[]ContentType{
-						ContentType{"b", 3, true, 0, 0, nowTime},
-						ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
-						ContentType{"5", 10, true, -1.1, -1.1, oldTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"h", 3, true, 0, 0, nowTime},
+						{"b", 3, true, 0, 0, nowTime},
+						{"a", -1, false, 1.1, 1.1, zeroTime},
+						{"5", 10, true, -1.1, -1.1, oldTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"h", 3, true, 0, 0, nowTime},
 					},
 					"Ok",
 				)
 			},
 			[]ContentType{
-				ContentType{"b", 3, true, 0, 0, nowTime},
-				ContentType{"a", -1, false, 1.1, 1.1, zeroTime},
+				{"b", 3, true, 0, 0, nowTime},
+				{"a", -1, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Distinct(
 					[]ContentType{
-						ContentType{"b", -1, true, 0, 0, nowTime},
-						ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"h", -1, true, 0, 0, nowTime},
-						ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+						{"b", -1, true, 0, 0, nowTime},
+						{"a", 0, false, 1.1, 1.1, zeroTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"h", -1, true, 0, 0, nowTime},
+						{"5", 10, true, -1.1, -1.1, oldTime},
 					},
 					"   Age   ",
 				)
 			},
 			[]ContentType{
-				ContentType{"b", -1, true, 0, 0, nowTime},
-				ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
-				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				{"b", -1, true, 0, 0, nowTime},
+				{"a", 0, false, 1.1, 1.1, zeroTime},
+				{"5", 10, true, -1.1, -1.1, oldTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Distinct(
 					[]ContentType{
-						ContentType{"b", -1, true, 0, 0, nowTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
-						ContentType{"h", -1, true, 0, 0, nowTime},
-						ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+						{"b", -1, true, 0, 0, nowTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"a", 0, false, 1.1, 1.1, zeroTime},
+						{"h", -1, true, 0, 0, nowTime},
+						{"5", 10, true, -1.1, -1.1, oldTime},
 					},
 					"   Money",
 				)
 			},
 			[]ContentType{
-				ContentType{"b", -1, true, 0, 0, nowTime},
-				ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
-				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				{"b", -1, true, 0, 0, nowTime},
+				{"a", 0, false, 1.1, 1.1, zeroTime},
+				{"5", 10, true, -1.1, -1.1, oldTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Distinct(
 					[]ContentType{
-						ContentType{"b", -1, true, 0, 0, nowTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
-						ContentType{"h", -1, true, 0, 0, nowTime},
-						ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+						{"b", -1, true, 0, 0, nowTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"a", 0, false, 1.1, 1.1, zeroTime},
+						{"h", -1, true, 0, 0, nowTime},
+						{"5", 10, true, -1.1, -1.1, oldTime},
 					},
 					"   CardMoney",
 				)
 			},
 			[]ContentType{
-				ContentType{"b", -1, true, 0, 0, nowTime},
-				ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
-				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				{"b", -1, true, 0, 0, nowTime},
+				{"a", 0, false, 1.1, 1.1, zeroTime},
+				{"5", 10, true, -1.1, -1.1, oldTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Distinct(
 					[]ContentType{
-						ContentType{"b", -1, true, 0, 0, nowTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"h", -1, true, 0, 0, nowTime},
-						ContentType{"5", 10, true, -1.1, -1.1, oldTime},
-						ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
+						{"b", -1, true, 0, 0, nowTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"h", -1, true, 0, 0, nowTime},
+						{"5", 10, true, -1.1, -1.1, oldTime},
+						{"a", 0, false, 1.1, 1.1, zeroTime},
 					},
 					"Register   ",
 				)
 			},
 			[]ContentType{
-				ContentType{"b", -1, true, 0, 0, nowTime},
-				ContentType{"", 0, false, 0, 0, zeroTime},
-				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
+				{"b", -1, true, 0, 0, nowTime},
+				{"", 0, false, 0, 0, zeroTime},
+				{"5", 10, true, -1.1, -1.1, oldTime},
 			},
 		},
 		//多值传递
@@ -2033,61 +2033,61 @@ func GetQueryDistinctTestCase() []TestCase {
 			func() interface{} {
 				return query.Distinct(
 					[]ContentType{
-						ContentType{"b", -1, true, 0, 0, nowTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"h", -1, true, 0, 0, nowTime},
-						ContentType{"5", 10, true, -1.1, -1.1, oldTime},
-						ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
+						{"b", -1, true, 0, 0, nowTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"h", -1, true, 0, 0, nowTime},
+						{"5", 10, true, -1.1, -1.1, oldTime},
+						{"a", 0, false, 1.1, 1.1, zeroTime},
 					},
 					"  Age  ,  Money",
 				)
 			},
 			[]ContentType{
-				ContentType{"b", -1, true, 0, 0, nowTime},
-				ContentType{"", 0, false, 0, 0, zeroTime},
-				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
-				ContentType{"a", 0, false, 1.1, 1.1, zeroTime},
+				{"b", -1, true, 0, 0, nowTime},
+				{"", 0, false, 0, 0, zeroTime},
+				{"5", 10, true, -1.1, -1.1, oldTime},
+				{"a", 0, false, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Distinct(
 					[]ContentType{
-						ContentType{"b", -1, true, 0, 0, nowTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"h", -1, true, 0, 0, nowTime},
-						ContentType{"5", 10, true, -1.1, -1.1, oldTime},
-						ContentType{"", 0, false, 0, 0, zeroTime},
-						ContentType{"a", 15, true, 1.1, 1.1, zeroTime},
-						ContentType{"5", 0, false, -1.1, -1.1, oldTime},
+						{"b", -1, true, 0, 0, nowTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"h", -1, true, 0, 0, nowTime},
+						{"5", 10, true, -1.1, -1.1, oldTime},
+						{"", 0, false, 0, 0, zeroTime},
+						{"a", 15, true, 1.1, 1.1, zeroTime},
+						{"5", 0, false, -1.1, -1.1, oldTime},
 					},
 					"  Name  ,  Money,Register  ",
 				)
 			},
 			[]ContentType{
-				ContentType{"b", -1, true, 0, 0, nowTime},
-				ContentType{"", 0, false, 0, 0, zeroTime},
-				ContentType{"h", -1, true, 0, 0, nowTime},
-				ContentType{"5", 10, true, -1.1, -1.1, oldTime},
-				ContentType{"a", 15, true, 1.1, 1.1, zeroTime},
+				{"b", -1, true, 0, 0, nowTime},
+				{"", 0, false, 0, 0, zeroTime},
+				{"h", -1, true, 0, 0, nowTime},
+				{"5", 10, true, -1.1, -1.1, oldTime},
+				{"a", 15, true, 1.1, 1.1, zeroTime},
 			},
 		},
 		{
 			func() interface{} {
 				return query.Distinct(
 					[]QueryInnerStruct2{
-						QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
-						QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
-						QueryInnerStruct2{QueryInnerStruct{2}, 5, 4.1},
-						QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
+						{QueryInnerStruct{1}, 2, 1.1},
+						{QueryInnerStruct{2}, 4, 2.1},
+						{QueryInnerStruct{2}, 5, 4.1},
+						{QueryInnerStruct{3}, 5, 3.1},
 					},
 					"QueryInnerStruct.MM",
 				)
 			},
 			[]QueryInnerStruct2{
-				QueryInnerStruct2{QueryInnerStruct{1}, 2, 1.1},
-				QueryInnerStruct2{QueryInnerStruct{2}, 4, 2.1},
-				QueryInnerStruct2{QueryInnerStruct{3}, 5, 3.1},
+				{QueryInnerStruct{1}, 2, 1.1},
+				{QueryInnerStruct{2}, 4, 2.1},
+				{QueryInnerStruct{3}, 5, 3.1},
 			},
 		},
 	}
