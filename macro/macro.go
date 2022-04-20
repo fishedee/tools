@@ -59,9 +59,14 @@ func (mp *Package) fireFuncCall(n ast.Node) {
 	if ok == false {
 		selectorExpr, ok := expr.Fun.(*ast.SelectorExpr)
 		if ok == false {
-			return
+			indexListExpr, ok := expr.Fun.(*ast.IndexListExpr)
+			if ok == false {
+				return
+			}
+			exprIdent = indexListExpr.X.(*ast.SelectorExpr).Sel
+		} else {
+			exprIdent = selectorExpr.Sel
 		}
-		exprIdent = selectorExpr.Sel
 	}
 
 	info := mp.pkg.Info
@@ -88,6 +93,7 @@ func (mp *Package) fireFuncCall(n ast.Node) {
 func (mp *Package) Inspect() {
 	for _, file := range mp.pkg.Files {
 		ast.Inspect(file, func(n ast.Node) bool {
+			// fmt.Printf("node: %#v\n", n)
 			//检查函数
 			mp.fireFuncCall(n)
 			return true

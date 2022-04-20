@@ -93,7 +93,7 @@ func init() {
 	var err error
 	queryGroupFuncTmpl, err = template.New("name").Parse(`
 	 {{if eq .isFunctorGroup "true"}}` +
-		`func ` + groupFuncPrefix + "{{ .signature }}(data []{{ .firstArgElemType }},groupType string,groupFunctor {{ .thirdArgType }})[]{{ .thirdArgReturnType}}{\n" +
+		`func ` + groupFuncPrefix + "{{ .signature }}(data []{{ .firstArgElemType }},groupType string,groupFunctor {{ .thirdArgType }})" + `{{if eq .isSliceReturn ""}} {{else}}*{{end}}` + "[]{{ .thirdArgReturnType}}{\n" +
 		`{{else}}` +
 		`func ` + columnMapFuncPrefix + "{{ .signature }}(data []{{ .firstArgElemType }},column string)map[{{ .columnType }}][]{{ .firstArgElemType}}{\n" +
 		`{{end}}dataIn := data
@@ -140,7 +140,7 @@ func init() {
 			{{end}}
 		}
 
-		return result
+		return {{if eq .isSliceReturn ""}} {{else}}&{{end}}result
 	}
 	`)
 	if err != nil {
