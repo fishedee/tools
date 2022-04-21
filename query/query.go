@@ -23,13 +23,12 @@ func SelectMacroRegister[T, R any](data []T, selectFunctor func(a T) R, handler 
 // Select select data from table
 //     * First Argument:table
 //     * Second Argument:select rule
-//     result = query.Select(users, func(a User) Sex {
+//     sel = query.Select(users, func(a User) Sex {
 //         if len(a.Name) >= 3 && a.Name[0:3] == "Man" {
 //             return Sex{IsMale: true}
 //         }
 //         return Sex{IsMale: false}
-//     })
-//     sel := result.([]Sex)
+//     }) // []Sex
 func Select[T, R any](data []T, selectFunctor func(a T) R) []R {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), reflect.TypeOf(selectFunctor).String()})
 	handler, isExist := selectMacroMapper[id]
@@ -53,13 +52,12 @@ func WhereMacroRegister[T any](data []T, whereFunctor func(T) bool, handler Wher
 // Where filter data from table
 //     * First Argument:table
 //     * Second Argument:filter rule
-//     result = query.Where(users, func(a User) bool {
+//     where = query.Where(users, func(a User) bool {
 //         if len(a.Name) >= 3 && a.Name[0:3] == "Man" {
 //             return true
 //         }
 //         return false
-//     })
-//     where := result.([]User)
+//     }) // []User
 func Where[T any](data []T, whereFuctor func(T) bool) []T {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), reflect.TypeOf(whereFuctor).String()})
 	handler, isExist := whereMacroMapper[id]
@@ -119,8 +117,7 @@ func SortMacroRegister[T any](data []T, sortType string, handler SortMacroHandle
 // Sort sort data from table,support multiple column,for Example: UserID desc,Age asc
 //     * First Argument:table
 //     * Second Argument:sort condition
-//     result = query.Sort(users, "UserID asc")
-//     sort := result.([]User)
+//     sort = query.Sort(users, "UserID asc") // []User
 func Sort[T any](data []T, sortType string) []T {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), sortType})
 	handler, isExist := sortMacroMapper[id]
@@ -166,12 +163,17 @@ func GroupMacroRegister[T, E any, R *E | []E](data []T, groupType string, groupF
 //     * First Argument: left table
 //     * Second Argument: group column name
 //     * Third Argument: group rule
-//     result = query.Group(users, "UserID", func(users []User) Department {
+//     group = query.Group[User, Department, []Department](users, "UserID", func(users []User) Department {
 //         return Department{
 //             Employees: users,
 //         }
-//     })
-//     group := result.([]Department)
+//     }) // []Department
+//     or
+//     group = query.Group[User, []Department, *[]Department](users, "UserID", func(users []User) []Department {
+//         return []Department{
+//             Employees: users,
+//         }
+//     }) // *[]Department
 func Group[T, E any, R *E | []E](data []T, groupType string, groupFunctor func([]T) E) R {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), groupType, reflect.TypeOf(groupFunctor).String()})
 	handler, isExist := groupMacroMapper[id]
@@ -195,8 +197,7 @@ func ColumnMacroRegister[T, R any](data []T, column string, handler ColumnMacroH
 // Column extract column from table
 //     * First Argument:table
 //     * Second Argument:column name
-//     result := query.Column(users, "UserID")
-//     userIDs := result.([]int)
+//     userIDs := query.Column[User, int](users, "UserID") // []int
 func Column[T, R any](data []T, column string) []R {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), column})
 	handler, isExist := columnMacroMapper[id]
@@ -220,8 +221,9 @@ func ColumnMapMacroRegister[T any, K comparable, R map[K]T | map[K][]T](data []T
 // ColumnMap generate a map from table,key is column value and value is it's row
 //     * First Argument:table
 //     * Second Argument:column name
-//     result = query.ColumnMap(users, "UserID")
-//     userMap := result.(map[int]User)
+//     userMap = query.ColumnMap[User, int, map[int]User](users, "UserID") // map[int]User
+//     or
+//     usersMap = query.ColumnMap[User, int, map[int][]User](users, "[]UserID") // map[int][]User
 func ColumnMap[T any, K comparable, R map[K]T | map[K][]T](data []T, column string) R {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), column})
 	handler, isExist := columnMapMacroMapper[id]
@@ -238,15 +240,14 @@ func ColumnMap[T any, K comparable, R map[K]T | map[K][]T](data []T, column stri
 //     * Second Argument: right table
 //     * Third Argument: join condition
 //     * Forth Argument: join rule
-//     result = query.LeftJoin(admins, users, "AdminID = UserID", func(admin Admin, user User) AdminUser {
+//     join = query.LeftJoin(admins, users, "AdminID = UserID", func(admin Admin, user User) AdminUser {
 //         return AdminUser{
 //             AdminID:    admin.AdminID,
 //             Level:      admin.Level,
 //             Name:       user.Name,
 //             CreateTime: user.CreateTime,
 //         }
-//     })
-//     join := result.([]AdminUser)
+//     }) // []AdminUser
 func LeftJoin[L, R, LR any](leftData []L, rightData []R, joinType string, joinFuctor func(L, R) LR) []LR {
 	return Join(leftData, rightData, "left", joinType, joinFuctor)
 }
@@ -279,15 +280,14 @@ func CombineMacroRegister[L, R, LR any](leftData []L, rightData []R, combineFuct
 //     * First Argument:left table
 //     * Second Argument:right table
 //     * Third Argument:combine rule
-//     result = query.Combine(admins, users, func(admin Admin, user User) AdminUser {
+//     combine = query.Combine(admins, users, func(admin Admin, user User) AdminUser {
 //         return AdminUser{
 //             AdminID:    admin.AdminID,
 //             Level:      admin.Level,
 //             Name:       user.Name,
 //             CreateTime: user.CreateTime,
 //         }
-//     })
-//     combine := result.([]AdminUser)
+//     }) // []AdminUser
 func Combine[L, R, LR any](leftData []L, rightData []R, combineFuctor func(L, R) LR) []LR {
 	id := getQueryTypeID([]string{reflect.TypeOf(leftData).String(), reflect.TypeOf(rightData).String(), reflect.TypeOf(combineFuctor).String()})
 	handler, isExist := combineMacroMapper[id]
@@ -300,9 +300,9 @@ func Combine[L, R, LR any](leftData []L, rightData []R, combineFuctor func(L, R)
 }
 
 // Reduce reduce from list to single
-//     query.Reduce([]User{}, func(sum int, singleData User) int {
+//     reduce := query.Reduce([]User{}, func(sum int, singleData User) int {
 //         return 1
-//     }, 0)
+//     }, 0) // int
 func Reduce[T, R any](data []T, reduceFuctor func(R, T) R, resultReduce R) R {
 	datalen := len(data)
 	for i := 0; i != datalen; i++ {
@@ -365,8 +365,7 @@ func Reverse[T any](data []T) []T {
 }
 
 // Distinct unique by column
-//     result := query.Distinct([]User{}, "Name")
-//     dis := result.([]User{})
+//     dis := query.Distinct([]User{}, "Name") // []User{}
 func Distinct[T any](data []T, columnNames string) []T {
 	//提取信息
 	name := plode.Explode(columnNames, ",")
