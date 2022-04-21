@@ -102,12 +102,14 @@ var admins = make([]Admin, 1000, 1000)
 // extract column from table
 // * First Argument:table
 // * Second Argument:column name
-userIDs := query.Column(users, "UserID") // []int
+userIDs := query.Column[User, int](users, "UserID") // []int
 
 // generate a map from table,key is column value and value is it's row
 // * First Argument:table
 // * Second Argument:column name
-userMap = query.ColumnMap(users, "UserID") // map[int]User
+userMap = query.ColumnMap[User, int, map[int]User](users, "UserID") // map[int]User
+// or
+usersMap = query.ColumnMap[User, int, map[int][]User](users, "[]UserID") // map[int][]User
 
 // select data from table
 // * First Argument:table
@@ -146,11 +148,17 @@ combine = query.Combine(admins, users, func(admin Admin, user User) AdminUser {
 // * First Argument: left table
 // * Second Argument: group column name
 // * Third Argument: group rule
-group = query.Group(users, "UserID", func(users []User) Department {
+group = query.Group[User, Department, []Department](users, "UserID", func(users []User) Department {
     return Department{
         Employees: users,
     }
 }) // []Department
+// or
+group = query.Group[User, []Department, *[]Department](users, "UserID", func(users []User) []Department {
+    return []Department{
+        Employees: users,
+    }
+}) // *[]Department
 
 // join data from two table，support LeftJoin,RightJoin,InnerJoin和OuterJoin
 // * First Argument: left table

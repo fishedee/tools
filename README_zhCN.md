@@ -98,12 +98,14 @@ var admins = make([]Admin, 1000, 1000)
 // 获取指定列
 // * 第一个参数为表格
 // * 第二个参数为列名
-userIDs := query.Column(users, "UserID") // []int
+userIDs := query.Column[User, int](users, "UserID") // []int
 
 // 以某列的值生成映射
 // * 第一个参数为表格
 // * 第二个参数为列名
-userMap = query.ColumnMap(users, "UserID") // map[int]User
+userMap = query.ColumnMap[User, int, map[int]User](users, "UserID") // map[int]User
+// or
+usersMap = query.ColumnMap[User, int, map[int][]User](users, "[]UserID") // map[int][]User
 
 // 表格转换或提取操作
 // * 第一个参数为表格
@@ -142,11 +144,17 @@ combine = query.Combine(admins, users, func(admin Admin, user User) AdminUser {
 // * 第一个参数为表格
 // * 第二个参数为列名
 // * 第三个参数为分组规则
-group = query.Group(users, "UserID", func(users []User) Department {
+group = query.Group[User, Department, []Department](users, "UserID", func(users []User) Department {
     return Department{
         Employees: users,
     }
 }) // []Department
+// or
+group = query.Group[User, []Department, *[]Department](users, "UserID", func(users []User) []Department {
+    return []Department{
+        Employees: users,
+    }
+}) // *[]Department
 
 // 两个表进行连接操作，支持LeftJoin,RightJoin,InnerJoin和OuterJoin
 // * 第一个参数为左表
