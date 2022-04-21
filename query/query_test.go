@@ -47,6 +47,39 @@ func TestQueryReduce(t *testing.T) {
 
 }
 
+func TestQuerySum(t *testing.T) {
+	testCase := testdata.GetQuerySumTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
+
+	}
+
+}
+
+func TestQueryMax(t *testing.T) {
+	testCase := testdata.GetQueryMaxTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
+
+	}
+
+}
+
+func TestQueryMin(t *testing.T) {
+	testCase := testdata.GetQueryMinTestCase()
+
+	for singleTestCaseIndex, singleTestCase := range testCase {
+
+		assert.Equal(t, singleTestCase.Target, singleTestCase.Handler(), singleTestCaseIndex)
+
+	}
+
+}
+
 func TestQuerySort(t *testing.T) {
 	testCase := testdata.GetQuerySortTestCase()
 

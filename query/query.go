@@ -1,8 +1,8 @@
 package query
 
 import (
+	"fmt"
 	"log"
-	"math"
 	"reflect"
 	"runtime"
 	"sort"
@@ -303,105 +303,52 @@ func Combine[L, R, LR any](leftData []L, rightData []R, combineFuctor func(L, R)
 //     query.Reduce([]User{}, func(sum int, singleData User) int {
 //         return 1
 //     }, 0)
-func Reduce(data interface{}, reduceFuctor interface{}, resultReduce interface{}) interface{} {
-	dataValue := reflect.ValueOf(data)
-	dataLen := dataValue.Len()
-
-	reduceFuctorValue := reflect.ValueOf(reduceFuctor)
-	resultReduceType := reduceFuctorValue.Type().In(0)
-	resultReduceValue := reflect.New(resultReduceType)
-	err := MapToArray(resultReduce, resultReduceValue.Interface(), "json")
-	if err != nil {
-		panic(err)
+func Reduce[T, R any](data []T, reduceFuctor func(R, T) R, resultReduce R) R {
+	datalen := len(data)
+	for i := 0; i != datalen; i++ {
+		resultReduce = reduceFuctor(resultReduce, data[i])
 	}
-	resultReduceValue = resultReduceValue.Elem()
+	return resultReduce
+}
 
-	for i := 0; i != dataLen; i++ {
-		singleDataValue := dataValue.Index(i)
-		resultReduceValue = reduceFuctorValue.Call([]reflect.Value{resultReduceValue, singleDataValue})[0]
-	}
-	return resultReduceValue.Interface()
+type Number interface {
+	~int | ~float32 | ~float64
 }
 
 // Sum get the sum of data.
 // only support int, float32, float64 type
-func Sum(data interface{}) interface{} {
-	dataType := reflect.TypeOf(data).Elem()
-	if dataType.Kind() == reflect.Int {
-		return Reduce(data, func(sum int, single int) int {
-			return sum + single
-		}, 0)
-	} else if dataType.Kind() == reflect.Float32 {
-		return Reduce(data, func(sum float32, single float32) float32 {
-			return sum + single
-		}, (float32)(0.0))
-	} else if dataType.Kind() == reflect.Float64 {
-		return Reduce(data, func(sum float64, single float64) float64 {
-			return sum + single
-		}, 0.0)
-	} else {
-		panic("invalid type " + dataType.String())
-	}
+func Sum[T Number](data []T) T {
+	return Reduce(data, func(sum T, single T) T {
+		return sum + single
+	}, 0)
 }
 
 // Max get max value from table.
 // only support int, float32, float64 type
-func Max(data interface{}) interface{} {
-	dataType := reflect.TypeOf(data).Elem()
-	if dataType.Kind() == reflect.Int {
-		return Reduce(data, func(max int, single int) int {
-			if single > max {
-				return single
-			}
-			return max
-		}, math.MinInt32)
-	} else if dataType.Kind() == reflect.Float32 {
-		return Reduce(data, func(max float32, single float32) float32 {
-			if single > max {
-				return single
-			}
-			return max
-		}, math.SmallestNonzeroFloat32)
-	} else if dataType.Kind() == reflect.Float64 {
-		return Reduce(data, func(max float64, single float64) float64 {
-			if single > max {
-				return single
-			}
-			return max
-		}, math.SmallestNonzeroFloat64)
-	} else {
-		panic("invalid type " + dataType.String())
+func Max[T Number](data []T) T {
+	if len(data) == 0 {
+		panic(fmt.Errorf("data length is 0"))
 	}
+	return Reduce(data, func(r T, t T) T {
+		if t > r {
+			return t
+		}
+		return r
+	}, data[0])
 }
 
 // Min get min value from table.
 // only support int, float32, float64 type
-func Min(data interface{}) interface{} {
-	dataType := reflect.TypeOf(data).Elem()
-	if dataType.Kind() == reflect.Int {
-		return Reduce(data, func(min int, single int) int {
-			if single < min {
-				return single
-			}
-			return min
-		}, math.MaxInt32)
-	} else if dataType.Kind() == reflect.Float32 {
-		return Reduce(data, func(min float32, single float32) float32 {
-			if single < min {
-				return single
-			}
-			return min
-		}, math.MaxFloat32)
-	} else if dataType.Kind() == reflect.Float64 {
-		return Reduce(data, func(min float64, single float64) float64 {
-			if single < min {
-				return single
-			}
-			return min
-		}, math.MaxFloat64)
-	} else {
-		panic("invalid type " + dataType.String())
+func Min[T Number](data []T) T {
+	if len(data) == 0 {
+		panic(fmt.Errorf("data length is 0"))
 	}
+	return Reduce(data, func(r T, t T) T {
+		if t < r {
+			return t
+		}
+		return r
+	}, data[0])
 }
 
 // Reverse reverse data in table
@@ -409,15 +356,12 @@ func Min(data interface{}) interface{} {
 //         []User{},
 //     )
 func Reverse[T any](data []T) []T {
-	dataValue := reflect.ValueOf(data)
-	dataType := dataValue.Type()
-	dataLen := dataValue.Len()
-	result := reflect.MakeSlice(dataType, dataLen, dataLen)
-
+	dataLen := len(data)
+	result := make([]T, dataLen, dataLen)
 	for i := 0; i != dataLen; i++ {
-		result.Index(dataLen - i - 1).Set(dataValue.Index(i))
+		result[dataLen-i-1] = data[i]
 	}
-	return result.Interface().([]T)
+	return result
 }
 
 // Distinct unique by column

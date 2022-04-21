@@ -414,6 +414,134 @@ func GetQueryReduceTestCase() []TestCase {
 	return testCase
 }
 
+func GetQuerySumTestCase() []TestCase {
+
+	testCase := []TestCase{
+		{
+			func() interface{} {
+				return query.Sum(
+					[]int{1, 2, 3, 4, 5},
+				)
+			},
+			15,
+		},
+		{
+			func() interface{} {
+				return query.Sum(
+					[]float32{1.2, 2.3, 4.5, 2.6, 10.9},
+				)
+			},
+			float32(21.5),
+		},
+		{
+			func() interface{} {
+				return query.Sum(
+					[]float64{1.2, 2.3, 4.5, 2.6, 10.9, 100000000.200000000},
+				)
+			},
+			100000021.7,
+		},
+	}
+
+	return testCase
+}
+
+func GetQueryMaxTestCase() []TestCase {
+
+	testCase := []TestCase{
+		{
+			func() interface{} {
+				return query.Max(
+					[]int{1, 2, 3, 4, 5},
+				)
+			},
+			5,
+		},
+		{
+			func() interface{} {
+				return query.Max(
+					[]int{-1, -2, -3, -4, -5},
+				)
+			},
+			-1,
+		},
+		{
+			func() interface{} {
+				return query.Max(
+					[]int{-1, -2, 3, 4, 5},
+				)
+			},
+			5,
+		},
+		{
+			func() interface{} {
+				return query.Max(
+					[]float32{1.2, 2.3, 4.5, 2.6, 10.9},
+				)
+			},
+			float32(10.9),
+		},
+		{
+			func() interface{} {
+				return query.Max(
+					[]float64{1.2, 2.3, 4.5, 2.6, 10.9, 100000000.200000000},
+				)
+			},
+			100000000.2,
+		},
+	}
+
+	return testCase
+}
+
+func GetQueryMinTestCase() []TestCase {
+
+	testCase := []TestCase{
+		{
+			func() interface{} {
+				return query.Min(
+					[]int{1, 2, 3, 4, 5},
+				)
+			},
+			1,
+		},
+		{
+			func() interface{} {
+				return query.Min(
+					[]int{-1, -2, -3, -4, -5},
+				)
+			},
+			-5,
+		},
+		{
+			func() interface{} {
+				return query.Min(
+					[]int{-1, -2, 3, 4, 5},
+				)
+			},
+			-2,
+		},
+		{
+			func() interface{} {
+				return query.Min(
+					[]float32{1.2, 2.3, 4.5, 2.6, 10.9},
+				)
+			},
+			float32(1.2),
+		},
+		{
+			func() interface{} {
+				return query.Min(
+					[]float64{1.2, 2.3, 4.5, 2.6, 10.9, 100000000.200000000},
+				)
+			},
+			1.2,
+		},
+	}
+
+	return testCase
+}
+
 // GetQuerySortTestCase GetQuerySortTestCase
 func GetQuerySortTestCase() []TestCase {
 	nowTime := time.Now()
@@ -1268,7 +1396,7 @@ func GetQueryGroupTestCase() []TestCase {
 					"Name",
 					func(list []ContentType) []ContentType {
 						sum := query.Sum(query.Column[ContentType, float32](list, "  Money  "))
-						list[0].Money = sum.(float32)
+						list[0].Money = sum
 						return []ContentType{list[0]}
 					})
 			},
@@ -1290,7 +1418,7 @@ func GetQueryGroupTestCase() []TestCase {
 					},
 					"Name",
 					func(list []ContentType) float32 {
-						sum := query.Sum(query.Column[ContentType, float32](list, "  Money  ")).(float32)
+						sum := query.Sum(query.Column[ContentType, float32](list, "  Money  "))
 						return sum
 					})
 			},
@@ -1309,7 +1437,7 @@ func GetQueryGroupTestCase() []TestCase {
 					"Ok",
 					func(list []ContentType) []ContentType {
 						sum := query.Sum(query.Column[ContentType, float64](list, "CardMoney  "))
-						list[0].CardMoney = sum.(float64)
+						list[0].CardMoney = sum
 						return []ContentType{list[0]}
 					})
 			},
@@ -1331,7 +1459,7 @@ func GetQueryGroupTestCase() []TestCase {
 					" Age ",
 					func(list []ContentType) []ContentType {
 						sum := query.Sum(query.Column[ContentType, float64](list, "  CardMoney  "))
-						list[0].CardMoney = sum.(float64)
+						list[0].CardMoney = sum
 						return []ContentType{list[0]}
 					})
 			},
@@ -1353,7 +1481,7 @@ func GetQueryGroupTestCase() []TestCase {
 					},
 					" Age ",
 					func(list []ContentType) float64 {
-						sum := query.Sum(query.Column[ContentType, float64](list, "  CardMoney  ")).(float64)
+						sum := query.Sum(query.Column[ContentType, float64](list, "  CardMoney  "))
 						return sum
 
 					})
@@ -1373,7 +1501,7 @@ func GetQueryGroupTestCase() []TestCase {
 					" Age ",
 					func(list []ContentType) []float64 {
 						sum := query.Sum(query.Column[ContentType, float64](list, "  CardMoney  "))
-						return []float64{sum.(float64)}
+						return []float64{sum}
 
 					})
 			},
@@ -1392,7 +1520,7 @@ func GetQueryGroupTestCase() []TestCase {
 					"Register ",
 					func(list []ContentType) int {
 						sum := query.Sum(query.Column[ContentType, int](list, "  Age  "))
-						return sum.(int)
+						return sum
 
 					})
 			},
@@ -1411,7 +1539,7 @@ func GetQueryGroupTestCase() []TestCase {
 					"Register ",
 					func(list []ContentType) []ContentType {
 						sum := query.Sum(query.Column[ContentType, int](list, "  Age  "))
-						list[0].Age = sum.(int)
+						list[0].Age = sum
 						return []ContentType{list[0]}
 					})
 			},
@@ -1459,7 +1587,7 @@ func GetQueryGroupTestCase() []TestCase {
 					"QueryInnerStruct.MM",
 					func(list []QueryInnerStruct2) []QueryInnerStruct2 {
 						sum := query.Sum(query.Column[QueryInnerStruct2, int](list, "  MM  "))
-						list[0].MM = sum.(int)
+						list[0].MM = sum
 						return []QueryInnerStruct2{list[0]}
 					})
 			},

@@ -125,33 +125,33 @@ func logic() {
 		"Name",
 		func(list []ContentType) []ContentType {
 			sum := query.Sum(query.Column[ContentType, float32](list, "  Money  "))
-			list[0].Money = sum.(float32)
+			list[0].Money = sum
 			return []ContentType{list[0]}
 		})
 	query.Group[ContentType, float32, []float32]([]ContentType{},
 		"Name",
 		func(list []ContentType) float32 {
-			sum := query.Sum(query.Column[ContentType, float32](list, "  Money  ")).(float32)
+			sum := query.Sum(query.Column[ContentType, float32](list, "  Money  "))
 			return sum
 		})
 	query.Group[ContentType, []ContentType, *[]ContentType]([]ContentType{},
 		"Ok",
 		func(list []ContentType) []ContentType {
 			sum := query.Sum(query.Column[ContentType, float64](list, "CardMoney  "))
-			list[0].CardMoney = sum.(float64)
+			list[0].CardMoney = sum
 			return []ContentType{list[0]}
 		})
 	query.Group[ContentType, []ContentType, *[]ContentType]([]ContentType{},
 		" Age ",
 		func(list []ContentType) []ContentType {
 			sum := query.Sum(query.Column[ContentType, float64](list, "  CardMoney  "))
-			list[0].CardMoney = sum.(float64)
+			list[0].CardMoney = sum
 			return []ContentType{list[0]}
 		})
 	query.Group[ContentType, float64, []float64]([]ContentType{},
 		" Age ",
 		func(list []ContentType) float64 {
-			sum := query.Sum(query.Column[ContentType, float64](list, "  CardMoney  ")).(float64)
+			sum := query.Sum(query.Column[ContentType, float64](list, "  CardMoney  "))
 			return sum
 
 		})
@@ -159,27 +159,27 @@ func logic() {
 		" Age ",
 		func(list []ContentType) []float64 {
 			sum := query.Sum(query.Column[ContentType, float64](list, "  CardMoney  "))
-			return []float64{sum.(float64)}
+			return []float64{sum}
 		})
 	query.Group[ContentType, int, []int]([]ContentType{},
 		"Register ",
 		func(list []ContentType) int {
 			sum := query.Sum(query.Column[ContentType, int](list, "  Age  "))
-			return sum.(int)
+			return sum
 
 		})
 	query.Group[ContentType, []ContentType, *[]ContentType]([]ContentType{},
 		"Register ",
 		func(list []ContentType) []ContentType {
 			sum := query.Sum(query.Column[ContentType, int](list, "  Age  "))
-			list[0].Age = sum.(int)
+			list[0].Age = sum
 			return []ContentType{list[0]}
 		})
 	query.Group[QueryInnerStruct2, []QueryInnerStruct2, *[]QueryInnerStruct2]([]QueryInnerStruct2{},
 		"QueryInnerStruct.MM",
 		func(list []QueryInnerStruct2) []QueryInnerStruct2 {
 			sum := query.Sum(query.Column[QueryInnerStruct2, int](list, "  MM  "))
-			list[0].MM = sum.(int)
+			list[0].MM = sum
 			return []QueryInnerStruct2{list[0]}
 		})
 	query.LeftJoin([]Admin{}, []User{}, "AdminID = UserID", func(left Admin, right User) AdminUser {
