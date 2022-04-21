@@ -1,13 +1,13 @@
 # tools
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/fishedee/tools)](https://goreportcard.com/report/github.com/fishedee/tools)
-[![GoDoc](https://godoc.org/github.com/fishedee/tools?status.svg)](https://godoc.org/github.com/fishedee/tools)
+[![GoDoc](https://pkg.go.dev/github.com/fishedee/tools?status.svg)](https://pkg.go.dev/github.com/fishedee/tools)
 
 Efficient and convenient func for golang data processing.All original code comes from [here](https://github.com/fishedee/fishgo/tree/master/src/github.com/fishedee/language).
 
 Chinese read [这里](README_zhCN.md)
 
-**Now, this library support Go1.18 generic.**
+**This library already supports Go1.18 generic.**
 
 ## Why
 

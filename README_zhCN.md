@@ -1,7 +1,7 @@
 # tools
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/fishedee/tools)](https://goreportcard.com/report/github.com/fishedee/tools)
-[![GoDoc](https://godoc.org/github.com/fishedee/tools?status.svg)](https://godoc.org/github.com/fishedee/tools)
+[![GoDoc](https://pkg.go.dev/github.com/fishedee/tools?status.svg)](https://pkg.go.dev/github.com/fishedee/tools)
 
 高性能便利的golang数据操作库，原始代码来源于这里[here](https://github.com/fishedee/fishgo/tree/master/src/github.com/fishedee/language).
 
