@@ -16,12 +16,12 @@ func TestQueryColumnMap(t *testing.T) {
 		{UserID: -2},
 		{UserID: 3},
 	}
-	assert.Equal(t, query.ColumnMap[gentestdata.User, int](data, "UserID"), map[int]gentestdata.User{
+	assert.Equal(t, query.ColumnMap[gentestdata.User, int, map[int]gentestdata.User](data, "UserID"), map[int]gentestdata.User{
 		1:  {UserID: 1},
 		-2: {UserID: -2},
 		3:  {UserID: 3},
 	})
-	assert.Equal(t, query.ColumnMap[int, int]([]int{5, 6, 8, 8, 0, 6}, "."), map[int]int{
+	assert.Equal(t, query.ColumnMap[int, int, map[int]int]([]int{5, 6, 8, 8, 0, 6}, "."), map[int]int{
 		5: 5,
 		6: 6,
 		8: 8,
@@ -64,7 +64,7 @@ func BenchmarkQueryColumnMapMacro(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
-		query.ColumnMap[gentestdata.User, int](data, "UserID")
+		query.ColumnMap[gentestdata.User, int, map[int]gentestdata.User](data, "UserID")
 	}
 }
 
@@ -73,7 +73,7 @@ func BenchmarkQueryColumnMapReflect(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
-		query.ColumnMap[gentestdata.User, int](data, "Age")
+		query.ColumnMap[gentestdata.User, int, map[int]gentestdata.User](data, "Age")
 	}
 }
 
@@ -96,7 +96,7 @@ func BenchmarkQueryColumnMapSliceMacro(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
-		query.ColumnMap[gentestdata.User, int](data, "[]UserID")
+		query.ColumnMap[gentestdata.User, int, map[int][]gentestdata.User](data, "[]UserID")
 	}
 }
 
@@ -105,6 +105,6 @@ func BenchmarkQueryColumnMapSliceReflect(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i != b.N; i++ {
-		query.ColumnMap[gentestdata.User, int](data, "[]Age")
+		query.ColumnMap[gentestdata.User, int, map[int][]gentestdata.User](data, "[]Age")
 	}
 }

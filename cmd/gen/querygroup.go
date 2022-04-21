@@ -140,7 +140,7 @@ func init() {
 			{{end}}
 		}
 
-		return {{if eq .isSliceReturn ""}} {{else}}&{{end}}result
+		return {{if eq .isFunctorGroup "true"}}{{if eq .isSliceReturn ""}} {{else}}&{{end}}{{end}}result
 	}
 	`)
 	if err != nil {

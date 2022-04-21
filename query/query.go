@@ -209,10 +209,10 @@ func Column[T, R any](data []T, column string) []R {
 }
 
 // ColumnMapMacroHandler 扩展类函数 QueryColumnMap
-type ColumnMapMacroHandler[T any, K comparable] func(data []T, column string) map[K]T
+type ColumnMapMacroHandler[T any, K comparable, R map[K]T | map[K][]T] func(data []T, column string) R
 
 // ColumnMapMacroRegister 注册
-func ColumnMapMacroRegister[T any, K comparable](data []T, column string, handler ColumnMapMacroHandler[T, K]) {
+func ColumnMapMacroRegister[T any, K comparable, R map[K]T | map[K][]T](data []T, column string, handler ColumnMapMacroHandler[T, K, R]) {
 	id := registerQueryTypeID([]string{reflect.TypeOf(data).String(), column})
 	columnMapMacroMapper[id] = handler
 }
@@ -222,15 +222,15 @@ func ColumnMapMacroRegister[T any, K comparable](data []T, column string, handle
 //     * Second Argument:column name
 //     result = query.ColumnMap(users, "UserID")
 //     userMap := result.(map[int]User)
-func ColumnMap[T any, K comparable](data []T, column string) map[K]T {
+func ColumnMap[T any, K comparable, R map[K]T | map[K][]T](data []T, column string) R {
 	id := getQueryTypeID([]string{reflect.TypeOf(data).String(), column})
 	handler, isExist := columnMapMacroMapper[id]
 	if isExist {
-		return handler.(ColumnMapMacroHandler[T, K])(data, column)
+		return handler.(ColumnMapMacroHandler[T, K, R])(data, column)
 	}
 
 	reflectWarn("QueryColumnMap")
-	return query.ColumnMapReflect[T, K](data, column)
+	return query.ColumnMapReflect[T, K, R](data, column)
 }
 
 // LeftJoin join data from two table，support LeftJoin,RightJoin,InnerJoin和OuterJoin
