@@ -5,6 +5,8 @@
 
 高性能便利的golang数据操作库，原始代码来源于这里[here](https://github.com/fishedee/fishgo/tree/master/src/github.com/fishedee/language).
 
+**注意, 现已支持Go1.18泛型。**
+
 ## 原理
 
 ```golang
@@ -16,14 +18,14 @@ sort.Slice(people, func(i, j int) bool {
 因为写后台服务时，经常是从数据库中取出数据，然后我们时常需要对多个表的数据在golang业务层进行group,join,sort等操作。这些操作大同小异，写得多了就感觉重复繁琐，容易出错。
 
 ```golang
-pepole2 := query.Sort(people,"Age asc").([]People)
+pepole2 := query.Sort(people,"Age asc")
 ```
 
 所以我们的想法是模拟数据库的sql操作，在golang上用统一的API来执行group,join,sort等操作。当然，由于golang的强类型特性，我们只能用interface{}来处理不同类型的输入，然后用reflect来实现算法。有了这个工具以后，我们在写业务代码时爽了很多，代码更简洁，更清晰。但是，我们随后发现了这样做对于超大数据量（10w行以上数据）时，会造成比较严重的性能问题。原因很简单，因为操作数据的算法都是用reflect来实现，有大量的时间浪费在reflect的类型解析和校验上了，而且，golang编译器无法像手工写代码一样能在编译时根据不同的代码执行最好的优化。
 
 ```golang
-func querySortV10a439a196b4cc9dca0592a40a23aba8392203e4(data interface{}, sortType string) interface{} {
-	dataIn := data.([]People)
+func querySortV10a439a196b4cc9dca0592a40a23aba8392203e4(data []People, sortType string) []People {
+	dataIn := data
 	newData := make([]People, len(dataIn), len(dataIn))
 	copy(newData, dataIn)
 
@@ -46,7 +48,7 @@ func querySortV10a439a196b4cc9dca0592a40a23aba8392203e4(data interface{}, sortTy
 
 
 ```sh
-gen -r packageName
+gen -r [packageName] # 指定包名，不指定则使用当前目录所在包
 ```
 
 而这一切，我们需要做的，仅仅就是在编译前，执行一行命令而已。
@@ -96,82 +98,74 @@ var admins = make([]Admin, 1000, 1000)
 // 获取指定列
 // * 第一个参数为表格
 // * 第二个参数为列名
-result := query.Column(users, "UserID")
-userIDs := result.([]int)
+userIDs := query.Column(users, "UserID") // []int
 
 // 以某列的值生成映射
 // * 第一个参数为表格
 // * 第二个参数为列名
-result = query.ColumnMap(users, "UserID")
-userMap := result.(map[int]User)
+userMap = query.ColumnMap(users, "UserID") // map[int]User
 
 // 表格转换或提取操作
 // * 第一个参数为表格
 // * 第二个参数为转换规则
-result = query.Select(users, func(a User) Sex {
+sel = query.Select(users, func(a User) Sex {
     if len(a.Name) >= 3 && a.Name[0:3] == "Man" {
         return Sex{IsMale: true}
     }
     return Sex{IsMale: false}
-})
-sel := result.([]Sex)
+}) // []Sex
 
 // 表格筛选操作
 // * 第一个参数为表格
 // * 第二个参数为筛选规则
-result = query.Where(users, func(a User) bool {
+where = query.Where(users, func(a User) bool {
     if len(a.Name) >= 3 && a.Name[0:3] == "Man" {
         return true
     }
     return false
-})
-where := result.([]User)
+}) // []User
 
 // 两个表一对一合并
 // * 第一个参数为左表
 // * 第二个参数为右表
 // * 第三个参数为合并规则
-result = query.Combine(admins, users, func(admin Admin, user User) AdminUser {
+combine = query.Combine(admins, users, func(admin Admin, user User) AdminUser {
     return AdminUser{
         AdminID:    admin.AdminID,
         Level:      admin.Level,
         Name:       user.Name,
         CreateTime: user.CreateTime,
     }
-})
-combine := result.([]AdminUser)
+}) // []AdminUser
 
 // 表根据某列进行分组操作
 // * 第一个参数为表格
 // * 第二个参数为列名
 // * 第三个参数为分组规则
-result = query.Group(users, "UserID", func(users []User) Department {
+group = query.Group(users, "UserID", func(users []User) Department {
     return Department{
         Employees: users,
     }
-})
-group := result.([]Department)
+}) // []Department
 
 // 两个表进行连接操作，支持LeftJoin,RightJoin,InnerJoin和OuterJoin
 // * 第一个参数为左表
 // * 第二个参数为右表
 // * 第三个参数为连接操作的条件
 // * 第四个参数为连接规则
-result = query.LeftJoin(admins, users, "AdminID = UserID", func(admin Admin, user User) AdminUser {
+join = query.LeftJoin(admins, users, "AdminID = UserID", func(admin Admin, user User) AdminUser {
     return AdminUser{
         AdminID:    admin.AdminID,
         Level:      admin.Level,
         Name:       user.Name,
         CreateTime: user.CreateTime,
     }
-})
-join := result.([]AdminUser)
+}) // []AdminUser
 
 // 表格排序操作，支持多列排序，如UserId desc,Age asc
 // * 第一个参数为表格
 // * 第二个参数为排序规则
-result = query.Sort(users, "UserID asc")
-sort := result.([]User)
+sort = query.Sort(users, "UserID asc") // []User
 ```
 
 就以上这几个API，没有其他的了，参数一目了然。
@@ -183,7 +177,7 @@ sort := result.([]User)
 go install github.com/fishedee/tools/cmd/gen
 
 使用:
-gen -r 包名
+gen -r [包名]
 ```
 
 gen工具是性能提速的核心，使用方法很简单，gen加包名就可以了，如果加-r参数，其会递归查找包下的所有子包的源码。gen读取源码以后，其会自动分析调用query.XXXX的地方，然后就会生成一个xxxx_querygen.go代码来代替reflect的实现。最后，你就能如平常一样编译代码就可以了，就能享受到超便利和高性能的好处了。但要注意的是，当包下面的源代码发生改变后，你要重新执行gen来生成代码。

@@ -7,6 +7,8 @@ Efficient and convenient func for golang data processing.All original code comes
 
 Chinese read [这里](README_zhCN.md)
 
+**Now, this library support Go1.18 generic.**
+
 ## Why
 
 ```golang
@@ -18,14 +20,14 @@ sort.Slice(people, func(i, j int) bool {
 When we write backend code,we often extract data from database.and next step ,we need to group,join and sort multiple table data to generate result in golang service.The code like this is always repeat again and again, The code we write more,The boring we feel more.
 
 ```golang
-pepole2 := query.Sort(people,"Age asc").([]People)
+pepole2 := query.Sort(people,"Age asc")
 ```
 
 so we have an idea!we use a unify API to finish group,join and sort.but because of strong typed in golang,we only use interface{} to handle different type input data,and use reflect to achieve the algorithm. as we finish this tool , it is a new world for me,the code more short,more easy and more beautiful.And after a period of time, we find a new problem,when we handle one million rows in this API,it will slow.This is a simple reason,because all algorithm is achieved by reflect, not by hand.Compiler can not optimize the code by different type.The other reason is there are much time wasted in reflect package by type get and type check.
 
 ```golang
-func querySortV10a439a196b4cc9dca0592a40a23aba8392203e4(data interface{}, sortType string) interface{} {
-	dataIn := data.([]People)
+func querySortV10a439a196b4cc9dca0592a40a23aba8392203e4(data []People, sortType string) []People {
+	dataIn := data
 	newData := make([]People, len(dataIn), len(dataIn))
 	copy(newData, dataIn)
 
@@ -100,82 +102,74 @@ var admins = make([]Admin, 1000, 1000)
 // extract column from table
 // * First Argument:table
 // * Second Argument:column name
-result := query.Column(users, "UserID")
-userIDs := result.([]int)
+userIDs := query.Column(users, "UserID") // []int
 
 // generate a map from table,key is column value and value is it's row
 // * First Argument:table
 // * Second Argument:column name
-result = query.ColumnMap(users, "UserID")
-userMap := result.(map[int]User)
+userMap = query.ColumnMap(users, "UserID") // map[int]User
 
 // select data from table
 // * First Argument:table
 // * Second Argument:select rule
-result = query.Select(users, func(a User) Sex {
+sel = query.Select(users, func(a User) Sex {
     if len(a.Name) >= 3 && a.Name[0:3] == "Man" {
         return Sex{IsMale: true}
     }
     return Sex{IsMale: false}
-})
-sel := result.([]Sex)
+}) // []Sex
 
 // filter data from table
 // * First Argument:table
 // * Second Argument:filter rule
-result = query.Where(users, func(a User) bool {
+where = query.Where(users, func(a User) bool {
     if len(a.Name) >= 3 && a.Name[0:3] == "Man" {
         return true
     }
     return false
-})
-where := result.([]User)
+}) // []User
 
 // combine data from two table , one by one
 // * First Argument:left table
 // * Second Argument:right table
 // * Third Argument:combine rule
-result = query.Combine(admins, users, func(admin Admin, user User) AdminUser {
+combine = query.Combine(admins, users, func(admin Admin, user User) AdminUser {
     return AdminUser{
         AdminID:    admin.AdminID,
         Level:      admin.Level,
         Name:       user.Name,
         CreateTime: user.CreateTime,
     }
-})
-combine := result.([]AdminUser)
+}) // []AdminUser
 
 // group data from table
 // * First Argument: left table
 // * Second Argument: group column name
 // * Third Argument: group rule
-result = query.Group(users, "UserID", func(users []User) Department {
+group = query.Group(users, "UserID", func(users []User) Department {
     return Department{
         Employees: users,
     }
-})
-group := result.([]Department)
+}) // []Department
 
 // join data from two table，support LeftJoin,RightJoin,InnerJoin和OuterJoin
 // * First Argument: left table
 // * Second Argument: right table
 // * Third Argument: join condition
 // * Forth Argument: join rule
-result = query.LeftJoin(admins, users, "AdminID = UserID", func(admin Admin, user User) AdminUser {
+join = query.LeftJoin(admins, users, "AdminID = UserID", func(admin Admin, user User) AdminUser {
     return AdminUser{
         AdminID:    admin.AdminID,
         Level:      admin.Level,
         Name:       user.Name,
         CreateTime: user.CreateTime,
     }
-})
-join := result.([]AdminUser)
+}) // []AdminUser
 
 // sort data from table,support multiple column,for Example: UserId desc,Age asc
 // * First Argument:table
 // * Second Argument:sort condition
-result = query.Sort(users, "UserID asc")
-sort := result.([]User)
+sort = query.Sort(users, "UserID asc") // []User
 ```
 
 This is All API , easy and less
@@ -187,7 +181,7 @@ Install：
 go install github.com/fishedee/tools/cmd/gen
 
 Use:
-gen -r PackageName
+gen -r [PackageName] # can ignore PackageName, when do that, use the current package
 ```
 
 gen is the core of hight performance, it is easy to use , gen and packageName. If you add -r argument , it will read all code in children package(include children of children package, and so on).when gen tool read all code ,it will analyse where call query.XXXXX, and it will auto generate a file named xxxx_querygen.go in the same package.At last, compile all the code just as common and it work!
