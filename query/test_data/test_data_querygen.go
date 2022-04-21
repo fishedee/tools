@@ -15,6 +15,48 @@ func queryColumnMapV1634476ac5d81ffe821151e2cd007944bb75387e(data []ContentType,
 	return result
 }
 
+func queryColumnMapV17413fb3daa269475dd84fbd43de7143d1a1fecd(data []ContentType, column string) map[float32][]ContentType {
+	dataIn := data
+	bufferData := make([]ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[float32]int, len(dataIn))
+	result := make(map[float32][]ContentType, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Money
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+
+		result[bufferData[kbegin].Money] = bufferData[kbegin:k]
+
+	}
+
+	return result
+}
+
 func queryColumnMapV3923b792e276005e09637544ecb3aec8be870f41(data []string, column string) map[string]string {
 	dataIn := data
 	result := make(map[string]string, len(dataIn))
@@ -42,6 +84,174 @@ func queryColumnMapV3f666f2858a8335d8dedbc686b034302e2f4fc0f(data []ContentType,
 	for i := len(dataIn) - 1; i >= 0; i-- {
 		result[dataIn[i].CardMoney] = dataIn[i]
 	}
+	return result
+}
+
+func queryColumnMapV53ba67968a45a6ad0844debe5d0894f3bfbf48a2(data []ContentType, column string) map[float64][]ContentType {
+	dataIn := data
+	bufferData := make([]ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[float64]int, len(dataIn))
+	result := make(map[float64][]ContentType, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].CardMoney
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+
+		result[bufferData[kbegin].CardMoney] = bufferData[kbegin:k]
+
+	}
+
+	return result
+}
+
+func queryColumnMapV68400eb3d8154e355447a3652268b3ee45711762(data []ContentType, column string) map[string][]ContentType {
+	dataIn := data
+	bufferData := make([]ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[string]int, len(dataIn))
+	result := make(map[string][]ContentType, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Name
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+
+		result[bufferData[kbegin].Name] = bufferData[kbegin:k]
+
+	}
+
+	return result
+}
+
+func queryColumnMapV7c828f56cce9605a6545677e43765003f2a1e3da(data []ContentType, column string) map[int][]ContentType {
+	dataIn := data
+	bufferData := make([]ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[int]int, len(dataIn))
+	result := make(map[int][]ContentType, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Age
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+
+		result[bufferData[kbegin].Age] = bufferData[kbegin:k]
+
+	}
+
+	return result
+}
+
+func queryColumnMapV8388abeb56ba7226a39979e2f85daf5b77b0ec13(data []ContentType, column string) map[string][]ContentType {
+	dataIn := data
+	bufferData := make([]ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[string]int, len(dataIn))
+	result := make(map[string][]ContentType, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Name
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+
+		result[bufferData[kbegin].Name] = bufferData[kbegin:k]
+
+	}
+
 	return result
 }
 
@@ -92,6 +302,90 @@ func queryColumnMapV9379e410e09e784ed64aa5e8311734b853ca1260(data []ContentType,
 	for i := len(dataIn) - 1; i >= 0; i-- {
 		result[dataIn[i].Age] = dataIn[i]
 	}
+	return result
+}
+
+func queryColumnMapVa3c39cd2e6c27da10580768a73066e91af5bfb6c(data []ContentType, column string) map[bool][]ContentType {
+	dataIn := data
+	bufferData := make([]ContentType, len(dataIn), len(dataIn))
+	mapData := make(map[bool]int, len(dataIn))
+	result := make(map[bool][]ContentType, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].Ok
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+
+		result[bufferData[kbegin].Ok] = bufferData[kbegin:k]
+
+	}
+
+	return result
+}
+
+func queryColumnMapVc0d612348cc652ffb28125191e9e18b8956d695f(data []QueryInnerStruct2, column string) map[int][]QueryInnerStruct2 {
+	dataIn := data
+	bufferData := make([]QueryInnerStruct2, len(dataIn), len(dataIn))
+	mapData := make(map[int]int, len(dataIn))
+	result := make(map[int][]QueryInnerStruct2, len(dataIn))
+
+	length := len(dataIn)
+	nextData := make([]int, length, length)
+	for i := 0; i != length; i++ {
+		single := dataIn[i].QueryInnerStruct.MM
+		lastIndex, isExist := mapData[single]
+		if isExist == true {
+			nextData[lastIndex] = i
+		}
+		nextData[i] = -1
+		mapData[single] = i
+	}
+	k := 0
+	for i := 0; i != length; i++ {
+		j := i
+		if nextData[j] == 0 {
+			continue
+		}
+		kbegin := k
+		for nextData[j] != -1 {
+			nextJ := nextData[j]
+			bufferData[k] = dataIn[j]
+			nextData[j] = 0
+			j = nextJ
+			k++
+		}
+		bufferData[k] = dataIn[j]
+		k++
+		nextData[j] = 0
+
+		result[bufferData[kbegin].QueryInnerStruct.MM] = bufferData[kbegin:k]
+
+	}
+
 	return result
 }
 
@@ -2076,23 +2370,37 @@ func queryWhereV8dd2f22a7d420700a40e4fb90e0ec144ad4ab02a(data []ContentType, whe
 
 func init() {
 
-	query.ColumnMapMacroRegister([]ContentType{}, "     Name         ", queryColumnMapV1634476ac5d81ffe821151e2cd007944bb75387e)
+	query.ColumnMapMacroRegister[ContentType, string]([]ContentType{}, "     Name         ", queryColumnMapV1634476ac5d81ffe821151e2cd007944bb75387e)
 
-	query.ColumnMapMacroRegister([]string{}, " . ", queryColumnMapV3923b792e276005e09637544ecb3aec8be870f41)
+	query.ColumnMapMacroRegister[ContentType, float32]([]ContentType{}, "    []Money  ", queryColumnMapV17413fb3daa269475dd84fbd43de7143d1a1fecd)
 
-	query.ColumnMapMacroRegister([]ContentType{}, "    Money  ", queryColumnMapV3c9c70c40c63019848d44a57a05b107340215e80)
+	query.ColumnMapMacroRegister[string, string]([]string{}, " . ", queryColumnMapV3923b792e276005e09637544ecb3aec8be870f41)
 
-	query.ColumnMapMacroRegister([]ContentType{}, "    CardMoney", queryColumnMapV3f666f2858a8335d8dedbc686b034302e2f4fc0f)
+	query.ColumnMapMacroRegister[ContentType, float32]([]ContentType{}, "    Money  ", queryColumnMapV3c9c70c40c63019848d44a57a05b107340215e80)
 
-	query.ColumnMapMacroRegister([]QueryInnerStruct2{}, "QueryInnerStruct.MM", queryColumnMapV84f666378aff13a68045428e41ef52e9bf17a800)
+	query.ColumnMapMacroRegister[ContentType, float64]([]ContentType{}, "    CardMoney", queryColumnMapV3f666f2858a8335d8dedbc686b034302e2f4fc0f)
 
-	query.ColumnMapMacroRegister([]ContentType{}, "Ok        ", queryColumnMapV890fbb2d61811a21c543c5d899f2e91b964343eb)
+	query.ColumnMapMacroRegister[ContentType, float64]([]ContentType{}, "    []CardMoney", queryColumnMapV53ba67968a45a6ad0844debe5d0894f3bfbf48a2)
 
-	query.ColumnMapMacroRegister([]ContentType{}, " Name ", queryColumnMapV8be389735876e433a498564bd3f63c8f1232d915)
+	query.ColumnMapMacroRegister[ContentType, string]([]ContentType{}, " []Name ", queryColumnMapV68400eb3d8154e355447a3652268b3ee45711762)
 
-	query.ColumnMapMacroRegister([]int{}, " . ", queryColumnMapV91dacd60e87431951940b4b4c51428e7c1e5c1f2)
+	query.ColumnMapMacroRegister[ContentType, int]([]ContentType{}, "[]Age        ", queryColumnMapV7c828f56cce9605a6545677e43765003f2a1e3da)
 
-	query.ColumnMapMacroRegister([]ContentType{}, "Age        ", queryColumnMapV9379e410e09e784ed64aa5e8311734b853ca1260)
+	query.ColumnMapMacroRegister[ContentType, string]([]ContentType{}, "     [] Name         ", queryColumnMapV8388abeb56ba7226a39979e2f85daf5b77b0ec13)
+
+	query.ColumnMapMacroRegister[QueryInnerStruct2, int]([]QueryInnerStruct2{}, "QueryInnerStruct.MM", queryColumnMapV84f666378aff13a68045428e41ef52e9bf17a800)
+
+	query.ColumnMapMacroRegister[ContentType, bool]([]ContentType{}, "Ok        ", queryColumnMapV890fbb2d61811a21c543c5d899f2e91b964343eb)
+
+	query.ColumnMapMacroRegister[ContentType, string]([]ContentType{}, " Name ", queryColumnMapV8be389735876e433a498564bd3f63c8f1232d915)
+
+	query.ColumnMapMacroRegister[int, int]([]int{}, " . ", queryColumnMapV91dacd60e87431951940b4b4c51428e7c1e5c1f2)
+
+	query.ColumnMapMacroRegister[ContentType, int]([]ContentType{}, "Age        ", queryColumnMapV9379e410e09e784ed64aa5e8311734b853ca1260)
+
+	query.ColumnMapMacroRegister[ContentType, bool]([]ContentType{}, "[]Ok        ", queryColumnMapVa3c39cd2e6c27da10580768a73066e91af5bfb6c)
+
+	query.ColumnMapMacroRegister[QueryInnerStruct2, int]([]QueryInnerStruct2{}, "[]QueryInnerStruct.MM", queryColumnMapVc0d612348cc652ffb28125191e9e18b8956d695f)
 
 	query.ColumnMacroRegister([]ContentType{}, "CardMoney  ", queryColumnV1326c8079077532a2df04e5705513b21ec7ccfde)
 

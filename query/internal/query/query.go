@@ -482,18 +482,17 @@ func ColumnReflect[T, R any](data []T, column string) []R {
 }
 
 // ColumnMapReflect 反射
-func ColumnMapReflect[T any, K comparable](data []T, column string) map[K]T {
+func ColumnMapReflect[T any, K comparable, R map[K]T | map[K][]T](data []T, column string) R {
 	column = strings.Trim(column, " ")
-	// 返回值类型不一致，暂时去掉
-	// if len(column) >= 2 && column[0:2] == "[]" {
-	// 	column = column[2:]
-	// 	return columnMapReflectSlice[T, K](data, column)
-	// } else {
-	return columnMapReflectSingle[T, K](data, column)
-	// }
+	if len(column) >= 2 && column[0:2] == "[]" {
+		column = column[2:]
+		return columnMapReflectSlice(data, column).(R)
+	} else {
+		return columnMapReflectSingle(data, column).(R)
+	}
 }
 
-func columnMapReflectSlice[T any, K comparable](data []T, column string) map[K][]T {
+func columnMapReflectSlice(data interface{}, column string) interface{} {
 	dataValue := reflect.ValueOf(data)
 	dataValueType := dataValue.Type()
 	dataType := dataValue.Type().Elem()
@@ -507,10 +506,10 @@ func columnMapReflectSlice[T any, K comparable](data []T, column string) map[K][
 		singleResultValue := dataFieldExtract(group.Index(0))
 		resultValue.SetMapIndex(singleResultValue, group)
 	})
-	return resultValue.Interface().(map[K][]T)
+	return resultValue.Interface()
 }
 
-func columnMapReflectSingle[T any, K comparable](data []T, column string) map[K]T {
+func columnMapReflectSingle(data interface{}, column string) interface{} {
 	dataValue := reflect.ValueOf(data)
 	dataType := dataValue.Type().Elem()
 	dataLen := dataValue.Len()
@@ -523,7 +522,7 @@ func columnMapReflectSingle[T any, K comparable](data []T, column string) map[K]
 		singleResultValue := dataFieldExtract(singleDataValue)
 		resultValue.SetMapIndex(singleResultValue, singleDataValue)
 	}
-	return resultValue.Interface().(map[K]T)
+	return resultValue.Interface()
 }
 
 // CombineReflect 反射

@@ -52,8 +52,10 @@ func QueryColumnMapGen(request QueryGenRequest) *QueryGenResponse {
 		})
 	}
 	initBody := excuteTemplate(queryColumnMapInitTmpl, map[string]string{
-		"signature":      signature,
-		"argumentDefine": argumentDefine,
+		"signature":              signature,
+		"firstArgElemType":       getTypeDeclareCode(line, firstArgElem),
+		"firstArgElemColumnType": getTypeDeclareCode(line, columnArgType),
+		"argumentDefine":         argumentDefine,
 	})
 	return &QueryGenResponse{
 		importPackage: importPackage,
@@ -90,7 +92,7 @@ func init() {
 		panic(err)
 	}
 	queryColumnMapInitTmpl, err = template.New("name").Parse(`
-		query.ColumnMapMacroRegister({{.argumentDefine}},` + columnMapFuncPrefix + `{{.signature}})
+		query.ColumnMapMacroRegister[{{ .firstArgElemType }}, {{ .firstArgElemColumnType }}]({{.argumentDefine}},` + columnMapFuncPrefix + `{{.signature}})
 	`)
 	if err != nil {
 		panic(err)

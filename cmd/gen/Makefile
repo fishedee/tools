@@ -1,6 +1,7 @@
 .PHONY:gen
-bench:gen
-	go test . -bench=. -benchmem -v 
+bench_only:
+	go test . -bench=. -benchmem -v
+bench:gen bench_only	
 gen:
 	go install github.com/fishedee/tools/cmd/gen
 	rm -rf testdata/testdata_querygen.go
