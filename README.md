@@ -52,7 +52,7 @@ So when we run query.Sort(xxxx),query.Sort will find the "concrete sort code" by
 
 
 ```sh
-gen -r packageName
+gen -r [packageName] # specify package，if not, use current package
 ```
 
 all of this ,we only need to run this command before we compile.That is all.
